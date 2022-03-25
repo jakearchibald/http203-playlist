@@ -1,0 +1,42 @@
+:root {
+  --white: #fff;
+  --primary-text: #212121;
+  --secondary-text: #757575;
+  --divider: #bdbdbd;
+  --primary-color: #673ab7;
+  --primary-dark: #512da8;
+  --primary-light: #d1c4e9;
+  --accent-color: #ff9800;
+  --content-padding: 1.2rem;
+}
+
+html {
+  background: var(--white);
+  font-family: system-ui, sans-serif;
+  font-size: 16px;
+  color: var(--primary-text);
+  line-height: 1.5;
+  height: -webkit-fill-available;
+}
+
+body {
+  margin: 0;
+  height: 100vh;
+  height: -webkit-fill-available;
+}
+
+a {
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+:global(#app) {
+  height: 100%;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}

@@ -1,0 +1,23 @@
+.main-layout {
+  height: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+
+.header {
+  background: var(--primary-color);
+  color: var(--white);
+  height: 54px;
+  display: grid;
+  align-items: center;
+  padding: 0 var(--content-padding);
+}
+
+.main {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.home-link {
+  color: inherit;
+}

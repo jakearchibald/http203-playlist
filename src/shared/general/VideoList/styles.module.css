@@ -1,0 +1,36 @@
+.video-list {
+  display: grid;
+  margin: 0;
+  padding: var(--content-padding);
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--content-padding);
+  background: var(--divider);
+
+  & > li {
+    display: block;
+    background: var(--white);
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.video-thumb {
+  width: 100%;
+  height: auto;
+  display: block;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  object-position: center;
+}
+
+.video-meta {
+  margin: 0;
+  padding: 0.4rem 1rem;
+}
+
+.video-link {
+  color: inherit;
+
+  &:hover {
+    text-decoration: none;
+  }
+}

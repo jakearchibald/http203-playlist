@@ -1,0 +1,46 @@
+.video-layout {
+}
+
+.embed,
+.video-img {
+  display: block;
+  aspect-ratio: 16/9;
+  width: 100%;
+  height: auto;
+}
+
+.video-img {
+  object-fit: cover;
+  object-position: center;
+}
+
+.embed-container {
+  display: grid;
+
+  & > * {
+    grid-area: 1 / 1;
+  }
+}
+
+.video-details {
+  padding: var(--content-padding);
+  background: var(--white);
+  overflow: hidden;
+}
+
+.video-title {
+  font-weight: 600;
+  margin: 0;
+  font-size: 1.6rem;
+}
+
+.description {
+  max-width: 67ch;
+  line-height: 1.6;
+}
+
+.scroller {
+  overflow-x: auto;
+  overflow-y: hidden;
+  height: 300px;
+}
