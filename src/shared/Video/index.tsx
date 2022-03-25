@@ -24,7 +24,7 @@ const Video: FunctionalComponent<Props> = ({
     <HeaderLayout onHomeClick={onHomeClick}>
       <div class={styles.videoLayout}>
         <div class={styles.videoAndDetails}>
-          <div class={styles.embedContainer}>
+          <div class={styles.embedContainer} key={video.id}>
             <img
               class={styles.videoImg}
               srcset={ytSrcset(video.id)}
