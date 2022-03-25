@@ -12,7 +12,7 @@
  */
 import { h } from 'preact';
 import { renderPage, writeFiles } from './utils';
-import IndexPage from './pages/index';
+import IndexPage from './pages/Index';
 import pageData from 'video-data:';
 import VideoPage from './pages/Video';
 
