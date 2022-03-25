@@ -15,6 +15,7 @@
     "outDir": "../.tmp/ts",
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
+    "types": [],
     "paths": {
       "static-build/*": ["src/static-build/*"],
       "client/*": ["src/client/*"],

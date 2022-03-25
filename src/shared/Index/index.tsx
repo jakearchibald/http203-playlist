@@ -17,7 +17,7 @@ const Index: FunctionalComponent<Props> = ({
   onVideoClick,
 }: Props) => {
   return (
-    <HeaderLayout onHomeClick={onHomeClick}>
+    <HeaderLayout onHomeClick={onHomeClick} scrollKey="home">
       <VideoList videos={videos} onVideoClick={onVideoClick} />
     </HeaderLayout>
   );

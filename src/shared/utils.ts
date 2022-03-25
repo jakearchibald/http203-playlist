@@ -1,3 +1,5 @@
+import { useRef, useEffect } from 'preact/hooks';
+
 const ytImageSizes: [width: number, urlPart: string][] = [
   [320, 'mq'],
   [480, 'hq'],
@@ -17,3 +19,11 @@ export const formatDate = (date: Date) =>
   `${date.getFullYear()}-${(date.getMonth() + 1)
     .toString()
     .padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
+
+export function usePrevious<T>(value: T): T | undefined {
+  const ref = useRef<T>();
+  useEffect(() => {
+    ref.current = value;
+  });
+  return ref.current;
+}

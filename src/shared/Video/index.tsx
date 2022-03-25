@@ -21,7 +21,7 @@ const Video: FunctionalComponent<Props> = ({
   onVideoClick,
 }: Props) => {
   return (
-    <HeaderLayout onHomeClick={onHomeClick}>
+    <HeaderLayout onHomeClick={onHomeClick} scrollKey={video.id}>
       <div class={styles.videoLayout}>
         <div class={styles.videoAndDetails}>
           <div class={styles.embedContainer} key={video.id}>
