@@ -1,6 +1,5 @@
-import { h, render } from 'preact';
-//import App from './App';
+import { h, render, hydrate } from 'preact';
+import videos from 'video-data:';
+import App from './App';
 
-//render(<App />, document.getElementById('app')!);
-
-console.log('hi');
+hydrate(<App videos={videos} />, document.getElementById('app')!);

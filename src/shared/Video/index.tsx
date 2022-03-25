@@ -10,11 +10,18 @@ import 'add-css:./styles.module.css';
 interface Props {
   videos: typeof import('video-data:').default;
   video: typeof import('video-data:').default[string];
+  onHomeClick?: (event: Event) => void;
+  onVideoClick?: (event: Event, url: string) => void;
 }
 
-const Video: FunctionalComponent<Props> = ({ video, videos }: Props) => {
+const Video: FunctionalComponent<Props> = ({
+  video,
+  videos,
+  onHomeClick,
+  onVideoClick,
+}: Props) => {
   return (
-    <HeaderLayout>
+    <HeaderLayout onHomeClick={onHomeClick}>
       <div class={styles.videoLayout}>
         <div class={styles.videoAndDetails}>
           <div class={styles.embedContainer}>
@@ -45,7 +52,7 @@ const Video: FunctionalComponent<Props> = ({ video, videos }: Props) => {
           </div>
         </div>
         <div class={styles.scroller}>
-          <VideoList videos={videos} />
+          <VideoList videos={videos} onVideoClick={onVideoClick} />
         </div>
       </div>
     </HeaderLayout>
