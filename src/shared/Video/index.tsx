@@ -16,7 +16,7 @@ const Video: FunctionalComponent<Props> = ({ video, videos }: Props) => {
   return (
     <HeaderLayout>
       <div class={styles.videoLayout}>
-        <div>
+        <div class={styles.videoAndDetails}>
           <div class={styles.embedContainer}>
             <img
               class={styles.videoImg}

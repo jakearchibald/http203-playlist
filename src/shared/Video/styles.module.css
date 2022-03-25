@@ -1,4 +1,18 @@
 .video-layout {
+  @media (min-width: 900px) {
+    display: grid;
+    grid-template-columns: 1fr 230px;
+    height: 100%;
+  }
+}
+
+.video-and-details {
+  @media (min-width: 900px) {
+    overflow-x: hidden;
+    overflow-y: auto;
+    display: grid;
+    grid-template-rows: max-content minmax(max-content, 1fr);
+  }
 }
 
 .embed,
@@ -32,6 +46,7 @@
   font-weight: 600;
   margin: 0;
   font-size: 1.6rem;
+  max-width: 43ch;
 }
 
 .description {
@@ -42,5 +57,20 @@
 .scroller {
   overflow-x: auto;
   overflow-y: hidden;
-  height: 300px;
+  height: 159px;
+  --video-list-columns: none;
+  --video-list-auto-flow: column;
+  --video-list-auto-columns: 135px;
+  background: var(--divider);
+  display: grid;
+  align-items: center;
+
+  @media (min-width: 900px) {
+    height: auto;
+    --video-list-auto-flow: row;
+    --video-list-auto-columns: auto;
+    --video-list-auto-rows: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
 }

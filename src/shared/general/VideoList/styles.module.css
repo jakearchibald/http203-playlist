@@ -2,9 +2,15 @@
   display: grid;
   margin: 0;
   padding: var(--content-padding);
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: var(
+    --video-list-columns,
+    repeat(auto-fill, minmax(300px, 1fr))
+  );
   gap: var(--content-padding);
   background: var(--divider);
+  grid-auto-flow: var(--video-list-auto-flow);
+  grid-auto-columns: var(--video-list-auto-columns);
+  grid-auto-rows: var(--video-list-auto-rows);
 
   & > li {
     display: block;
