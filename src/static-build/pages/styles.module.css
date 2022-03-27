@@ -55,8 +55,18 @@ a {
 
 ::page-transition-incoming-image(root) {
   animation: 500ms ease-out both slide-from-right;
+  animation-play-state: paused;
 }
 
 ::page-transition-outgoing-image(root) {
   animation: 500ms ease-out both slide-to-left;
+  animation-play-state: paused;
+}
+
+.play::page-transition-incoming-image(root) {
+  animation-play-state: running;
+}
+
+.play::page-transition-outgoing-image(root) {
+  animation-play-state: running;
 }
