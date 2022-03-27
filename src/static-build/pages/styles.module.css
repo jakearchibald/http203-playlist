@@ -59,10 +59,78 @@ html[class~='transition-warming-up']::page-transition-outgoing-image(*) {
   }
 }
 
+@keyframes slide-from-left {
+  from {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes slide-to-right {
+  to {
+    transform: translateX(100%);
+  }
+}
+
 ::page-transition-incoming-image(root) {
   animation: 500ms ease-out both slide-from-right;
 }
 
 ::page-transition-outgoing-image(root) {
   animation: 500ms ease-out both slide-to-left;
+}
+
+html.back-transition::page-transition-incoming-image(root) {
+  animation-name: slide-from-left;
+}
+
+html.back-transition::page-transition-outgoing-image(root) {
+  animation-name: slide-to-right;
+}
+
+@keyframes slide-and-fade-from-right {
+  from {
+    opacity: 0;
+    transform: translateX(60px);
+  }
+}
+
+@keyframes slide-and-fade-to-left {
+  to {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+}
+
+@keyframes slide-and-fade-from-left {
+  from {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+}
+
+@keyframes slide-and-fade-to-right {
+  to {
+    opacity: 0;
+    transform: translateX(60px);
+  }
+}
+
+@media (min-width: 660px) {
+  ::page-transition-incoming-image(root) {
+    animation-name: slide-and-fade-from-right;
+    animation-duration: 300ms;
+  }
+
+  ::page-transition-outgoing-image(root) {
+    animation-name: slide-and-fade-to-left;
+    animation-duration: 300ms;
+  }
+
+  .back-transition::page-transition-incoming-image(root) {
+    animation-name: slide-and-fade-from-left;
+  }
+
+  .back-transition::page-transition-outgoing-image(root) {
+    animation-name: slide-and-fade-to-right;
+  }
 }

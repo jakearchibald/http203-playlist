@@ -36,6 +36,7 @@
 .scroller {
   overflow-x: auto;
   overflow-y: hidden;
+  contain: paint;
   height: 159px;
   --video-list-columns: none;
   --video-list-auto-flow: column;

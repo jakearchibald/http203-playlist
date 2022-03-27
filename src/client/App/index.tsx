@@ -34,18 +34,30 @@ const App: FunctionalComponent<Props> = ({
     const elementsToSet = [
       ['.site-header', 'header'],
       ['.header-text', 'header-text'],
+      ['.related-videos', 'related-videos'],
     ];
+
+    function setElements(transition: DocumentTransition) {
+      for (const [selector, tag] of elementsToSet) {
+        const element = document.querySelector(selector);
+        if (!element) continue;
+        transition.setElement(element, tag);
+      }
+    }
 
     await startTransition({
       outgoing(transition) {
-        for (const [selector, tag] of elementsToSet) {
-          transition.setElement(document.querySelector(selector)!, tag);
+        if (path === '/') {
+          document.documentElement.classList.add('back-transition');
         }
+
+        setElements(transition);
       },
       incoming(transition) {
-        for (const [selector, tag] of elementsToSet) {
-          transition.setElement(document.querySelector(selector)!, tag);
-        }
+        setElements(transition);
+      },
+      done() {
+        document.documentElement.classList.remove('back-transition');
       },
     });
     history.pushState(null, '', path);
