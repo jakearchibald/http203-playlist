@@ -24,18 +24,22 @@ export function usePageTransition() {
   }: UsePageTransitionArg = {}): Promise<void> => {
     if (!('createDocumentTransition' in document)) return;
 
-    return new Promise<void>((resolve) => {
+    return new Promise<void>(async (resolve) => {
       const transition = document.createDocumentTransition();
       transitionRef.current = transition;
       incomingRef.current = incoming;
       outgoing?.(transition);
 
-      transition.start(async () => {
+      globalThis.ongoingTransition = transition.start(async () => {
         resolve();
         await new Promise((resolve) => {
           startResolver.current = resolve;
         });
       });
+
+      await globalThis.ongoingTransition;
+
+      globalThis.ongoingTransition = undefined;
     });
   };
 }
