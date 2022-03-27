@@ -22,7 +22,7 @@ const Header: FunctionalComponent<Props> = ({
 
   return (
     <div class={styles.mainLayout}>
-      <header class={styles.header}>
+      <header class={[styles.header, 'site-header'].join(' ')}>
         <a
           href="/"
           class={styles.homeLink}
