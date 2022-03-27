@@ -36,7 +36,7 @@ const Video: FunctionalComponent<Props> = ({
             />
           </div>
         </div>
-        <div class={styles.scroller}>
+        <div class={[styles.scroller, 'related-videos'].join(' ')}>
           <VideoList videos={videos} onVideoClick={onVideoClick} />
         </div>
       </div>

@@ -3,6 +3,7 @@ import { useRef, useEffect } from 'preact/hooks';
 interface UsePageTransitionArg {
   outgoing?(transition: DocumentTransition): void;
   incoming?(transition: DocumentTransition): void;
+  done?(): void;
 }
 
 export function usePageTransition() {
@@ -21,6 +22,7 @@ export function usePageTransition() {
   return async ({
     outgoing,
     incoming,
+    done,
   }: UsePageTransitionArg = {}): Promise<void> => {
     if (!('createDocumentTransition' in document)) return;
 
@@ -44,6 +46,7 @@ export function usePageTransition() {
       await globalThis.ongoingTransition;
 
       globalThis.ongoingTransition = undefined;
+      done?.();
     });
   };
 }
