@@ -31,18 +31,21 @@ const App: FunctionalComponent<Props> = ({
   async function navigateTo(path: string) {
     if (path === location.pathname) return;
 
+    const elementsToSet = [
+      ['.site-header', 'header'],
+      ['.home-link', 'home-link'],
+    ];
+
     await startTransition({
       outgoing(transition) {
-        transition.setElement(
-          document.querySelector('.site-header')!,
-          'header',
-        );
+        for (const [selector, tag] of elementsToSet) {
+          transition.setElement(document.querySelector(selector)!, tag);
+        }
       },
       incoming(transition) {
-        transition.setElement(
-          document.querySelector('.site-header')!,
-          'header',
-        );
+        for (const [selector, tag] of elementsToSet) {
+          transition.setElement(document.querySelector(selector)!, tag);
+        }
       },
     });
     history.pushState(null, '', path);
