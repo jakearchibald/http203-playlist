@@ -11,6 +11,7 @@
   object-position: center;
   will-change: opacity;
   transition: opacity 500ms ease-in-out;
+  pointer-events: none;
 }
 
 .embed-container {
