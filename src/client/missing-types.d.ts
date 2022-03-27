@@ -13,10 +13,12 @@
 /// <reference path="../../missing-types.d.ts" />
 
 interface DocumentTransition {
-  start(setupPromise: () => Promise<void> | void): void;
+  start(setupPromise: () => Promise<void> | void): Promise<void>;
   setElement(element: Element, tag: string): void;
 }
 
 interface Document {
   createDocumentTransition(): DocumentTransition;
 }
+
+declare var ongoingTransition: Promise<void> | undefined;
