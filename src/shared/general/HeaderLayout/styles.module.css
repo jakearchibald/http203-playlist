@@ -27,6 +27,7 @@
   fill: var(--white);
   color: inherit;
   width: max-content;
+  contain: paint;
 }
 
 .show-back-icon .home-link {

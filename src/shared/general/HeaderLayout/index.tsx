@@ -35,7 +35,7 @@ const Header: FunctionalComponent<Props> = ({
       >
         <a
           href="/"
-          class={styles.homeLink}
+          class={[styles.homeLink, 'home-link'].join(' ')}
           onClick={(event) => onHomeClick?.(event)}
         >
           <svg class={styles.backIcon} viewBox="0 0 24 24">
