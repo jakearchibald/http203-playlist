@@ -46,3 +46,23 @@ html[class~='transition-warming-up']::page-transition-incoming-image(*),
 html[class~='transition-warming-up']::page-transition-outgoing-image(*) {
   animation-play-state: paused !important;
 }
+
+@keyframes slide-from-right {
+  from {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes slide-to-left {
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+::page-transition-incoming-image(root) {
+  animation: 500ms ease-out both slide-from-right;
+}
+
+::page-transition-outgoing-image(root) {
+  animation: 500ms ease-out both slide-to-left;
+}
