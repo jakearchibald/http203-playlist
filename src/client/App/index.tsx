@@ -29,7 +29,22 @@ const App: FunctionalComponent<Props> = ({
   }
 
   async function navigateTo(path: string) {
-    await startTransition();
+    if (path === location.pathname) return;
+
+    await startTransition({
+      outgoing(transition) {
+        transition.setElement(
+          document.querySelector('.site-header')!,
+          'header',
+        );
+      },
+      incoming(transition) {
+        transition.setElement(
+          document.querySelector('.site-header')!,
+          'header',
+        );
+      },
+    });
     history.pushState(null, '', path);
     setStateFromURL();
   }
