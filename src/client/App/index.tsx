@@ -1,3 +1,4 @@
+import { usePageTransition } from 'client/utils';
 import { h, FunctionalComponent, Fragment, RenderableProps } from 'preact';
 import { useState, useMemo, useEffect } from 'preact/hooks';
 import Index from 'shared/Index';
@@ -27,7 +28,8 @@ const App: FunctionalComponent<Props> = ({
     setVideo(getVideoFromURL());
   }
 
-  function navigateTo(path: string) {
+  async function navigateTo(path: string) {
+    await startTransition();
     history.pushState(null, '', path);
     setStateFromURL();
   }
@@ -41,6 +43,8 @@ const App: FunctionalComponent<Props> = ({
     event.preventDefault();
     navigateTo(path);
   }
+
+  const startTransition = usePageTransition();
 
   const initialVideo = useMemo(() => getVideoFromURL(), []);
 
