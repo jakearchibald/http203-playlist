@@ -1,0 +1,22 @@
+.embed,
+.video-img {
+  display: block;
+  aspect-ratio: 16/9;
+  width: 100%;
+  height: auto;
+}
+
+.video-img {
+  object-fit: cover;
+  object-position: center;
+  will-change: opacity;
+  transition: opacity 500ms ease-in-out;
+}
+
+.embed-container {
+  display: grid;
+
+  & > * {
+    grid-area: 1 / 1;
+  }
+}

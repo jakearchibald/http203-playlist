@@ -1,11 +1,12 @@
-import { h, FunctionalComponent } from 'preact';
+import { h, FunctionalComponent, RenderableProps, createRef } from 'preact';
 import {} from 'preact/hooks';
 import HeaderLayout from 'shared/general/HeaderLayout';
 import VideoList from 'shared/general/VideoList';
-import { formatDate, ytSrcset } from 'shared/utils';
+import { formatDate } from 'shared/utils';
 
 import * as styles from './styles.module.css';
 import 'add-css:./styles.module.css';
+import Embed from './Embed';
 
 interface Props {
   videos: typeof import('video-data:').default;
@@ -19,28 +20,12 @@ const Video: FunctionalComponent<Props> = ({
   videos,
   onHomeClick,
   onVideoClick,
-}: Props) => {
+}: RenderableProps<Props>) => {
   return (
     <HeaderLayout onHomeClick={onHomeClick} scrollKey={video.id}>
       <div class={styles.videoLayout}>
         <div class={styles.videoAndDetails}>
-          <div class={styles.embedContainer} key={video.id}>
-            <img
-              class={styles.videoImg}
-              srcset={ytSrcset(video.id)}
-              alt={video.title}
-            />
-            <iframe
-              class={styles.embed}
-              width="560"
-              height="315"
-              src={`https://www.youtube-nocookie.com/embed/${video.id}`}
-              title="YouTube video player"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            ></iframe>
-          </div>
+          <Embed video={video} key={video.id} />
 
           <div class={styles.videoDetails}>
             <h1 class={styles.videoTitle}>{video.title}</h1>
