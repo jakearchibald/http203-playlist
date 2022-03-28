@@ -16,6 +16,7 @@
 
 .embed-container {
   display: grid;
+  contain: paint;
 
   & > * {
     grid-area: 1 / 1;
