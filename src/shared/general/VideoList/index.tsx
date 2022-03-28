@@ -24,11 +24,11 @@ const VideoList: FunctionalComponent<Props> = ({
             onClick={(event) => onVideoClick?.(event, `/videos/${slug}/`)}
           >
             <img
-              class={styles.videoThumb}
+              class={[styles.videoThumb, 'video-thumb'].join(' ')}
               srcset={ytSrcset(video.id)}
               alt={video.title}
             />
-            <p class={styles.videoMeta}>
+            <p class={[styles.videoMeta, 'video-meta'].join(' ')}>
               <time>{formatDate(new Date(video.published))}</time>
             </p>
           </a>

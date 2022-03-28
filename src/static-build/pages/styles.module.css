@@ -134,3 +134,7 @@ html[class~='back-transition']::page-transition-outgoing-image(root) {
     animation-name: slide-and-fade-to-right;
   }
 }
+
+::page-transition-container(embed-container) {
+  animation-duration: 8s;
+}

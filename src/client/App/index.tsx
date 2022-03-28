@@ -29,7 +29,9 @@ const App: FunctionalComponent<Props> = ({
   }
 
   async function navigateTo(path: string) {
-    if (path === location.pathname) return;
+    const currentPath = location.pathname;
+
+    if (path === currentPath) return;
 
     const elementsToSet = [
       ['.site-header', 'header'],
@@ -51,9 +53,23 @@ const App: FunctionalComponent<Props> = ({
         }
 
         setElements(transition);
+
+        if (currentPath === '/' && path.startsWith('/videos/')) {
+          transition.setElement(
+            document.querySelector(`a[href="${path}"] .video-thumb`)!,
+            'embed-container',
+          );
+        }
       },
       incoming(transition) {
         setElements(transition);
+
+        if (currentPath === '/' && path.startsWith('/videos/')) {
+          transition.setElement(
+            document.querySelector(`.embed-container`)!,
+            'embed-container',
+          );
+        }
       },
       done() {
         document.documentElement.classList.remove('back-transition');
