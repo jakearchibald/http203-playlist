@@ -16,6 +16,12 @@ const Embed: FunctionalComponent<Props> = ({
 
   return (
     <div class={styles.embedContainer}>
+      <img
+        class={styles.videoImg}
+        style={{ opacity: iframeReady ? '0' : '1' }}
+        srcset={ytSrcset(video.id)}
+        alt={video.title}
+      />
       <iframe
         onLoad={() => setIframeReady(true)}
         class={styles.embed}
@@ -27,14 +33,6 @@ const Embed: FunctionalComponent<Props> = ({
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowFullScreen
       ></iframe>
-      <img
-        class={styles.videoImg}
-        style={{ opacity: iframeReady ? '0' : '1' }}
-        srcset={ytSrcset(video.id)}
-        alt={video.title}
-        // @ts-ignore
-        fetchpriority="high"
-      />
     </div>
   );
 };
