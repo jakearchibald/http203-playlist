@@ -44,3 +44,8 @@
 .show-back-icon .back-icon {
   display: block;
 }
+
+.header-text {
+  display: block;
+  contain: paint;
+}

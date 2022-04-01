@@ -33,7 +33,7 @@ const App: FunctionalComponent<Props> = ({
 
     const elementsToSet = [
       ['.site-header', 'header'],
-      ['.home-link', 'home-link'],
+      ['.header-text', 'header-text'],
     ];
 
     await startTransition({
