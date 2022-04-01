@@ -24,6 +24,8 @@ export function usePageTransition() {
   }: UsePageTransitionArg = {}): Promise<void> => {
     if (!('createDocumentTransition' in document)) return;
 
+    document.documentElement.classList.add('transition-warming-up');
+
     return new Promise<void>(async (resolve) => {
       const transition = document.createDocumentTransition();
       transitionRef.current = transition;
@@ -35,6 +37,8 @@ export function usePageTransition() {
         await new Promise((resolve) => {
           startResolver.current = resolve;
         });
+
+        document.documentElement.classList.remove('transition-warming-up');
       });
 
       await globalThis.ongoingTransition;
