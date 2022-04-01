@@ -1,6 +1,53 @@
 [
   {
     "kind": "youtube#playlistItem",
+    "etag": "ByqFegtEKudUp0NHbcZcD_iGvZE",
+    "id": "UExOWWt4T0Y2cmNJQUtJUUZzTmJWMEpEd3NfR19ibk5vOS44REI4QUZDRDI5MDc4Q0NF",
+    "snippet": {
+      "publishedAt": "2022-03-29T15:01:58Z",
+      "channelId": "UCnUYZLuoy1rq1aVMwx4aTzw",
+      "title": "What key was pressed? (You won't believe how keyboard events work) | HTTP 203",
+      "description": "Jake challenges Ada (from Samsung Internet https://developer.samsung.com/internet) to a game of \"what key was pressed\" while diving into how keyboard events work, and the best way to handle user input.\n\nThe original tweet → https://goo.gle/36QUegg \nWordledge → https://goo.gle/3qIPtMJ \nKeyboardEvent → https://goo.gle/3tLnk9X \nDvorak layout → https://goo.gle/3tHzctr \nevent.code bug → https://goo.gle/3IFKDGo \nKeyboard events viewer →  https://goo.gle/3JPp07Z \nJake's ancient keyboard talk → https://goo.gle/388PkMk \nInput event →  https://goo.gle/3qIueuC \nWordle Analyzer → https://goo.gle/36VoRkz \nThe wordle analyzer input implementation → https://goo.gle/36B1pcK \n\nMore videos in the HTTP 203 series → http://goo.gle/HTTP203\nSubscribe to Google Chrome Developers here → https://goo.gle/ChromeDevs \n\nAlso, if you enjoyed this, you might like the HTTP203 podcast → https://goo.gle/HTTP203Podcast\n\n#HTTP203 #ChromeDeveloper #WebDev",
+      "thumbnails": {
+        "default": {
+          "url": "https://i.ytimg.com/vi/jLqTXkFtEH0/default.jpg",
+          "width": 120,
+          "height": 90
+        },
+        "medium": {
+          "url": "https://i.ytimg.com/vi/jLqTXkFtEH0/mqdefault.jpg",
+          "width": 320,
+          "height": 180
+        },
+        "high": {
+          "url": "https://i.ytimg.com/vi/jLqTXkFtEH0/hqdefault.jpg",
+          "width": 480,
+          "height": 360
+        },
+        "standard": {
+          "url": "https://i.ytimg.com/vi/jLqTXkFtEH0/sddefault.jpg",
+          "width": 640,
+          "height": 480
+        },
+        "maxres": {
+          "url": "https://i.ytimg.com/vi/jLqTXkFtEH0/maxresdefault.jpg",
+          "width": 1280,
+          "height": 720
+        }
+      },
+      "channelTitle": "Google Chrome Developers",
+      "playlistId": "PLNYkxOF6rcIAKIQFsNbV0JDws_G_bnNo9",
+      "position": 0,
+      "resourceId": {
+        "kind": "youtube#video",
+        "videoId": "jLqTXkFtEH0"
+      },
+      "videoOwnerChannelTitle": "Google Chrome Developers",
+      "videoOwnerChannelId": "UCnUYZLuoy1rq1aVMwx4aTzw"
+    }
+  },
+  {
+    "kind": "youtube#playlistItem",
     "etag": "Fd3ogW5tIGqbjz-MILZPFtnXwu8",
     "id": "UExOWWt4T0Y2cmNJQUtJUUZzTmJWMEpEd3NfR19ibk5vOS5FQjcyRDZBMEMyNTY3OTdE",
     "snippet": {
