@@ -40,3 +40,9 @@ a {
 * {
   -webkit-tap-highlight-color: transparent;
 }
+
+html[class~='transition-warming-up']::page-transition-container(*),
+html[class~='transition-warming-up']::page-transition-incoming-image(*),
+html[class~='transition-warming-up']::page-transition-outgoing-image(*) {
+  animation-play-state: paused !important;
+}
