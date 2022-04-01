@@ -11,6 +11,11 @@
   display: grid;
   align-items: center;
   padding: 0 var(--content-padding);
+  contain: paint;
+}
+
+.show-back-icon.header {
+  padding: 0 10px;
 }
 
 .main {
@@ -19,5 +24,22 @@
 }
 
 .home-link {
+  fill: var(--white);
   color: inherit;
+  width: max-content;
+}
+
+.show-back-icon .home-link {
+  display: grid;
+  grid-template-columns: 31px 1fr;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.back-icon {
+  display: none;
+}
+
+.show-back-icon .back-icon {
+  display: block;
 }

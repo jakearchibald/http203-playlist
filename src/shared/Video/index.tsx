@@ -22,7 +22,7 @@ const Video: FunctionalComponent<Props> = ({
   onVideoClick,
 }: RenderableProps<Props>) => {
   return (
-    <HeaderLayout onHomeClick={onHomeClick} scrollKey={video.id}>
+    <HeaderLayout onHomeClick={onHomeClick} scrollKey={video.id} showBackIcon>
       <div class={styles.videoLayout}>
         <div class={styles.videoAndDetails}>
           <Embed video={video} key={video.id} />
