@@ -40,3 +40,23 @@ a {
 * {
   -webkit-tap-highlight-color: transparent;
 }
+
+@keyframes slide-from-right {
+  from {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes slide-to-left {
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+::page-transition-incoming-image(root) {
+  animation: 500ms ease-out both slide-from-right;
+}
+
+::page-transition-outgoing-image(root) {
+  animation: 500ms ease-out both slide-to-left;
+}
