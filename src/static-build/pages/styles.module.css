@@ -79,11 +79,11 @@ html[class~='transition-warming-up']::page-transition-outgoing-image(*) {
   animation: 500ms ease-out both slide-to-left;
 }
 
-html.back-transition::page-transition-incoming-image(root) {
+html[class~='back-transition']::page-transition-incoming-image(root) {
   animation-name: slide-from-left;
 }
 
-html.back-transition::page-transition-outgoing-image(root) {
+html[class~='back-transition']::page-transition-outgoing-image(root) {
   animation-name: slide-to-right;
 }
 
@@ -126,11 +126,11 @@ html.back-transition::page-transition-outgoing-image(root) {
     animation-duration: 300ms;
   }
 
-  .back-transition::page-transition-incoming-image(root) {
+  html[class~='back-transition']::page-transition-incoming-image(root) {
     animation-name: slide-and-fade-from-left;
   }
 
-  .back-transition::page-transition-outgoing-image(root) {
+  html[class~='back-transition']::page-transition-outgoing-image(root) {
     animation-name: slide-and-fade-to-right;
   }
 }

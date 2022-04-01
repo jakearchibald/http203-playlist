@@ -34,7 +34,6 @@ const App: FunctionalComponent<Props> = ({
     const elementsToSet = [
       ['.site-header', 'header'],
       ['.header-text', 'header-text'],
-      ['.related-videos', 'related-videos'],
     ];
 
     function setElements(transition: DocumentTransition) {
