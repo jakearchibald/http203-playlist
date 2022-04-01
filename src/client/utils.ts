@@ -18,7 +18,12 @@ export function usePageTransition() {
     resolver();
   });
 
-  return ({ outgoing, incoming }: UsePageTransitionArg = {}) => {
+  return async ({
+    outgoing,
+    incoming,
+  }: UsePageTransitionArg = {}): Promise<void> => {
+    if (!('createDocumentTransition' in document)) return;
+
     return new Promise<void>((resolve) => {
       const transition = document.createDocumentTransition();
       transitionRef.current = transition;
