@@ -19,18 +19,21 @@ export function usePageTransition() {
   });
 
   return ({ outgoing, incoming }: UsePageTransitionArg = {}) => {
-    return new Promise<void>((resolve) => {
+    return new Promise<void>(async (resolve) => {
       const transition = document.createDocumentTransition();
       transitionRef.current = transition;
       incomingRef.current = incoming;
       outgoing?.(transition);
 
-      transition.start(async () => {
+      await transition.start(async () => {
         resolve();
         await new Promise((resolve) => {
           startResolver.current = resolve;
         });
+        document.documentElement.classList.add('play');
       });
+
+      document.documentElement.classList.remove('play');
     });
   };
 }
