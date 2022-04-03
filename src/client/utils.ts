@@ -1,5 +1,7 @@
 import { useRef, useEffect } from 'preact/hooks';
 
+const reducedMotionMedia = matchMedia('(prefers-reduced-motion: reduce)');
+
 interface UsePageTransitionArg {
   outgoing?(transition: DocumentTransition): void;
   incoming?(transition: DocumentTransition): void;
@@ -24,7 +26,12 @@ export function usePageTransition() {
     incoming,
     done,
   }: UsePageTransitionArg = {}): Promise<void> => {
-    if (!('createDocumentTransition' in document)) return;
+    if (
+      !('createDocumentTransition' in document) ||
+      reducedMotionMedia.matches
+    ) {
+      return;
+    }
 
     document.documentElement.classList.add('transition-warming-up');
 
