@@ -33,6 +33,7 @@
   background: var(--white);
   margin: 0;
   padding: 0.4rem 1rem;
+  contain: paint;
 }
 
 .video-link {

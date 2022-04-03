@@ -19,6 +19,7 @@
   padding: var(--content-padding);
   background: var(--white);
   overflow: hidden;
+  contain: paint;
 }
 
 .video-title {

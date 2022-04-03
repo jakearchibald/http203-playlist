@@ -27,7 +27,7 @@ const Video: FunctionalComponent<Props> = ({
         <div class={styles.videoAndDetails}>
           <Embed video={video} key={video.id} />
 
-          <div class={styles.videoDetails}>
+          <div class={[styles.videoDetails, 'video-details'].join(' ')}>
             <h1 class={styles.videoTitle}>{video.title}</h1>
             <time>{formatDate(new Date(video.published))}</time>
             <div

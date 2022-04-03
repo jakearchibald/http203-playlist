@@ -33,9 +33,12 @@ const App: FunctionalComponent<Props> = ({
 
     if (path === currentPath) return;
 
+    const toVideo = path.startsWith('/videos/') && currentPath === '/';
+
     const elementsToSet = [
       ['.site-header', 'header'],
       ['.header-text', 'header-text'],
+      ['.related-videos', 'related-videos'],
     ];
 
     function setElements(transition: DocumentTransition) {
@@ -48,31 +51,44 @@ const App: FunctionalComponent<Props> = ({
 
     await startTransition({
       outgoing(transition) {
-        if (path === '/') {
+        if (toVideo) {
+          document.documentElement.classList.add('transition-to-video');
+        } else if (path === '/') {
           document.documentElement.classList.add('back-transition');
         }
 
         setElements(transition);
 
-        if (currentPath === '/' && path.startsWith('/videos/')) {
+        if (toVideo) {
           transition.setElement(
             document.querySelector(`a[href="${path}"] .video-thumb`)!,
             'embed-container',
+          );
+          transition.setElement(
+            document.querySelector(`a[href="${path}"] .video-meta`)!,
+            'video-details',
           );
         }
       },
       incoming(transition) {
         setElements(transition);
 
-        if (currentPath === '/' && path.startsWith('/videos/')) {
+        if (toVideo) {
           transition.setElement(
             document.querySelector(`.embed-container`)!,
             'embed-container',
           );
+          transition.setElement(
+            document.querySelector(`.video-details`)!,
+            'video-details',
+          );
         }
       },
       done() {
-        document.documentElement.classList.remove('back-transition');
+        document.documentElement.classList.remove(
+          'back-transition',
+          'transition-to-video',
+        );
       },
     });
     history.pushState(null, '', path);
