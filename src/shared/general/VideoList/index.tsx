@@ -7,28 +7,20 @@ import { formatDate, ytSrcset } from 'shared/utils';
 
 interface Props {
   videos: typeof import('video-data:').default;
-  onVideoClick?: (event: Event, url: string) => void;
 }
 
-const VideoList: FunctionalComponent<Props> = ({
-  videos,
-  onVideoClick,
-}: Props) => {
+const VideoList: FunctionalComponent<Props> = ({ videos }: Props) => {
   return (
     <ol class={styles.videoList}>
       {Object.entries(videos).map(([slug, video]) => (
         <li>
-          <a
-            class={styles.videoLink}
-            href={`/videos/${slug}/`}
-            onClick={(event) => onVideoClick?.(event, `/videos/${slug}/`)}
-          >
+          <a class={styles.videoLink} href={`/videos/${slug}/`}>
             <img
-              class={styles.videoThumb}
+              class={[styles.videoThumb, 'video-thumb'].join(' ')}
               srcset={ytSrcset(video.id)}
               alt={video.title}
             />
-            <p class={styles.videoMeta}>
+            <p class={[styles.videoMeta, 'video-meta'].join(' ')}>
               <time>{formatDate(new Date(video.published))}</time>
             </p>
           </a>

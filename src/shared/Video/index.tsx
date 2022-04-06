@@ -11,23 +11,19 @@ import Embed from './Embed';
 interface Props {
   videos: typeof import('video-data:').default;
   video: typeof import('video-data:').default[string];
-  onHomeClick?: (event: Event) => void;
-  onVideoClick?: (event: Event, url: string) => void;
 }
 
 const Video: FunctionalComponent<Props> = ({
   video,
   videos,
-  onHomeClick,
-  onVideoClick,
 }: RenderableProps<Props>) => {
   return (
-    <HeaderLayout onHomeClick={onHomeClick} scrollKey={video.id} showBackIcon>
+    <HeaderLayout scrollKey={video.id} showBackIcon>
       <div class={styles.videoLayout}>
         <div class={styles.videoAndDetails}>
           <Embed video={video} key={video.id} />
 
-          <div class={styles.videoDetails}>
+          <div class={[styles.videoDetails, 'video-details'].join(' ')}>
             <h1 class={styles.videoTitle}>{video.title}</h1>
             <time>{formatDate(new Date(video.published))}</time>
             <div
@@ -36,8 +32,8 @@ const Video: FunctionalComponent<Props> = ({
             />
           </div>
         </div>
-        <div class={styles.scroller}>
-          <VideoList videos={videos} onVideoClick={onVideoClick} />
+        <div class={[styles.scroller, 'related-videos'].join(' ')}>
+          <VideoList videos={videos} />
         </div>
       </div>
     </HeaderLayout>

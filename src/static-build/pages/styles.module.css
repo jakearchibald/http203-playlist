@@ -40,3 +40,155 @@ a {
 * {
   -webkit-tap-highlight-color: transparent;
 }
+
+@keyframes slide-from-right {
+  from {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes slide-to-left {
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes slide-from-left {
+  from {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes slide-to-right {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes slide-and-fade-from-right {
+  from {
+    opacity: 0;
+    transform: translateX(60px);
+  }
+}
+
+@keyframes slide-and-fade-to-left {
+  to {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+}
+
+@keyframes slide-and-fade-from-left {
+  from {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+}
+
+@keyframes slide-and-fade-to-right {
+  to {
+    opacity: 0;
+    transform: translateX(60px);
+  }
+}
+
+html:global(.transition-warming-up)::page-transition-container(*),
+html:global(.transition-warming-up)::page-transition-incoming-image(*),
+html:global(.transition-warming-up)::page-transition-outgoing-image(*) {
+  animation-play-state: paused !important;
+}
+
+::page-transition-incoming-image(root) {
+  animation: 500ms ease-out both slide-from-right;
+}
+
+::page-transition-outgoing-image(root) {
+  animation: 500ms ease-out both slide-to-left;
+}
+
+html[class~='back-transition']::page-transition-incoming-image(root) {
+  animation-name: slide-from-left;
+}
+
+html[class~='back-transition']::page-transition-outgoing-image(root) {
+  animation-name: slide-to-right;
+}
+
+html:global(.transition-to-video)::page-transition-incoming-image(root) {
+  animation-name: fade-in;
+  animation-duration: 300ms;
+}
+
+html:global(.transition-to-video)::page-transition-outgoing-image(root) {
+  animation-name: fade-out;
+  animation-duration: 300ms;
+}
+
+::page-transition-container(embed-container) {
+  animation-duration: 300ms;
+  animation-timing-function: ease-out;
+}
+
+::page-transition-container(video-details) {
+  animation-duration: 300ms;
+  animation-timing-function: ease-out;
+}
+
+::page-transition-incoming-image(video-details) {
+  object-fit: cover;
+  object-position: bottom center;
+}
+
+::page-transition-outgoing-image(video-details) {
+  object-fit: cover;
+  object-position: bottom center;
+}
+
+@media (min-width: 660px) {
+  ::page-transition-incoming-image(root) {
+    animation-name: slide-and-fade-from-right;
+    animation-duration: 300ms;
+  }
+
+  ::page-transition-outgoing-image(root) {
+    animation-name: slide-and-fade-to-left;
+    animation-duration: 300ms;
+  }
+
+  html[class~='back-transition']::page-transition-incoming-image(root) {
+    animation-name: slide-and-fade-from-left;
+  }
+
+  html[class~='back-transition']::page-transition-outgoing-image(root) {
+    animation-name: slide-and-fade-to-right;
+  }
+
+  ::page-transition-container(embed-container) {
+    animation-duration: 300ms;
+  }
+
+  ::page-transition-container(video-details) {
+    animation-duration: 300ms;
+  }
+
+  html:global(.transition-to-video)::page-transition-incoming-image(related-videos) {
+    animation: 300ms ease-out both slide-and-fade-from-right;
+  }
+
+  html:global(.transition-to-home)::page-transition-outgoing-image(related-videos) {
+    animation: 300ms ease-out both slide-and-fade-to-right;
+  }
+}

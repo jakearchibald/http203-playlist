@@ -11,5 +11,17 @@
  * limitations under the License.
  */
 /// <reference path="../../missing-types.d.ts" />
+/// <reference path="../../navigation-types.d.ts" />
 
 declare const __PRERENDER__: boolean;
+
+interface DocumentTransition {
+  start(setupPromise: () => Promise<void> | void): Promise<void>;
+  setElement(element: Element, tag: string): void;
+}
+
+interface Document {
+  createDocumentTransition(): DocumentTransition;
+}
+
+declare var ongoingTransition: Promise<void> | undefined;

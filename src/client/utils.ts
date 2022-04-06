@@ -1,8 +1,11 @@
 import { useRef, useEffect } from 'preact/hooks';
 
+const reducedMotionMedia = matchMedia('(prefers-reduced-motion: reduce)');
+
 interface UsePageTransitionArg {
   outgoing?(transition: DocumentTransition): void;
   incoming?(transition: DocumentTransition): void;
+  done?(): void;
 }
 
 export function usePageTransition() {
@@ -21,21 +24,36 @@ export function usePageTransition() {
   return async ({
     outgoing,
     incoming,
+    done,
   }: UsePageTransitionArg = {}): Promise<void> => {
-    if (!('createDocumentTransition' in document)) return;
+    if (
+      !('createDocumentTransition' in document) ||
+      reducedMotionMedia.matches
+    ) {
+      return;
+    }
 
-    return new Promise<void>((resolve) => {
+    document.documentElement.classList.add('transition-warming-up');
+
+    return new Promise<void>(async (resolve) => {
       const transition = document.createDocumentTransition();
       transitionRef.current = transition;
       incomingRef.current = incoming;
       outgoing?.(transition);
 
-      transition.start(async () => {
+      globalThis.ongoingTransition = transition.start(async () => {
         resolve();
         await new Promise((resolve) => {
           startResolver.current = resolve;
         });
+
+        document.documentElement.classList.remove('transition-warming-up');
       });
+
+      await globalThis.ongoingTransition;
+
+      globalThis.ongoingTransition = undefined;
+      done?.();
     });
   };
 }
