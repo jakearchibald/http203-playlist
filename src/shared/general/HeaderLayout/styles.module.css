@@ -27,6 +27,7 @@
   fill: var(--white);
   color: inherit;
   width: max-content;
+  contain: paint;
 }
 
 .show-back-icon .home-link {
@@ -42,4 +43,9 @@
 
 .show-back-icon .back-icon {
   display: block;
+}
+
+.header-text {
+  display: block;
+  contain: paint;
 }
