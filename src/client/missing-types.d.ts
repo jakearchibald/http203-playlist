@@ -11,6 +11,7 @@
  * limitations under the License.
  */
 /// <reference path="../../missing-types.d.ts" />
+/// <reference path="../../navigation-types.d.ts" />
 
 interface DocumentTransition {
   start(setupPromise: () => Promise<void> | void): Promise<void>;
