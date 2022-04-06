@@ -7,18 +7,12 @@ import VideoList from 'shared/general/VideoList';
 
 interface Props {
   videos: typeof import('video-data:').default;
-  onHomeClick?: (event: Event) => void;
-  onVideoClick?: (event: Event, url: string) => void;
 }
 
-const Index: FunctionalComponent<Props> = ({
-  videos,
-  onHomeClick,
-  onVideoClick,
-}: Props) => {
+const Index: FunctionalComponent<Props> = ({ videos }: Props) => {
   return (
-    <HeaderLayout onHomeClick={onHomeClick} scrollKey="home">
-      <VideoList videos={videos} onVideoClick={onVideoClick} />
+    <HeaderLayout scrollKey="home">
+      <VideoList videos={videos} />
     </HeaderLayout>
   );
 };

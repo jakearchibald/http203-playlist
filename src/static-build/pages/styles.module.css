@@ -185,6 +185,10 @@ html:global(.transition-to-video)::page-transition-outgoing-image(root) {
   }
 
   html:global(.transition-to-video)::page-transition-incoming-image(related-videos) {
-    animation: 300ms ease-out both slide-from-right;
+    animation: 300ms ease-out both slide-and-fade-from-right;
+  }
+
+  html:global(.transition-to-home)::page-transition-outgoing-image(related-videos) {
+    animation: 300ms ease-out both slide-and-fade-to-right;
   }
 }
