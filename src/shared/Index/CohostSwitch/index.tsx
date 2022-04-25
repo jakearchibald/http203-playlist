@@ -19,7 +19,7 @@ const CohostSwitch: FunctionalComponent<Props> = ({
       </li>
       {cohosts.map((cohost) => (
         <li class={selectedCohost === cohost ? styles.currentCohost : ''}>
-          <a href={`/with-${cohost.toLowerCase()}`}>{cohost}</a>
+          <a href={`/with-${cohost.toLowerCase()}/`}>{cohost}</a>
         </li>
       ))}
     </ol>
