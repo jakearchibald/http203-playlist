@@ -29,13 +29,17 @@ const Header: FunctionalComponent<Props> = ({
     const entry = backEntriesReversed.find((entry) => {
       if (!entry.url) return false;
       const entryURL = new URL(entry.url);
-      return entryURL.origin === location.origin && entryURL.pathname === '/';
+      return (
+        entryURL.origin === location.origin &&
+        entry.sameDocument &&
+        (entryURL.pathname === '/' || entryURL.pathname.startsWith('/with-'))
+      );
     });
 
     if (!entry) return;
 
     event.preventDefault();
-    navigation.traverseTo(entry.key);
+    const result = navigation.traverseTo(entry.key);
   };
 
   return (

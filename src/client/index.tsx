@@ -1,4 +1,4 @@
-import { h, render, hydrate } from 'preact';
+import { h, hydrate } from 'preact';
 import videos from 'video-data:';
 import App from './App';
 

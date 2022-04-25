@@ -2,6 +2,7 @@ import { usePageTransition } from 'client/utils';
 import { h, FunctionalComponent, RenderableProps } from 'preact';
 import { useState, useMemo, useEffect } from 'preact/hooks';
 import Index from 'shared/Index';
+import { cohosts } from 'shared/data';
 import Video from 'shared/Video';
 
 interface Props {
@@ -25,8 +26,16 @@ const App: FunctionalComponent<Props> = ({
     return video;
   }
 
+  function getCohostFromURL(path = location.pathname) {
+    if (!path.startsWith('/with-')) return undefined;
+    const cohost = /\/with-([^\/]+)/.exec(path);
+    if (!cohost) return undefined;
+    return cohosts.find((name) => name.toLowerCase() === cohost[1]);
+  }
+
   function setStateFromURL(path: string = '/') {
     setVideo(getVideoFromURL(path));
+    setCohost(getCohostFromURL(path));
   }
 
   async function performTransition(
@@ -36,9 +45,12 @@ const App: FunctionalComponent<Props> = ({
   ) {
     if (from === to) return;
 
-    const toVideo = to.startsWith('/videos/') && from === '/';
+    const toVideo =
+      to.startsWith('/videos/') && (from === '/' || from.startsWith('/with-'));
+
     const elementsToSet = [
       ['.site-header', 'header'],
+      ['.cohost-switch', 'cohost-switch'],
       ['.header-text', 'header-text'],
       ['.related-videos', 'related-videos'],
     ];
@@ -56,10 +68,7 @@ const App: FunctionalComponent<Props> = ({
         if (toVideo) {
           document.documentElement.classList.add('transition-to-video');
         } else if (to === '/') {
-          document.documentElement.classList.add(
-            'back-transition',
-            'transition-to-home',
-          );
+          document.documentElement.classList.add('transition-to-home');
         }
 
         if (back) {
@@ -119,6 +128,7 @@ const App: FunctionalComponent<Props> = ({
 
         if (
           destinationURL.pathname === '/' ||
+          destinationURL.pathname.startsWith('/with-') ||
           destinationURL.pathname.startsWith('/videos/')
         ) {
           event.transitionWhile(
@@ -142,15 +152,20 @@ const App: FunctionalComponent<Props> = ({
 
   const startTransition = usePageTransition();
   const initialVideo = useMemo(() => getVideoFromURL(), []);
+  const initialCohost = useMemo(() => getCohostFromURL(), []);
 
   const [video, setVideo] = useState<
     undefined | typeof import('video-data:').default[string]
   >(initialVideo);
 
+  const [cohost, setCohost] = useState<
+    undefined | typeof import('shared/data').cohosts[number]
+  >(initialCohost);
+
   if (video) {
     return <Video video={video} videos={videos} />;
   }
 
-  return <Index videos={videos} />;
+  return <Index videos={videos} cohost={cohost} />;
 };
 export default App;

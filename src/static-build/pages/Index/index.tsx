@@ -16,17 +16,19 @@ import IndexRoot from 'shared/Index';
 import pageData from 'video-data:';
 import CommonHead from '../CommonHead';
 
-interface Props {}
+interface Props {
+  cohost?: typeof import('video-data:').default[string]['cohost'];
+}
 
-const Index: FunctionalComponent<Props> = () => (
+const Index: FunctionalComponent<Props> = ({ cohost }) => (
   <html lang="en">
     <head>
       <CommonHead />
-      <title>HTTP 203</title>
+      <title>HTTP 203{cohost && ` - with ${cohost}`}</title>
     </head>
     <body>
       <div id="app">
-        <IndexRoot videos={pageData} />
+        <IndexRoot videos={pageData} cohost={cohost} />
       </div>
     </body>
   </html>

@@ -13,14 +13,22 @@
 import { h } from 'preact';
 import { renderPage, writeFiles } from './utils';
 import IndexPage from './pages/Index';
+import { cohosts } from 'shared/data';
 import pageData from 'video-data:';
 import VideoPage from './pages/Video';
 
 interface Output {
   [outputPath: string]: string | false;
 }
+
 const toOutput: Output = {
   'index.html': renderPage(<IndexPage />),
+  ...Object.fromEntries(
+    cohosts.map((cohost) => [
+      `with-${cohost.toLowerCase()}/index.html`,
+      renderPage(<IndexPage cohost={cohost} />),
+    ]),
+  ),
   ...Object.fromEntries(
     Object.entries(pageData).map(([slug, video]) => [
       `videos/${slug}/index.html`,
