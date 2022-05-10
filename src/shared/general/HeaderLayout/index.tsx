@@ -45,11 +45,7 @@ const Header: FunctionalComponent<Props> = ({
   return (
     <div class={styles.mainLayout}>
       <header
-        class={[
-          styles.header,
-          showBackIcon && styles.showBackIcon,
-          'site-header',
-        ]
+        class={[styles.header, showBackIcon && styles.showBackIcon]
           .filter(Boolean)
           .join(' ')}
       >
@@ -57,9 +53,7 @@ const Header: FunctionalComponent<Props> = ({
           <svg class={styles.backIcon} viewBox="0 0 24 24">
             <path d="M20 11H7.8l5.6-5.6L12 4l-8 8 8 8 1.4-1.4L7.8 13H20v-2z" />
           </svg>
-          <span class={[styles.headerText, 'header-text'].join(' ')}>
-            HTTP 203
-          </span>
+          <span class={styles.headerText}>HTTP 203</span>
         </a>
       </header>
       <div ref={scrollerRef} class={styles.main}>

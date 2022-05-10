@@ -4,6 +4,17 @@ import { useState, useMemo, useEffect } from 'preact/hooks';
 import Index from 'shared/Index';
 import { cohosts } from 'shared/data';
 import Video from 'shared/Video';
+import * as videoListStyles from 'shared/general/VideoList/styles.module.css';
+import * as videoEmbedStyles from 'shared/Video/Embed/styles.module.css';
+import * as videoStyles from 'shared/Video/styles.module.css';
+
+const enum TransitionType {
+  Other,
+  ThumbsToVideo,
+  VideoToThumbs,
+  VideoToVideo,
+  ThumbsToThumbs,
+}
 
 interface Props {
   videos: typeof import('video-data:').default;
@@ -45,69 +56,115 @@ const App: FunctionalComponent<Props> = ({
   ) {
     if (from === to) return;
 
-    const toVideo =
-      to.startsWith('/videos/') && (from === '/' || from.startsWith('/with-'));
-
-    const elementsToSet = [
-      ['.site-header', 'header'],
-      ['.cohost-switch', 'cohost-switch'],
-      ['.header-text', 'header-text'],
-      ['.related-videos', 'related-videos'],
-    ];
-
-    function setElements(transition: DocumentTransition) {
-      for (const [selector, tag] of elementsToSet) {
-        const element = document.querySelector(selector);
-        if (!element) continue;
-        transition.setElement(element, tag);
+    const transitionType: TransitionType = (() => {
+      if (
+        to.startsWith('/videos/') &&
+        (from === '/' || from.startsWith('/with-'))
+      ) {
+        return TransitionType.ThumbsToVideo;
       }
-    }
+      if (
+        from.startsWith('/videos/') &&
+        (to === '/' || to.startsWith('/with-'))
+      ) {
+        return TransitionType.VideoToThumbs;
+      }
+      if (
+        (from === '/' || from.startsWith('/with-')) &&
+        (to === '/' || to.startsWith('/with-'))
+      ) {
+        return TransitionType.ThumbsToThumbs;
+      }
+      if (from.startsWith('/videos/') && to.startsWith('/videos/')) {
+        return TransitionType.VideoToVideo;
+      }
+      return TransitionType.Other;
+    })();
+
+    const elementsToUntag: HTMLElement[] = [];
 
     await startTransition({
-      outgoing(transition) {
-        if (toVideo) {
-          document.documentElement.classList.add('transition-to-video');
-        } else if (to === '/') {
-          document.documentElement.classList.add('transition-to-home');
+      outgoing() {
+        if (transitionType === TransitionType.ThumbsToVideo) {
+          document.documentElement.classList.add('transition-home-to-video');
+          const thumb = document.querySelector(
+            `a[href="${to}"] .${videoListStyles.videoThumb}`,
+          );
+          const details = document.querySelector(
+            `a[href="${to}"] .${videoListStyles.videoMeta}`,
+          );
+
+          if (thumb && details) {
+            elementsToUntag.push(thumb as HTMLElement, details as HTMLElement);
+            (thumb as HTMLElement).style.pageTransitionTag = 'embed-container';
+            (details as HTMLElement).style.pageTransitionTag = 'video-details';
+          }
+        } else if (transitionType === TransitionType.VideoToThumbs) {
+          document.documentElement.classList.add('transition-video-to-home');
+        } else if (transitionType === TransitionType.VideoToVideo) {
+          document.documentElement.classList.add('transition-video-to-video');
+
+          const embed = document.querySelector(
+            `.${videoEmbedStyles.embedContainer}`,
+          );
+          const details = document.querySelector(
+            `.${videoStyles.videoDetails}`,
+          );
+
+          if (embed && details) {
+            elementsToUntag.push(embed as HTMLElement, details as HTMLElement);
+            (embed as HTMLElement).style.pageTransitionTag = 'none';
+            (details as HTMLElement).style.pageTransitionTag = 'none';
+          }
         }
 
         if (back) {
           document.documentElement.classList.add('back-transition');
         }
-
-        setElements(transition);
-
-        if (toVideo) {
-          transition.setElement(
-            document.querySelector(`a[href="${to}"] .video-thumb`)!,
-            'embed-container',
-          );
-          transition.setElement(
-            document.querySelector(`a[href="${to}"] .video-meta`)!,
-            'video-details',
-          );
-        }
       },
-      incoming(transition) {
-        setElements(transition);
+      incoming() {
+        if (transitionType === TransitionType.VideoToThumbs) {
+          const thumb = document.querySelector(
+            `a[href="${from}"] .${videoListStyles.videoThumb}`,
+          );
+          const details = document.querySelector(
+            `a[href="${from}"] .${videoListStyles.videoMeta}`,
+          );
 
-        if (toVideo) {
-          transition.setElement(
-            document.querySelector(`.embed-container`)!,
-            'embed-container',
+          if (thumb && details) {
+            elementsToUntag.push(thumb as HTMLElement, details as HTMLElement);
+            (thumb as HTMLElement).style.pageTransitionTag = 'embed-container';
+            (details as HTMLElement).style.pageTransitionTag = 'video-details';
+          }
+        } else if (transitionType === TransitionType.VideoToVideo) {
+          document.documentElement.classList.add('transition-video-to-video');
+
+          const embed = document.querySelector(
+            `.${videoEmbedStyles.embedContainer}`,
           );
-          transition.setElement(
-            document.querySelector(`.video-details`)!,
-            'video-details',
+          const details = document.querySelector(
+            `.${videoStyles.videoDetails}`,
           );
+
+          if (embed && details) {
+            elementsToUntag.push(embed as HTMLElement, details as HTMLElement);
+            (embed as HTMLElement).style.pageTransitionTag = 'none';
+            (details as HTMLElement).style.pageTransitionTag = 'none';
+          }
         }
       },
       done() {
         document.documentElement.classList.remove(
           'back-transition',
-          'transition-to-video',
-          'transition-to-home',
+          'transition-home-to-video',
+          'transition-video-to-home',
+          'transition-video-to-video',
         );
+
+        while (elementsToUntag.length) {
+          const element = elementsToUntag.pop()!;
+          element.style.pageTransitionTag = '';
+        }
       },
     });
 

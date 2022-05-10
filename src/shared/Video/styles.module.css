@@ -1,7 +1,10 @@
 .video-layout {
+  display: grid;
+  grid-template-rows: min-content 1fr;
+
   @media (min-width: 900px) {
-    display: grid;
     grid-template-columns: 1fr 230px;
+    grid-template-rows: none;
     height: 100%;
   }
 }
@@ -20,6 +23,7 @@
   background: var(--white);
   overflow: hidden;
   contain: paint;
+  page-transition-tag: video-details;
 }
 
 .video-title {
@@ -38,13 +42,14 @@
   overflow-x: auto;
   overflow-y: hidden;
   contain: paint;
-  height: 159px;
+  page-transition-tag: related-videos;
+  min-height: 159px;
   --video-list-columns: none;
   --video-list-auto-flow: column;
   --video-list-auto-columns: 135px;
   background: var(--divider);
   display: grid;
-  align-items: center;
+  align-items: start;
 
   @media (min-width: 900px) {
     height: auto;

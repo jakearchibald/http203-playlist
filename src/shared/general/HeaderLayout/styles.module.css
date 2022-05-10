@@ -12,6 +12,7 @@
   align-items: center;
   padding: 0 var(--content-padding);
   contain: paint;
+  page-transition-tag: site-header;
 }
 
 .show-back-icon.header {
@@ -21,6 +22,12 @@
 .main {
   overflow-x: hidden;
   overflow-y: auto;
+  display: grid;
+  grid-template-columns: 100%;
+
+  @media (min-width: 900px) {
+    display: block;
+  }
 }
 
 .home-link {
@@ -48,4 +55,5 @@
 .header-text {
   display: block;
   contain: paint;
+  page-transition-tag: header-text;
 }

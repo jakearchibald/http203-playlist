@@ -23,3 +23,7 @@ interface Document {
 }
 
 declare var ongoingTransition: Promise<void> | undefined;
+
+interface CSSStyleDeclaration {
+  pageTransitionTag: string;
+}

@@ -26,7 +26,7 @@ const Embed: FunctionalComponent<Props> = ({
   }, []);
 
   return (
-    <div class={[styles.embedContainer, 'embed-container'].join(' ')}>
+    <div class={styles.embedContainer}>
       {renderIframe && (
         <iframe
           onLoad={() => setIframeReady(true)}

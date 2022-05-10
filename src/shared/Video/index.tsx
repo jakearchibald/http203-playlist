@@ -23,7 +23,7 @@ const Video: FunctionalComponent<Props> = ({
         <div class={styles.videoAndDetails}>
           <Embed video={video} key={video.id} />
 
-          <div class={[styles.videoDetails, 'video-details'].join(' ')}>
+          <div class={styles.videoDetails}>
             <h1 class={styles.videoTitle}>{video.title}</h1>
             <time>{formatDate(new Date(video.published))}</time>
             <div
@@ -32,7 +32,7 @@ const Video: FunctionalComponent<Props> = ({
             />
           </div>
         </div>
-        <div class={[styles.scroller, 'related-videos'].join(' ')}>
+        <div class={styles.scroller}>
           <VideoList videos={videos} />
         </div>
       </div>

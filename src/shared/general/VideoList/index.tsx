@@ -20,7 +20,7 @@ const VideoList: FunctionalComponent<Props> = ({ videos }: Props) => {
               srcset={ytSrcset(video.id)}
               alt={video.title}
             />
-            <p class={[styles.videoMeta, 'video-meta'].join(' ')}>
+            <p class={styles.videoMeta}>
               <time>{formatDate(new Date(video.published))}</time>
             </p>
           </a>

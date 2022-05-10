@@ -22,8 +22,10 @@ const Index: FunctionalComponent<Props> = ({ videos, cohost }: Props) => {
 
   return (
     <HeaderLayout scrollKey="home">
-      <CohostSwitch selectedCohost={cohost} />
-      <VideoList videos={filteredVideos} />
+      <div>
+        <CohostSwitch selectedCohost={cohost} />
+        <VideoList videos={filteredVideos} />
+      </div>
     </HeaderLayout>
   );
 };

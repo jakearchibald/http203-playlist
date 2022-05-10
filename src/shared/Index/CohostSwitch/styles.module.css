@@ -8,7 +8,6 @@
   padding: 0.3rem 0.4rem;
   width: fit-content;
   border-radius: 19px;
-  contain: paint;
 
   & > * {
     display: block;

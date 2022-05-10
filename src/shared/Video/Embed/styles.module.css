@@ -17,6 +17,7 @@
 .embed-container {
   display: grid;
   contain: paint;
+  page-transition-tag: embed-container;
 
   & > * {
     grid-area: 1 / 1;
