@@ -10,7 +10,7 @@ interface NavigationResult {
 interface Navigation extends EventTarget {
   addEventListener<K extends keyof NavigationEventMap>(
     type: K,
-    listener: (this: Navigation, ev: NavigationEventMap[K]) => any,
+    listener: (this: Navigation, ev: NavigationEventMap[K]) => unknown,
     options?: boolean | AddEventListenerOptions,
   ): void;
   addEventListener(
@@ -46,7 +46,7 @@ interface NavigationHistoryEntry extends EventTarget {
   index: number;
   sameDocument: boolean;
 
-  getState(): any;
+  getState(): unknown;
 }
 
 interface NavigateEvent extends Event {
@@ -58,9 +58,9 @@ interface NavigateEvent extends Event {
   signal: AbortSignal;
   formData?: FormData;
   downloadRequest?: string;
-  info: any;
+  info: unknown;
   transitionWhile: (
-    newNavigationAction: Promise<void>,
+    newNavigationAction: Promise<void> | void,
     options?: NavigationTransitionWhileOptions,
   ) => void;
 }

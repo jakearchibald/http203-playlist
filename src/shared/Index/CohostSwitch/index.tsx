@@ -1,4 +1,4 @@
-import { h, FunctionalComponent, RenderableProps, createRef } from 'preact';
+import { h, FunctionalComponent, RenderableProps } from 'preact';
 import {} from 'preact/hooks';
 import { cohosts } from 'shared/data';
 

@@ -1,4 +1,4 @@
-import { h, FunctionalComponent, RenderableProps, createRef } from 'preact';
+import { h, FunctionalComponent, RenderableProps } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
 import { ytSrcset } from 'shared/utils';
 
@@ -20,9 +20,12 @@ const Embed: FunctionalComponent<Props> = ({
   useEffect(() => {
     if (!globalThis.ongoingTransition) return;
 
-    globalThis.ongoingTransition.then(() => {
-      setRenderIframe(true);
-    });
+    globalThis.ongoingTransition
+      .then(() => {
+        setRenderIframe(true);
+      })
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      .catch(() => {});
   }, []);
 
   return (
@@ -38,13 +41,14 @@ const Embed: FunctionalComponent<Props> = ({
           frameBorder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
-        ></iframe>
+        />
       )}
       <img
         class={styles.videoImg}
         style={{ opacity: iframeReady ? '0' : '1' }}
         srcset={ytSrcset(video.id)}
         alt={video.title}
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         fetchpriority="high"
       />

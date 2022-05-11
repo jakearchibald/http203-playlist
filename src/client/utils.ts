@@ -8,24 +8,24 @@ interface UsePageTransitionArg {
   done?(): void;
 }
 
-export function usePageTransition() {
-  const startResolver = useRef<(value?: unknown) => void>();
+export function usePageTransition({
+  outgoing,
+  incoming,
+  done,
+}: UsePageTransitionArg = {}) {
+  const startResolverRef = useRef<(value?: unknown) => void>();
+  const outgoingRef = useRef(outgoing);
+  const incomingRef = useRef(incoming);
+  const doneRef = useRef(done);
   const transitionRef = useRef<DocumentTransition>();
-  const incomingRef = useRef<UsePageTransitionArg['incoming']>();
 
   useEffect(() => {
-    const resolver = startResolver.current;
-    if (resolver === undefined) return;
+    if (startResolverRef.current === undefined) return;
     incomingRef.current?.(transitionRef.current!);
-    startResolver.current = undefined;
-    resolver();
+    startResolverRef.current();
   });
 
-  return async ({
-    outgoing,
-    incoming,
-    done,
-  }: UsePageTransitionArg = {}): Promise<void> => {
+  return async (): Promise<void> => {
     if (
       !('createDocumentTransition' in document) ||
       reducedMotionMedia.matches
@@ -35,25 +35,25 @@ export function usePageTransition() {
 
     document.documentElement.classList.add('transition-warming-up');
 
-    return new Promise<void>(async (resolve) => {
+    return new Promise<void>((resolve) => {
       const transition = document.createDocumentTransition();
       transitionRef.current = transition;
-      incomingRef.current = incoming;
-      outgoing?.(transition);
+      outgoingRef.current?.(transition);
 
       globalThis.ongoingTransition = transition.start(async () => {
         resolve();
-        await new Promise((resolve) => {
-          startResolver.current = resolve;
-        });
 
+        await new Promise((resolve) => (startResolverRef.current = resolve));
         document.documentElement.classList.remove('transition-warming-up');
       });
 
-      await globalThis.ongoingTransition;
-
-      globalThis.ongoingTransition = undefined;
-      done?.();
+      globalThis.ongoingTransition
+        .then(() => {
+          globalThis.ongoingTransition = undefined;
+          doneRef.current?.();
+        })
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        .catch(() => {});
     });
   };
 }

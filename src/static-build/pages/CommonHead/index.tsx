@@ -27,6 +27,7 @@ const CommonHead: FunctionalComponent<Props> = () => (
     <meta name="viewport" content="width=device-width, minimum-scale=1.0" />
     <link rel="icon" type="image/png" href={faviconURL} />
     <style
+      // eslint-disable-next-line react/no-danger
       dangerouslySetInnerHTML={{
         __html: escapeStyleScriptContent(initialCss),
       }}

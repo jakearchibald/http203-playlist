@@ -1,5 +1,5 @@
 import { h, FunctionalComponent, RenderableProps, createRef } from 'preact';
-import { useEffect, useRef } from 'preact/hooks';
+import { useEffect } from 'preact/hooks';
 
 import * as styles from './styles.module.css';
 import 'add-css:./styles.module.css';
@@ -18,7 +18,7 @@ const Header: FunctionalComponent<Props> = ({
 
   useEffect(() => {
     scrollerRef.current!.scrollTo(0, 0);
-  }, [scrollKey]);
+  }, [scrollKey, scrollerRef]);
 
   const onHomeClick = (event: Event) => {
     const backEntriesReversed = navigation
@@ -39,7 +39,7 @@ const Header: FunctionalComponent<Props> = ({
     if (!entry) return;
 
     event.preventDefault();
-    const result = navigation.traverseTo(entry.key);
+    navigation.traverseTo(entry.key);
   };
 
   return (

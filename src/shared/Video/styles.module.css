@@ -24,6 +24,10 @@
   overflow: hidden;
   contain: paint;
   page-transition-tag: video-details;
+
+  :global(.transition-video-to-video) & {
+    page-transition-tag: none;
+  }
 }
 
 .video-title {

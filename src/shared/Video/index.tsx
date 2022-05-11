@@ -1,4 +1,4 @@
-import { h, FunctionalComponent, RenderableProps, createRef } from 'preact';
+import { h, FunctionalComponent, RenderableProps } from 'preact';
 import {} from 'preact/hooks';
 import HeaderLayout from 'shared/general/HeaderLayout';
 import VideoList from 'shared/general/VideoList';
@@ -28,6 +28,7 @@ const Video: FunctionalComponent<Props> = ({
             <time>{formatDate(new Date(video.published))}</time>
             <div
               class={styles.description}
+              // eslint-disable-next-line react/no-danger
               dangerouslySetInnerHTML={{ __html: video.description }}
             />
           </div>

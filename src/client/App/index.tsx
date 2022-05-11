@@ -1,12 +1,16 @@
 import { usePageTransition } from 'client/utils';
 import { h, FunctionalComponent, RenderableProps } from 'preact';
-import { useState, useMemo, useEffect } from 'preact/hooks';
+import {
+  useState,
+  useMemo,
+  useEffect,
+  useCallback,
+  useRef,
+} from 'preact/hooks';
 import Index from 'shared/Index';
 import { cohosts } from 'shared/data';
 import Video from 'shared/Video';
 import * as videoListStyles from 'shared/general/VideoList/styles.module.css';
-import * as videoEmbedStyles from 'shared/Video/Embed/styles.module.css';
-import * as videoStyles from 'shared/Video/styles.module.css';
 
 const enum TransitionType {
   Other,
@@ -16,6 +20,35 @@ const enum TransitionType {
   ThumbsToThumbs,
 }
 
+interface TransitionData {
+  type: TransitionType;
+  from: string;
+  to: string;
+  back: boolean;
+}
+
+function getTransitionType(from: string, to: string): TransitionType {
+  if (
+    to.startsWith('/videos/') &&
+    (from === '/' || from.startsWith('/with-'))
+  ) {
+    return TransitionType.ThumbsToVideo;
+  }
+  if (from.startsWith('/videos/') && (to === '/' || to.startsWith('/with-'))) {
+    return TransitionType.VideoToThumbs;
+  }
+  if (
+    (from === '/' || from.startsWith('/with-')) &&
+    (to === '/' || to.startsWith('/with-'))
+  ) {
+    return TransitionType.ThumbsToThumbs;
+  }
+  if (from.startsWith('/videos/') && to.startsWith('/videos/')) {
+    return TransitionType.VideoToVideo;
+  }
+  return TransitionType.Other;
+}
+
 interface Props {
   videos: typeof import('video-data:').default;
 }
@@ -23,153 +56,129 @@ interface Props {
 const App: FunctionalComponent<Props> = ({
   videos,
 }: RenderableProps<Props>) => {
-  function getVideoFromURL(
-    path = location.pathname,
-  ): typeof videos[string] | undefined {
-    const videoPrefix = '/videos/';
-    let video: undefined | typeof videos[string] = undefined;
+  const getVideoFromURL = useCallback(
+    (path = location.pathname): typeof videos[string] | undefined => {
+      const videoPrefix = '/videos/';
+      let video: undefined | typeof videos[string];
 
-    if (path.startsWith(videoPrefix)) {
-      const slug = path.slice(videoPrefix.length, -1);
-      video = videos[slug];
-    }
+      if (path.startsWith(videoPrefix)) {
+        const slug = path.slice(videoPrefix.length, -1);
+        video = videos[slug];
+      }
 
-    return video;
-  }
+      return video;
+    },
+    [videos],
+  );
 
   function getCohostFromURL(path = location.pathname) {
     if (!path.startsWith('/with-')) return undefined;
-    const cohost = /\/with-([^\/]+)/.exec(path);
+    const cohost = /\/with-([^/]+)/.exec(path);
     if (!cohost) return undefined;
     return cohosts.find((name) => name.toLowerCase() === cohost[1]);
   }
 
-  function setStateFromURL(path: string = '/') {
-    setVideo(getVideoFromURL(path));
-    setCohost(getCohostFromURL(path));
-  }
+  const setStateFromURL = useCallback(
+    (path = '/') => {
+      setVideo(getVideoFromURL(path));
+      setCohost(getCohostFromURL(path));
+    },
+    [getVideoFromURL],
+  );
 
-  async function performTransition(
-    from: string,
-    to: string,
-    { back = false }: { back?: boolean } = {},
-  ) {
-    if (from === to) return;
+  const initialVideo = useMemo(() => getVideoFromURL(), [getVideoFromURL]);
+  const initialCohost = useMemo(() => getCohostFromURL(), []);
+  const transitionData = useRef<TransitionData>();
+  const elementsToUntag = useRef<HTMLElement[]>([]);
 
-    const transitionType: TransitionType = (() => {
-      if (
-        to.startsWith('/videos/') &&
-        (from === '/' || from.startsWith('/with-'))
-      ) {
-        return TransitionType.ThumbsToVideo;
-      }
-      if (
-        from.startsWith('/videos/') &&
-        (to === '/' || to.startsWith('/with-'))
-      ) {
-        return TransitionType.VideoToThumbs;
-      }
-      if (
-        (from === '/' || from.startsWith('/with-')) &&
-        (to === '/' || to.startsWith('/with-'))
-      ) {
-        return TransitionType.ThumbsToThumbs;
-      }
-      if (from.startsWith('/videos/') && to.startsWith('/videos/')) {
-        return TransitionType.VideoToVideo;
-      }
-      return TransitionType.Other;
-    })();
+  const startTransition = usePageTransition({
+    outgoing() {
+      const { back, to, type } = transitionData.current!;
 
-    const elementsToUntag: HTMLElement[] = [];
-
-    await startTransition({
-      outgoing() {
-        if (transitionType === TransitionType.ThumbsToVideo) {
-          document.documentElement.classList.add('transition-home-to-video');
-          const thumb = document.querySelector(
-            `a[href="${to}"] .${videoListStyles.videoThumb}`,
-          );
-          const details = document.querySelector(
-            `a[href="${to}"] .${videoListStyles.videoMeta}`,
-          );
-
-          if (thumb && details) {
-            elementsToUntag.push(thumb as HTMLElement, details as HTMLElement);
-            (thumb as HTMLElement).style.pageTransitionTag = 'embed-container';
-            (details as HTMLElement).style.pageTransitionTag = 'video-details';
-          }
-        } else if (transitionType === TransitionType.VideoToThumbs) {
-          document.documentElement.classList.add('transition-video-to-home');
-        } else if (transitionType === TransitionType.VideoToVideo) {
-          document.documentElement.classList.add('transition-video-to-video');
-
-          const embed = document.querySelector(
-            `.${videoEmbedStyles.embedContainer}`,
-          );
-          const details = document.querySelector(
-            `.${videoStyles.videoDetails}`,
-          );
-
-          if (embed && details) {
-            elementsToUntag.push(embed as HTMLElement, details as HTMLElement);
-            (embed as HTMLElement).style.pageTransitionTag = 'none';
-            (details as HTMLElement).style.pageTransitionTag = 'none';
-          }
-        }
-
-        if (back) {
-          document.documentElement.classList.add('back-transition');
-        }
-      },
-      incoming() {
-        if (transitionType === TransitionType.VideoToThumbs) {
-          const thumb = document.querySelector(
-            `a[href="${from}"] .${videoListStyles.videoThumb}`,
-          );
-          const details = document.querySelector(
-            `a[href="${from}"] .${videoListStyles.videoMeta}`,
-          );
-
-          if (thumb && details) {
-            elementsToUntag.push(thumb as HTMLElement, details as HTMLElement);
-            (thumb as HTMLElement).style.pageTransitionTag = 'embed-container';
-            (details as HTMLElement).style.pageTransitionTag = 'video-details';
-          }
-        } else if (transitionType === TransitionType.VideoToVideo) {
-          document.documentElement.classList.add('transition-video-to-video');
-
-          const embed = document.querySelector(
-            `.${videoEmbedStyles.embedContainer}`,
-          );
-          const details = document.querySelector(
-            `.${videoStyles.videoDetails}`,
-          );
-
-          if (embed && details) {
-            elementsToUntag.push(embed as HTMLElement, details as HTMLElement);
-            (embed as HTMLElement).style.pageTransitionTag = 'none';
-            (details as HTMLElement).style.pageTransitionTag = 'none';
-          }
-        }
-      },
-      done() {
-        document.documentElement.classList.remove(
-          'back-transition',
-          'transition-home-to-video',
-          'transition-video-to-home',
-          'transition-video-to-video',
+      if (type === TransitionType.ThumbsToVideo) {
+        document.documentElement.classList.add('transition-home-to-video');
+        const thumb = document.querySelector(
+          `a[href="${to}"] .${videoListStyles.videoThumb}`,
+        );
+        const details = document.querySelector(
+          `a[href="${to}"] .${videoListStyles.videoMeta}`,
         );
 
-        while (elementsToUntag.length) {
-          const element = elementsToUntag.pop()!;
-          element.style.pageTransitionTag = '';
+        if (thumb && details) {
+          elementsToUntag.current.push(
+            thumb as HTMLElement,
+            details as HTMLElement,
+          );
+          (thumb as HTMLElement).style.pageTransitionTag = 'embed-container';
+          (details as HTMLElement).style.pageTransitionTag = 'video-details';
         }
-      },
-    });
+      } else if (type === TransitionType.VideoToThumbs) {
+        document.documentElement.classList.add('transition-video-to-home');
+      } else if (type === TransitionType.VideoToVideo) {
+        document.documentElement.classList.add('transition-video-to-video');
+      }
 
-    setStateFromURL(to);
-  }
+      if (back) document.documentElement.classList.add('back-transition');
+    },
+    incoming() {
+      const { from, type } = transitionData.current!;
+
+      if (type === TransitionType.VideoToThumbs) {
+        // Allow these to fall back to the first thumbnail
+        const thumb =
+          document.querySelector(
+            `a[href="${from}"] .${videoListStyles.videoThumb}`,
+          ) || document.querySelector(`.${videoListStyles.videoThumb}`);
+
+        const details =
+          document.querySelector(
+            `a[href="${from}"] .${videoListStyles.videoMeta}`,
+          ) || document.querySelector(`.${videoListStyles.videoMeta}`);
+
+        if (thumb && details) {
+          elementsToUntag.current.push(
+            thumb as HTMLElement,
+            details as HTMLElement,
+          );
+          (thumb as HTMLElement).style.pageTransitionTag = 'embed-container';
+          (details as HTMLElement).style.pageTransitionTag = 'video-details';
+        }
+      }
+    },
+    done() {
+      document.documentElement.classList.remove(
+        'back-transition',
+        'transition-home-to-video',
+        'transition-video-to-home',
+        'transition-video-to-video',
+      );
+
+      while (elementsToUntag.current.length) {
+        const element = elementsToUntag.current.pop()!;
+        element.style.pageTransitionTag = '';
+      }
+    },
+  });
+
+  const performTransition = useCallback(
+    async (
+      from: string,
+      to: string,
+      { back = false }: { back?: boolean } = {},
+    ) => {
+      if (from === to) return;
+
+      transitionData.current = {
+        from,
+        to,
+        back,
+        type: getTransitionType(from, to),
+      };
+      await startTransition();
+      setStateFromURL(to);
+    },
+    [setStateFromURL, startTransition],
+  );
 
   useEffect(() => {
     if (!self.navigation) return;
@@ -205,11 +214,7 @@ const App: FunctionalComponent<Props> = ({
     );
 
     return () => controller.abort();
-  }, []);
-
-  const startTransition = usePageTransition();
-  const initialVideo = useMemo(() => getVideoFromURL(), []);
-  const initialCohost = useMemo(() => getCohostFromURL(), []);
+  }, [performTransition]);
 
   const [video, setVideo] = useState<
     undefined | typeof import('video-data:').default[string]
@@ -225,4 +230,5 @@ const App: FunctionalComponent<Props> = ({
 
   return <Index videos={videos} cohost={cohost} />;
 };
+
 export default App;
