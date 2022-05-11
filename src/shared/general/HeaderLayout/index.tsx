@@ -1,5 +1,5 @@
-import { h, FunctionalComponent, RenderableProps, createRef } from 'preact';
-import { useEffect } from 'preact/hooks';
+import { h, FunctionalComponent, RenderableProps } from 'preact';
+import { useEffect, useRef } from 'preact/hooks';
 
 import * as styles from './styles.module.css';
 import 'add-css:./styles.module.css';
@@ -14,11 +14,11 @@ const Header: FunctionalComponent<Props> = ({
   scrollKey,
   showBackIcon,
 }: RenderableProps<Props>) => {
-  const scrollerRef = createRef<HTMLDivElement>();
+  const scrollerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     scrollerRef.current!.scrollTo(0, 0);
-  }, [scrollKey, scrollerRef]);
+  }, [scrollKey]);
 
   const onHomeClick = (event: Event) => {
     const backEntriesReversed = navigation
