@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from 'preact/hooks';
+import { useCallback, useEffect, useLayoutEffect, useRef } from 'preact/hooks';
 
 import { usePageTransition } from 'client/utils';
 import * as videoListStyles from 'shared/general/VideoList/styles.module.css';
@@ -11,11 +11,30 @@ const enum TransitionType {
   ThumbsToThumbs,
 }
 
+const enum NavigationType {
+  New,
+  Back,
+  Other,
+}
+
+function getNavigationType(event: NavigateEvent): NavigationType {
+  if (event.navigationType === 'push' || event.navigationType === 'replace') {
+    return NavigationType.New;
+  }
+  if (
+    event.destination.index !== -1 &&
+    event.destination.index < navigation.currentEntry!.index
+  ) {
+    return NavigationType.Back;
+  }
+  return NavigationType.Other;
+}
+
 interface TransitionData {
-  type: TransitionType;
+  transitionType: TransitionType;
+  navigationType: NavigationType;
   from: string;
   to: string;
-  back: boolean;
 }
 
 function getTransitionType(from: string, to: string): TransitionType {
@@ -43,17 +62,24 @@ function getTransitionType(from: string, to: string): TransitionType {
 export function useRouter(callback: (newURL: string) => void) {
   const savedCallback = useRef(callback);
   const transitionData = useRef<TransitionData>();
+  const resetScrollOnNextRender = useRef(false);
   const elementsToUntag = useRef<HTMLElement[]>([]);
 
   useEffect(() => {
     savedCallback.current = callback;
   }, [callback]);
 
+  useLayoutEffect(() => {
+    if (!resetScrollOnNextRender.current) return;
+    resetScrollOnNextRender.current = false;
+    scrollTo(0, 0);
+  });
+
   const startTransition = usePageTransition({
     outgoing() {
-      const { back, to, type } = transitionData.current!;
+      const { navigationType, to, transitionType } = transitionData.current!;
 
-      if (type === TransitionType.ThumbsToVideo) {
+      if (transitionType === TransitionType.ThumbsToVideo) {
         document.documentElement.classList.add('transition-home-to-video');
         const thumb = document.querySelector(
           `a[href="${to}"] .${videoListStyles.videoThumb}`,
@@ -70,18 +96,20 @@ export function useRouter(callback: (newURL: string) => void) {
           (thumb as HTMLElement).style.pageTransitionTag = 'embed-container';
           (details as HTMLElement).style.pageTransitionTag = 'video-details';
         }
-      } else if (type === TransitionType.VideoToThumbs) {
+      } else if (transitionType === TransitionType.VideoToThumbs) {
         document.documentElement.classList.add('transition-video-to-home');
-      } else if (type === TransitionType.VideoToVideo) {
+      } else if (transitionType === TransitionType.VideoToVideo) {
         document.documentElement.classList.add('transition-video-to-video');
       }
 
-      if (back) document.documentElement.classList.add('back-transition');
+      if (navigationType === NavigationType.Back) {
+        document.documentElement.classList.add('back-transition');
+      }
     },
     incoming() {
-      const { from, type } = transitionData.current!;
+      const { from, transitionType } = transitionData.current!;
 
-      if (type === TransitionType.VideoToThumbs) {
+      if (transitionType === TransitionType.VideoToThumbs) {
         // Allow these to fall back to the first thumbnail
         const thumb =
           document.querySelector(
@@ -122,18 +150,26 @@ export function useRouter(callback: (newURL: string) => void) {
     async (
       from: string,
       to: string,
-      { back = false }: { back?: boolean } = {},
+      { type = NavigationType.New }: { type?: NavigationType } = {},
     ) => {
       if (from === to) return;
 
-      transitionData.current = {
-        from,
-        to,
-        back,
-        type: getTransitionType(from, to),
-      };
-      await startTransition();
+      // Hack so scroll restoration does the right thing
+      await new Promise((r) => setTimeout(r, 0));
+
+      if ('createDocumentTransition' in document) {
+        transitionData.current = {
+          from,
+          to,
+          navigationType: type,
+          transitionType: getTransitionType(from, to),
+        };
+        await startTransition();
+      }
+
       savedCallback.current(to);
+
+      if (type === NavigationType.New) resetScrollOnNextRender.current = true;
     },
     [startTransition],
   );
@@ -159,11 +195,7 @@ export function useRouter(callback: (newURL: string) => void) {
             performTransition(
               new URL(navigation.currentEntry!.url!).pathname,
               destinationURL.pathname,
-              {
-                back:
-                  event.destination.index !== -1 &&
-                  event.destination.index < navigation.currentEntry!.index,
-              },
+              { type: getNavigationType(event) },
             ),
           );
         }
