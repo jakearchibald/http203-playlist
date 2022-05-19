@@ -1,25 +1,16 @@
 import { h, FunctionalComponent, RenderableProps } from 'preact';
-import { useEffect, useRef } from 'preact/hooks';
 
 import * as styles from './styles.module.css';
 import 'add-css:./styles.module.css';
 
 interface Props {
-  scrollKey?: unknown;
   showBackIcon?: boolean;
 }
 
 const Header: FunctionalComponent<Props> = ({
   children,
-  scrollKey,
   showBackIcon,
 }: RenderableProps<Props>) => {
-  const scrollerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    scrollerRef.current!.scrollTo(0, 0);
-  }, [scrollKey]);
-
   const onHomeClick = (event: Event) => {
     const backEntriesReversed = navigation
       .entries()
@@ -31,7 +22,6 @@ const Header: FunctionalComponent<Props> = ({
       const entryURL = new URL(entry.url);
       return (
         entryURL.origin === location.origin &&
-        entry.sameDocument &&
         (entryURL.pathname === '/' || entryURL.pathname.startsWith('/with-'))
       );
     });
@@ -56,9 +46,7 @@ const Header: FunctionalComponent<Props> = ({
           <span class={styles.headerText}>HTTP 203</span>
         </a>
       </header>
-      <div ref={scrollerRef} class={styles.main}>
-        {children}
-      </div>
+      <div class={styles.main}>{children}</div>
     </div>
   );
 };
