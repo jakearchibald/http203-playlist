@@ -57,3 +57,32 @@ export function usePageTransition({
     });
   };
 }
+
+export function doAbortable<T>(
+  signal: AbortSignal,
+  callback: (setAbortAction: (abortAction: () => void) => void) => T,
+): Promise<T> {
+  signal.throwIfAborted();
+  let onAbort: () => void;
+  let listener: () => void;
+  let onAbortReturn: unknown;
+
+  const setAbortAction = (c: () => void) => {
+    onAbort = c;
+  };
+  const promise = callback(setAbortAction);
+
+  return Promise.race<T>([
+    new Promise((_, reject) => {
+      listener = () => {
+        reject(new DOMException('', 'AbortError'));
+        onAbortReturn = onAbort?.();
+      };
+      signal.addEventListener('abort', listener);
+    }),
+    promise,
+  ]).finally(() => {
+    signal.removeEventListener('abort', listener);
+    return onAbortReturn;
+  });
+}

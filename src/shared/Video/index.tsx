@@ -18,7 +18,7 @@ const Video: FunctionalComponent<Props> = ({
   videos,
 }: RenderableProps<Props>) => {
   return (
-    <HeaderLayout scrollKey={video.id} showBackIcon>
+    <HeaderLayout showBackIcon>
       <div class={styles.videoLayout}>
         <div class={styles.videoAndDetails}>
           <Embed video={video} key={video.id} />
