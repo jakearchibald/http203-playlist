@@ -24,15 +24,17 @@ interface Output {
 const toOutput: Output = {
   'index.html': renderPage(<IndexPage />),
   ...Object.fromEntries(
-    cohosts.map((cohost) => [
-      `with-${cohost.toLowerCase()}/index.html`,
-      renderPage(<IndexPage cohost={cohost} />),
+    cohosts.flatMap((cohost) => [
+      [
+        `with-${cohost.toLowerCase()}/index.html`,
+        renderPage(<IndexPage cohost={cohost} />),
+      ],
     ]),
   ),
   ...Object.fromEntries(
-    Object.entries(pageData).map(([slug, video]) => [
-      `videos/${slug}/index.html`,
-      renderPage(<VideoPage video={video} />),
+    Object.entries(pageData).flatMap(([slug, video]) => [
+      [`videos/${slug}/index.html`, renderPage(<VideoPage video={video} />)],
+      [`videos/${slug}/data.json`, JSON.stringify(video)],
     ]),
   ),
 };
