@@ -2,7 +2,7 @@ import { h, FunctionalComponent } from 'preact';
 import {} from 'preact/hooks';
 import HeaderLayout from 'shared/general/HeaderLayout';
 import VideoList from 'shared/general/VideoList';
-import CohostSwitch from './CohostSwitch';
+//import CohostSwitch from './CohostSwitch';
 
 //import * as styles from './styles.module.css';
 
@@ -23,7 +23,6 @@ const Index: FunctionalComponent<Props> = ({ videos, cohost }: Props) => {
   return (
     <HeaderLayout>
       <div>
-        <CohostSwitch selectedCohost={cohost} />
         <VideoList videos={filteredVideos} />
       </div>
     </HeaderLayout>

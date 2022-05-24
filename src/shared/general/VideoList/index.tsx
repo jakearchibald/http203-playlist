@@ -14,7 +14,7 @@ const VideoList: FunctionalComponent<Props> = ({ videos }: Props) => {
     <ol class={styles.videoList}>
       {Object.entries(videos).map(([slug, video]) => (
         <li>
-          <a class={styles.videoLink} href={`/videos/${slug}/`}>
+          <a class={styles.videoLink} href={`videos/${slug}/`}>
             <img
               class={[styles.videoThumb, 'video-thumb'].join(' ')}
               srcset={ytSrcset(video.id)}
