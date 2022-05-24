@@ -27,3 +27,7 @@ declare var ongoingTransition: Promise<void> | undefined;
 interface CSSStyleDeclaration {
   pageTransitionTag: string;
 }
+
+interface AbortSignal extends EventTarget {
+  throwIfAborted(): void;
+}

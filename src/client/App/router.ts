@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useLayoutEffect, useRef } from 'preact/hooks';
 
-import { usePageTransition } from 'client/utils';
+import { doAbortable, usePageTransition } from 'client/utils';
 import * as videoListStyles from 'shared/general/VideoList/styles.module.css';
 
 const enum TransitionType {
@@ -150,12 +150,23 @@ export function useRouter(callback: (newURL: string) => void) {
     async (
       from: string,
       to: string,
-      { type = NavigationType.New }: { type?: NavigationType } = {},
+      {
+        type = NavigationType.New,
+        signal = new AbortController().signal,
+      }: { type?: NavigationType; signal?: AbortSignal } = {},
     ) => {
+      signal.throwIfAborted();
+
       if (from === to) return;
 
-      // Hack so scroll restoration does the right thing
-      await new Promise((r) => setTimeout(r, 0));
+      await doAbortable(
+        signal,
+        (setAbortAction) =>
+          new Promise((resolve) => {
+            const id = setTimeout(resolve, 2000);
+            setAbortAction(() => clearTimeout(id));
+          }),
+      );
 
       if ('createDocumentTransition' in document) {
         transitionData.current = {
@@ -195,7 +206,7 @@ export function useRouter(callback: (newURL: string) => void) {
             performTransition(
               new URL(navigation.currentEntry!.url!).pathname,
               destinationURL.pathname,
-              { type: getNavigationType(event) },
+              { type: getNavigationType(event), signal: event.signal },
             ),
           );
         }
