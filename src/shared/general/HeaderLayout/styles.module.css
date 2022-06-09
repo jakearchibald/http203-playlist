@@ -12,7 +12,6 @@
   align-items: center;
   padding: 0 var(--content-padding);
   contain: paint;
-  page-transition-tag: site-header;
 }
 
 .show-back-icon.header {
@@ -55,5 +54,4 @@
 .header-text {
   display: block;
   contain: paint;
-  page-transition-tag: header-text;
 }
