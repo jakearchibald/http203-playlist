@@ -100,7 +100,7 @@ export function useRouter(callback: (newURL: string) => void) {
         ],
         {
           duration: 1000,
-          pseudoElement: '::page-transition-incoming-image(root)',
+          pseudoElement: '::page-transition-container(root)',
         },
       );
     },
