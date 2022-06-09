@@ -115,6 +115,7 @@ html:global(.transition-home-to-video)::page-transition-container(embed-containe
 html:global(.transition-video-to-home)::page-transition-container(embed-container) {
   animation-duration: 300ms;
   animation-timing-function: ease-out;
+  z-index: 1;
 }
 
 html:global(.transition-home-to-video)::page-transition-container(video-details),
@@ -126,6 +127,7 @@ html:global(.transition-video-to-home)::page-transition-container(video-details)
 html:global(.transition-home-to-video)::page-transition-incoming-image(video-details),
 html:global(.transition-video-to-home)::page-transition-outgoing-image(video-details) {
   object-fit: cover;
+  height: 100%;
   object-position: bottom center;
   animation: none;
   mix-blend-mode: normal;
@@ -134,6 +136,7 @@ html:global(.transition-video-to-home)::page-transition-outgoing-image(video-det
 html:global(.transition-home-to-video)::page-transition-outgoing-image(video-details),
 html:global(.transition-video-to-home)::page-transition-incoming-image(video-details) {
   object-fit: none;
+  height: 100%;
   object-position: bottom left;
   mix-blend-mode: normal;
   z-index: 1;
