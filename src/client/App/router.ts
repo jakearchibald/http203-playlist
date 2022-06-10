@@ -74,36 +74,7 @@ export function useRouter(callback: (newURL: string) => void) {
     savedCallback.current = callback;
   }, [callback]);
 
-  const startTransition = usePageTransition({
-    incoming() {
-      const points = 10;
-      const x = innerWidth / 2;
-      const y = innerHeight / 2;
-      const endScale = Math.sqrt(x ** 2 + y ** 2);
-
-      requestAnimationFrame(() => {
-        document.documentElement.animate(
-          [
-            {
-              clipPath: pointsToCSSPolygon(
-                createStar({ points, x, y, scale: 0 }),
-              ),
-            },
-            {
-              clipPath: pointsToCSSPolygon(
-                createStar({ points, x, y, scale: endScale }),
-              ),
-            },
-          ],
-          {
-            duration: 500,
-            easing: 'ease-in',
-            pseudoElement: '::page-transition-incoming-image(root)',
-          },
-        );
-      });
-    },
-  });
+  const startTransition = usePageTransition();
 
   const performTransition = useCallback(
     async (
