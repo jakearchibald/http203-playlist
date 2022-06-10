@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef } from 'preact/hooks';
 
 import { usePageTransition } from 'client/utils';
 
-function createStarPath({
+function createStar({
   points,
   x,
   y,
@@ -12,19 +12,21 @@ function createStarPath({
   x: number;
   y: number;
   scale: number;
-}): string {
-  const star = Array.from({ length: points }, (_, i) => {
-    return new DOMMatrix()
+}): DOMPoint[] {
+  return Array.from({ length: points }, (_, i) =>
+    new DOMMatrix()
       .translate(x, y)
       .scale(scale)
       .rotate((i / points) * 360)
       .translate(0, i % 2 ? -1 : -2)
-      .transformPoint(new DOMPoint());
-  });
+      //.translate(0, -1)
+      .transformPoint(new DOMPoint()),
+  );
+}
 
-  return star
-    .map((point, i) => `${i === 0 ? 'M' : 'L'} ${point.x} ${point.y}`)
-    .join(' ');
+function pointsToCSSPolygon(points: DOMPoint[]): string {
+  const pointsStr = points.map((point) => `${point.x}px ${point.y}px`).join();
+  return `polygon(${pointsStr})`;
 }
 
 const enum TransitionType {
@@ -77,32 +79,29 @@ export function useRouter(callback: (newURL: string) => void) {
       const points = 10;
       const x = innerWidth / 2;
       const y = innerHeight / 2;
-      const endScale = Math.max(x, y);
+      const endScale = Math.sqrt(x ** 2 + y ** 2);
 
-      document.documentElement.animate(
-        [
+      requestAnimationFrame(() => {
+        document.documentElement.animate(
+          [
+            {
+              clipPath: pointsToCSSPolygon(
+                createStar({ points, x, y, scale: 0 }),
+              ),
+            },
+            {
+              clipPath: pointsToCSSPolygon(
+                createStar({ points, x, y, scale: endScale }),
+              ),
+            },
+          ],
           {
-            clipPath: `path("${createStarPath({
-              points,
-              x,
-              y,
-              scale: 1,
-            })}")`,
+            duration: 500,
+            easing: 'ease-in',
+            pseudoElement: '::page-transition-incoming-image(root)',
           },
-          {
-            clipPath: `path("${createStarPath({
-              points,
-              x,
-              y,
-              scale: endScale,
-            })}")`,
-          },
-        ],
-        {
-          duration: 1000,
-          pseudoElement: '::page-transition-incoming-image(root)',
-        },
-      );
+        );
+      });
     },
   });
 
