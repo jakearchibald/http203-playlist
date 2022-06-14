@@ -48,9 +48,6 @@ html:global(.transition-warming-up)::page-transition-outgoing-image(*) {
 }
 
 @keyframes wipe-move {
-  from {
-    -webkit-mask-position: 0;
-  }
   to {
     -webkit-mask-position: 100%;
   }
@@ -58,12 +55,11 @@ html:global(.transition-warming-up)::page-transition-outgoing-image(*) {
 
 ::page-transition-outgoing-image(root),
 ::page-transition-incoming-image(root) {
-  -webkit-mask-image: linear-gradient(to right, #fff 47.5%, transparent 52.5%);
+  -webkit-mask-image: linear-gradient(to right, #000 47.5%, transparent 52.5%);
   -webkit-mask-size: 210%;
-  animation: 1.5s linear wipe-move;
-  animation-fill-mode: both;
+  animation: 1.5s linear both wipe-move;
 }
 
 ::page-transition-incoming-image(root) {
-  -webkit-mask-image: linear-gradient(to right, transparent 47.5%, #fff 52.5%);
+  -webkit-mask-image: linear-gradient(to right, transparent 47.5%, #000 52.5%);
 }
