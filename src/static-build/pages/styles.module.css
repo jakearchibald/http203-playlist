@@ -122,24 +122,8 @@ html:global(.transition-home-to-video)::page-transition-container(video-details)
 html:global(.transition-video-to-home)::page-transition-container(video-details) {
   animation-duration: 300ms;
   animation-timing-function: ease-out;
-}
-
-html:global(.transition-home-to-video)::page-transition-incoming-image(video-details),
-html:global(.transition-video-to-home)::page-transition-outgoing-image(video-details) {
-  object-fit: cover;
-  height: 100%;
-  object-position: bottom center;
-  animation: none;
-  mix-blend-mode: normal;
-}
-
-html:global(.transition-home-to-video)::page-transition-outgoing-image(video-details),
-html:global(.transition-video-to-home)::page-transition-incoming-image(video-details) {
-  object-fit: none;
-  height: 100%;
-  object-position: bottom left;
-  mix-blend-mode: normal;
-  z-index: 1;
+  background: #fff;
+  overflow: clip;
 }
 
 html:global(.transition-home-to-video)::page-transition-incoming-image(root),
@@ -199,69 +183,3 @@ html:global(.transition-video-to-video.back-transition)::page-transition-outgoin
     animation: 300ms ease-out both slide-to-right;
   }
 }
-
-/*
-::page-transition-incoming-image(root) {
-  animation: 500ms ease-out both slide-from-right;
-}
-
-::page-transition-outgoing-image(root) {
-  animation: 500ms ease-out both slide-to-left;
-}
-
-html:global(.back-transition)::page-transition-incoming-image(root) {
-  animation-name: slide-from-left;
-}
-
-html:global(.back-transition)::page-transition-outgoing-image(root) {
-  animation-name: slide-to-right;
-}
-
-html:global(.transition-home-to-video)::page-transition-incoming-image(root) {
-  animation-name: fade-in;
-  animation-duration: 300ms;
-}
-
-html:global(.transition-home-to-video)::page-transition-outgoing-image(root) {
-  animation-name: fade-out;
-  animation-duration: 300ms;
-}
-
-
-
-@media (min-width: 660px) {
-  ::page-transition-incoming-image(root) {
-    animation-name: slide-and-fade-from-right;
-    animation-duration: 300ms;
-  }
-
-  ::page-transition-outgoing-image(root) {
-    animation-name: slide-and-fade-to-left;
-    animation-duration: 300ms;
-  }
-
-  html:global(.back-transition)::page-transition-incoming-image(root) {
-    animation-name: slide-and-fade-from-left;
-  }
-
-  html:global(.back-transition)::page-transition-outgoing-image(root) {
-    animation-name: slide-and-fade-to-right;
-  }
-
-  ::page-transition-container(embed-container) {
-    animation-duration: 300ms;
-  }
-
-  ::page-transition-container(video-details) {
-    animation-duration: 300ms;
-  }
-
-  html:global(.transition-home-to-video)::page-transition-incoming-image(related-videos) {
-    animation: 300ms ease-out both slide-and-fade-from-right;
-  }
-
-  html:global(.transition-video-to-home)::page-transition-outgoing-image(related-videos) {
-    animation: 300ms ease-out both slide-and-fade-to-right;
-  }
-}
-*/
