@@ -56,7 +56,7 @@
   align-items: start;
 
   @media (min-width: 900px) {
-    height: auto;
+    height: 100vh;
     --video-list-auto-flow: row;
     --video-list-auto-columns: auto;
     --video-list-auto-rows: auto;

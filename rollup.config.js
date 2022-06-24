@@ -108,7 +108,7 @@ export default async function ({ watch }) {
               }),
               entryURLPlugin(),
               ...commonPlugins(),
-              commonjs(),
+              //commonjs(),
               resolve(),
               replace({
                 values: {
