@@ -33,8 +33,6 @@ export function usePageTransition({
       return;
     }
 
-    document.documentElement.classList.add('transition-warming-up');
-
     return new Promise<void>((resolve) => {
       const transition = document.createDocumentTransition();
       transitionRef.current = transition;
@@ -44,7 +42,6 @@ export function usePageTransition({
         resolve();
 
         await new Promise((resolve) => (startResolverRef.current = resolve));
-        document.documentElement.classList.remove('transition-warming-up');
       });
 
       globalThis.ongoingTransition

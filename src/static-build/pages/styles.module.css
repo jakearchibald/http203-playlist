@@ -105,12 +105,6 @@ a {
   }
 }
 
-html:global(.transition-warming-up)::page-transition-container(*),
-html:global(.transition-warming-up)::page-transition-incoming-image(*),
-html:global(.transition-warming-up)::page-transition-outgoing-image(*) {
-  animation-play-state: paused !important;
-}
-
 html:global(.transition-home-to-video)::page-transition-container(embed-container),
 html:global(.transition-video-to-home)::page-transition-container(embed-container) {
   animation-duration: 300ms;
