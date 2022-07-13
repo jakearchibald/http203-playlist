@@ -49,7 +49,7 @@ declare module 'video-data:' {
       title: string;
       description: string;
       published: string;
-      cohost: 'Ada' | 'Surma' | 'Paul';
+      cohost: 'Cassie' | 'Ada' | 'Surma' | 'Paul';
     };
   }
   const data: PageData;

@@ -1,6 +1,174 @@
 [
   {
     "kind": "youtube#playlistItem",
+    "etag": "XyeeeZus2Tlo3VaO4MNtLaLPcCI",
+    "id": "UExOWWt4T0Y2cmNJQUtJUUZzTmJWMEpEd3NfR19ibk5vOS44NzQ1OTI1OUFFM0NFRTc5",
+    "snippet": {
+      "publishedAt": "2022-07-12T14:12:29Z",
+      "channelId": "UCnUYZLuoy1rq1aVMwx4aTzw",
+      "title": "Demystifyingish SVG paths | HTTP 203",
+      "description": "Cassie Evans (from Greensock) chats to Jake about SVG paths, and what that mess of letters and numbers actually means.\n\nThe logo turtle demo → https://goo.gle/3IyzSXT \n\nMore videos in the HTTP 203 series → http://goo.gle/HTTP203\nSubscribe to Google Chrome Developers here → https://goo.gle/ChromeDevs \n\nAlso, if you enjoyed this, you might like the HTTP203 podcast → https://goo.gle/HTTP203Podcast\n\n#HTTP203 #ChromeDeveloper #WebDev",
+      "thumbnails": {
+        "default": {
+          "url": "https://i.ytimg.com/vi/9qen5CKjUe8/default.jpg",
+          "width": 120,
+          "height": 90
+        },
+        "medium": {
+          "url": "https://i.ytimg.com/vi/9qen5CKjUe8/mqdefault.jpg",
+          "width": 320,
+          "height": 180
+        },
+        "high": {
+          "url": "https://i.ytimg.com/vi/9qen5CKjUe8/hqdefault.jpg",
+          "width": 480,
+          "height": 360
+        }
+      },
+      "channelTitle": "Google Chrome Developers",
+      "playlistId": "PLNYkxOF6rcIAKIQFsNbV0JDws_G_bnNo9",
+      "position": 0,
+      "resourceId": {
+        "kind": "youtube#video",
+        "videoId": "9qen5CKjUe8"
+      },
+      "videoOwnerChannelTitle": "Google Chrome Developers",
+      "videoOwnerChannelId": "UCnUYZLuoy1rq1aVMwx4aTzw"
+    }
+  },
+  {
+    "kind": "youtube#playlistItem",
+    "etag": "XY4cyrM-nH4QA0oOvE7en_-pjK4",
+    "id": "UExOWWt4T0Y2cmNJQUtJUUZzTmJWMEpEd3NfR19ibk5vOS5DODY2Qzc5Mzc1QkZEQ0NF",
+    "snippet": {
+      "publishedAt": "2022-06-28T05:50:01Z",
+      "channelId": "UCnUYZLuoy1rq1aVMwx4aTzw",
+      "title": "FLIP animations | HTTP 203",
+      "description": "Cassie Evans from GreenSock walks through FLIP – a great animation technique for transitioning between states, and also a terrible backronym (yes, Jake writes these descriptions)\n\nPurple box FLIP demo → https://goo.gle/3mRYiBO \nList shuffle demo → https://goo.gle/3xTZ4ob \nList shuffle with GSAP → https://goo.gle/3xVkmlo \nList item transform → https://goo.gle/3xxpgDs \nGSAP FLIP plugin → https://goo.gle/3NW801Q \n\nMore videos in the HTTP 203 series → http://goo.gle/HTTP203\nSubscribe to Google Chrome Developers here → https://goo.gle/ChromeDevs \n\nAlso, if you enjoyed this, you might like the HTTP203 podcast → https://goo.gle/HTTP203Podcast\n\n#HTTP203 #ChromeDeveloper #WebDev",
+      "thumbnails": {
+        "default": {
+          "url": "https://i.ytimg.com/vi/8q_05PUYv1o/default.jpg",
+          "width": 120,
+          "height": 90
+        },
+        "medium": {
+          "url": "https://i.ytimg.com/vi/8q_05PUYv1o/mqdefault.jpg",
+          "width": 320,
+          "height": 180
+        },
+        "high": {
+          "url": "https://i.ytimg.com/vi/8q_05PUYv1o/hqdefault.jpg",
+          "width": 480,
+          "height": 360
+        },
+        "standard": {
+          "url": "https://i.ytimg.com/vi/8q_05PUYv1o/sddefault.jpg",
+          "width": 640,
+          "height": 480
+        },
+        "maxres": {
+          "url": "https://i.ytimg.com/vi/8q_05PUYv1o/maxresdefault.jpg",
+          "width": 1280,
+          "height": 720
+        }
+      },
+      "channelTitle": "Google Chrome Developers",
+      "playlistId": "PLNYkxOF6rcIAKIQFsNbV0JDws_G_bnNo9",
+      "position": 1,
+      "resourceId": {
+        "kind": "youtube#video",
+        "videoId": "8q_05PUYv1o"
+      },
+      "videoOwnerChannelTitle": "Google Chrome Developers",
+      "videoOwnerChannelId": "UCnUYZLuoy1rq1aVMwx4aTzw"
+    }
+  },
+  {
+    "kind": "youtube#playlistItem",
+    "etag": "iR_xQJ_dSVmTkv3Pz4qD4liJLNE",
+    "id": "UExOWWt4T0Y2cmNJQUtJUUZzTmJWMEpEd3NfR19ibk5vOS40MzEwNkU4RUE0MjhBRjg4",
+    "snippet": {
+      "publishedAt": "2022-06-07T03:06:23Z",
+      "channelId": "UCnUYZLuoy1rq1aVMwx4aTzw",
+      "title": "The history API is dead. Long live the navigation API | HTTP 203",
+      "description": "In this episode, Cassie (from Greensock) and Jake (not from Greensock) sit down to chat about the new Navigation API, which replaced the old and busted History API.\n\nDocs on the Navigation API → https://goo.gle/3NWd8T9 \nThe demo → https://goo.gle/395gHYB \nSource for the demo → https://goo.gle/3ax16kX \nFollow Cassie on Twitter → https://goo.gle/3Q4FQDd \n\nMore videos in the HTTP 203 series → http://goo.gle/HTTP203\nSubscribe to Google Chrome Developers here → https://goo.gle/ChromeDevs \n\nAlso, if you enjoyed this, you might like the HTTP203 podcast → https://goo.gle/HTTP203Podcast\n\n#HTTP203 #ChromeDeveloper #WebDev",
+      "thumbnails": {
+        "default": {
+          "url": "https://i.ytimg.com/vi/cgKUMRPAliw/default.jpg",
+          "width": 120,
+          "height": 90
+        },
+        "medium": {
+          "url": "https://i.ytimg.com/vi/cgKUMRPAliw/mqdefault.jpg",
+          "width": 320,
+          "height": 180
+        },
+        "high": {
+          "url": "https://i.ytimg.com/vi/cgKUMRPAliw/hqdefault.jpg",
+          "width": 480,
+          "height": 360
+        },
+        "standard": {
+          "url": "https://i.ytimg.com/vi/cgKUMRPAliw/sddefault.jpg",
+          "width": 640,
+          "height": 480
+        },
+        "maxres": {
+          "url": "https://i.ytimg.com/vi/cgKUMRPAliw/maxresdefault.jpg",
+          "width": 1280,
+          "height": 720
+        }
+      },
+      "channelTitle": "Google Chrome Developers",
+      "playlistId": "PLNYkxOF6rcIAKIQFsNbV0JDws_G_bnNo9",
+      "position": 2,
+      "resourceId": {
+        "kind": "youtube#video",
+        "videoId": "cgKUMRPAliw"
+      },
+      "videoOwnerChannelTitle": "Google Chrome Developers",
+      "videoOwnerChannelId": "UCnUYZLuoy1rq1aVMwx4aTzw"
+    }
+  },
+  {
+    "kind": "youtube#playlistItem",
+    "etag": "nyQbDFjprVS0XoZrGG7ELYf-IeI",
+    "id": "UExOWWt4T0Y2cmNJQUtJUUZzTmJWMEpEd3NfR19ibk5vOS42RDgxQ0M2OUIwREZCNjZF",
+    "snippet": {
+      "publishedAt": "2022-05-24T14:03:34Z",
+      "channelId": "UCnUYZLuoy1rq1aVMwx4aTzw",
+      "title": "Samsung Internet - the why & how | HTTP 203",
+      "description": "Ada Rose Canon from Samsung Internet chats to Jake about why Samsung Internet exists, and how it differs from other Chromium browsers.\n\nSamsung Internet → https://goo.gle/39UwF7Z\nSamsung Internet beta → https://goo.gle/3PIxeC3\nSamsung Internet DevRel → https://goo.gle/3sZdVLb\nSamsung internet on Twitter → https://goo.gle/3GhmpCR\nFound a bug on Samsung Internet? Report it to browser@samsung.com\n\nMore videos in the HTTP 203 series → http://goo.gle/HTTP203\nSubscribe to Google Chrome Developers here → https://goo.gle/ChromeDevs \n\nAlso, if you enjoyed this, you might like the HTTP203 podcast → https://goo.gle/HTTP203Podcast\n\n#HTTP203 #ChromeDeveloper #WebDev",
+      "thumbnails": {
+        "default": {
+          "url": "https://i.ytimg.com/vi/F-rZOIBGIaQ/default.jpg",
+          "width": 120,
+          "height": 90
+        },
+        "medium": {
+          "url": "https://i.ytimg.com/vi/F-rZOIBGIaQ/mqdefault.jpg",
+          "width": 320,
+          "height": 180
+        },
+        "high": {
+          "url": "https://i.ytimg.com/vi/F-rZOIBGIaQ/hqdefault.jpg",
+          "width": 480,
+          "height": 360
+        }
+      },
+      "channelTitle": "Google Chrome Developers",
+      "playlistId": "PLNYkxOF6rcIAKIQFsNbV0JDws_G_bnNo9",
+      "position": 3,
+      "resourceId": {
+        "kind": "youtube#video",
+        "videoId": "F-rZOIBGIaQ"
+      },
+      "videoOwnerChannelTitle": "Google Chrome Developers",
+      "videoOwnerChannelId": "UCnUYZLuoy1rq1aVMwx4aTzw"
+    }
+  },
+  {
+    "kind": "youtube#playlistItem",
     "etag": "QAH92nxcUK-ZQS8HBuSnI2RUdx8",
     "id": "UExOWWt4T0Y2cmNJQUtJUUZzTmJWMEpEd3NfR19ibk5vOS40ODU2MTBGM0M5MkIwQzU0",
     "snippet": {
