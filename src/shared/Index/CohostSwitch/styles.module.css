@@ -21,6 +21,11 @@
   }
 }
 
+:global(.thumbs-to-thumbs) .cohost-switch {
+  page-transition-tag: cohost-switch;
+  contain: paint;
+}
+
 .current-cohost {
   & a {
     background: var(--primary-color);

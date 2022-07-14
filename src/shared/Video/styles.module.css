@@ -22,12 +22,6 @@
   padding: var(--content-padding);
   background: var(--white);
   overflow: hidden;
-  contain: paint;
-  page-transition-tag: video-details;
-
-  :global(.transition-video-to-video) & {
-    page-transition-tag: none;
-  }
 }
 
 .video-title {
@@ -45,8 +39,6 @@
 .scroller {
   overflow-x: auto;
   overflow-y: hidden;
-  contain: paint;
-  page-transition-tag: related-videos;
   min-height: 159px;
   --video-list-columns: none;
   --video-list-auto-flow: column;
@@ -63,4 +55,65 @@
     overflow-x: hidden;
     overflow-y: auto;
   }
+}
+
+:global(.video-to-video) .scroller {
+  @media (min-width: 900px) {
+    page-transition-tag: related-videos;
+    contain: paint;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes slide-slightly-from-right {
+  from {
+    transform: translateX(30px);
+  }
+}
+
+@keyframes slide-slightly-to-left {
+  to {
+    transform: translateX(-30px);
+  }
+}
+
+@keyframes slide-slightly-from-left {
+  from {
+    transform: translateX(-30px);
+  }
+}
+
+@keyframes slide-slightly-to-right {
+  to {
+    transform: translateX(30px);
+  }
+}
+
+::page-transition-outgoing-image(root) {
+  animation: 90ms cubic-bezier(0.4, 0, 1, 1) both fade-out,
+    300ms cubic-bezier(0.4, 0, 0.2, 1) both slide-slightly-to-left;
+}
+
+::page-transition-incoming-image(root) {
+  animation: 210ms cubic-bezier(0, 0, 0.2, 1) 90ms both fade-in,
+    300ms cubic-bezier(0.4, 0, 0.2, 1) both slide-slightly-from-right;
+}
+
+:global(.back-transition)::page-transition-outgoing-image(root) {
+  animation-name: fade-out, slide-slightly-to-right;
+}
+
+:global(.back-transition)::page-transition-incoming-image(root) {
+  animation-name: fade-in, slide-slightly-from-left;
 }

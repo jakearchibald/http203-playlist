@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useLayoutEffect, useRef } from 'preact/hooks';
 
 import { usePageTransition } from 'client/utils';
-import * as videoListStyles from 'shared/general/VideoList/styles.module.css';
 
 const enum TransitionType {
   Other,
@@ -63,7 +62,6 @@ export function useRouter(callback: (newURL: string) => void) {
   const savedCallback = useRef(callback);
   const transitionData = useRef<TransitionData>();
   const resetScrollOnNextRender = useRef(false);
-  const elementsToUntag = useRef<HTMLElement[]>([]);
 
   useEffect(() => {
     savedCallback.current = callback;
@@ -77,72 +75,24 @@ export function useRouter(callback: (newURL: string) => void) {
 
   const startTransition = usePageTransition({
     outgoing() {
-      const { navigationType, to, transitionType } = transitionData.current!;
-
-      if (transitionType === TransitionType.ThumbsToVideo) {
-        document.documentElement.classList.add('transition-home-to-video');
-        const thumb = document.querySelector(
-          `a[href="${to}"] .${videoListStyles.videoThumb}`,
-        );
-        const details = document.querySelector(
-          `a[href="${to}"] .${videoListStyles.videoMeta}`,
-        );
-
-        if (thumb && details) {
-          elementsToUntag.current.push(
-            thumb as HTMLElement,
-            details as HTMLElement,
-          );
-          (thumb as HTMLElement).style.pageTransitionTag = 'embed-container';
-          (details as HTMLElement).style.pageTransitionTag = 'video-details';
-        }
-      } else if (transitionType === TransitionType.VideoToThumbs) {
-        document.documentElement.classList.add('transition-video-to-home');
-      } else if (transitionType === TransitionType.VideoToVideo) {
-        document.documentElement.classList.add('transition-video-to-video');
-      }
+      const { navigationType, transitionType } = transitionData.current!;
 
       if (navigationType === NavigationType.Back) {
         document.documentElement.classList.add('back-transition');
       }
-    },
-    incoming() {
-      const { from, transitionType } = transitionData.current!;
 
-      if (transitionType === TransitionType.VideoToThumbs) {
-        // Allow these to fall back to the first thumbnail
-        const thumb =
-          document.querySelector(
-            `a[href="${from}"] .${videoListStyles.videoThumb}`,
-          ) || document.querySelector(`.${videoListStyles.videoThumb}`);
-
-        const details =
-          document.querySelector(
-            `a[href="${from}"] .${videoListStyles.videoMeta}`,
-          ) || document.querySelector(`.${videoListStyles.videoMeta}`);
-
-        if (thumb && details) {
-          elementsToUntag.current.push(
-            thumb as HTMLElement,
-            details as HTMLElement,
-          );
-          (thumb as HTMLElement).style.pageTransitionTag = 'embed-container';
-          (details as HTMLElement).style.pageTransitionTag = 'video-details';
-        }
+      if (transitionType === TransitionType.VideoToVideo) {
+        document.documentElement.classList.add('video-to-video');
+      } else if (transitionType === TransitionType.ThumbsToThumbs) {
+        document.documentElement.classList.add('thumbs-to-thumbs');
       }
     },
     done() {
       document.documentElement.classList.remove(
         'back-transition',
-        'transition-home-to-video',
-        'transition-video-to-home',
-        'transition-video-to-video',
+        'video-to-video',
+        'thumbs-to-thumbs',
       );
-
-      while (elementsToUntag.current.length) {
-        const element = elementsToUntag.current.pop()!;
-        element.style.pageTransitionTag = '';
-      }
     },
   });
 
