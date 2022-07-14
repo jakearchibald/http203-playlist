@@ -76,44 +76,44 @@
   }
 }
 
-@keyframes slide-slightly-from-right {
+@keyframes slide-slightly-from-front {
   from {
-    transform: translateX(30px);
+    transform: scale(1.1);
   }
 }
 
-@keyframes slide-slightly-to-left {
+@keyframes slide-slightly-to-back {
   to {
-    transform: translateX(-30px);
+    transform: scale(0.8);
   }
 }
 
-@keyframes slide-slightly-from-left {
+@keyframes slide-slightly-from-back {
   from {
-    transform: translateX(-30px);
+    transform: scale(0.8);
   }
 }
 
-@keyframes slide-slightly-to-right {
+@keyframes slide-slightly-to-front {
   to {
-    transform: translateX(30px);
+    transform: scale(1.1);
   }
 }
 
 ::page-transition-outgoing-image(root) {
   animation: 90ms cubic-bezier(0.4, 0, 1, 1) both fade-out,
-    300ms cubic-bezier(0.4, 0, 0.2, 1) both slide-slightly-to-left;
+    300ms cubic-bezier(0.4, 0, 0.2, 1) both slide-slightly-to-back;
 }
 
 ::page-transition-incoming-image(root) {
   animation: 210ms cubic-bezier(0, 0, 0.2, 1) 90ms both fade-in,
-    300ms cubic-bezier(0.4, 0, 0.2, 1) both slide-slightly-from-right;
+    300ms cubic-bezier(0.4, 0, 0.2, 1) both slide-slightly-from-front;
 }
 
 :global(.back-transition)::page-transition-outgoing-image(root) {
-  animation-name: fade-out, slide-slightly-to-right;
+  animation-name: fade-out, slide-slightly-to-front;
 }
 
 :global(.back-transition)::page-transition-incoming-image(root) {
-  animation-name: fade-in, slide-slightly-from-left;
+  animation-name: fade-in, slide-slightly-from-back;
 }
