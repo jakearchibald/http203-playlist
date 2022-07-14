@@ -54,6 +54,7 @@ export default class Header extends Component<Props> {
   componentDidMount() {
     addEventListener('scroll', this.#onScroll);
     addEventListener('resize', this.#onResize);
+    this.#sizeHeaderContainer();
   }
 
   componentWillUnmount() {
