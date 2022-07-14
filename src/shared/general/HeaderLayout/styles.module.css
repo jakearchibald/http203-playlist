@@ -11,8 +11,16 @@
   display: grid;
   align-items: center;
   padding: 0 var(--content-padding);
+  position: sticky;
+  z-index: 1;
+  top: 0;
   contain: paint;
   page-transition-tag: site-header;
+  pointer-events: auto;
+}
+
+.header-container {
+  pointer-events: none;
 }
 
 .show-back-icon.header {
