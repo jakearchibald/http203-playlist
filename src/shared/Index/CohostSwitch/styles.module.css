@@ -1,27 +1,63 @@
 .cohost-switch {
-  display: flex;
-  flex-flow: row wrap;
-  padding: 0;
+  all: unset;
+  display: block;
+  cursor: pointer;
   margin: 0 auto;
   margin-top: var(--content-padding);
   background: var(--white);
-  padding: 0.3rem 0.4rem;
+  padding: 0.3rem 1rem;
   width: fit-content;
   border-radius: 19px;
+  position: relative;
 
-  & > * {
-    display: block;
-  }
-
-  & a {
-    color: var(--primary-color);
-    display: block;
-    padding: 0.1rem 0.9rem;
-    border-radius: 1000px;
+  &:focus-visible {
+    box-shadow: 0 0 15px rgb(0 0 0 / 50%);
   }
 }
 
-.current-cohost {
+.selected-cohost {
+  color: var(--primary-color);
+}
+
+:global(.thumbs-to-thumbs) .cohost-switch {
+  page-transition-tag: cohost-switch;
+  contain: paint;
+}
+
+.current-in-list {
+  color: var(--primary-text);
+}
+
+.modal {
+  border: none;
+  border-radius: 12px;
+  padding: 1em 1.5em;
+  min-width: 250px;
+
+  &::backdrop {
+    background: rgba(0 0 0 / 50%);
+  }
+
+  &[open] {
+    page-transition-tag: cohost-modal;
+    contain: paint;
+
+    &::backdrop {
+      page-transition-tag: cohost-modal-backdrop;
+      contain: paint;
+    }
+  }
+}
+
+.cohost-list {
+  margin: 0;
+  padding: 0;
+  text-align: center;
+
+  & > li {
+    display: block;
+  }
+
   & a {
     background: var(--primary-color);
     color: #fff;
