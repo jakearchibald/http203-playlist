@@ -1,5 +1,5 @@
 import { h, FunctionalComponent, RenderableProps } from 'preact';
-import {} from 'preact/hooks';
+import { useEffect } from 'preact/hooks';
 import HeaderLayout from 'shared/general/HeaderLayout';
 import VideoList from 'shared/general/VideoList';
 import { formatDate } from 'shared/utils';
@@ -17,6 +17,10 @@ const Video: FunctionalComponent<Props> = ({
   video,
   videos,
 }: RenderableProps<Props>) => {
+  useEffect(() => {
+    document.title = `${video.title} - HTTP 203`;
+  }, [video]);
+
   return (
     <HeaderLayout showBackIcon>
       <div class={styles.videoLayout}>
