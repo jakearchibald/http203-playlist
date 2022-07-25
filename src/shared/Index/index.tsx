@@ -1,5 +1,5 @@
 import { h, FunctionalComponent } from 'preact';
-import {} from 'preact/hooks';
+import { useEffect } from 'preact/hooks';
 import HeaderLayout from 'shared/general/HeaderLayout';
 import VideoList from 'shared/general/VideoList';
 import CohostSwitch from './CohostSwitch';
@@ -13,6 +13,10 @@ interface Props {
 
 const Index: FunctionalComponent<Props> = ({ videos, cohost }: Props) => {
   let filteredVideos = videos;
+
+  useEffect(() => {
+    document.title = 'HTTP 203';
+  }, []);
 
   if (cohost) {
     filteredVideos = Object.fromEntries(
