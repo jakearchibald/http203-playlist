@@ -16,12 +16,6 @@
 
 .embed-container {
   display: grid;
-  contain: paint;
-  page-transition-tag: embed-container;
-
-  :global(.transition-video-to-video) & {
-    page-transition-tag: none;
-  }
 
   & > * {
     grid-area: 1 / 1;

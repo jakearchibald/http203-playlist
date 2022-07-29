@@ -1,26 +1,68 @@
-import { h, FunctionalComponent, RenderableProps } from 'preact';
-import { useEffect, useRef } from 'preact/hooks';
+import { h, RenderableProps, Component, createRef } from 'preact';
 
 import * as styles from './styles.module.css';
 import 'add-css:./styles.module.css';
 
 interface Props {
-  scrollKey?: unknown;
   showBackIcon?: boolean;
 }
 
-const Header: FunctionalComponent<Props> = ({
-  children,
-  scrollKey,
-  showBackIcon,
-}: RenderableProps<Props>) => {
-  const scrollerRef = useRef<HTMLDivElement>(null);
+export default class Header extends Component<Props> {
+  #headerContainerRef = createRef<HTMLDivElement>();
+  #headerRef = createRef<HTMLElement>();
 
-  useEffect(() => {
-    scrollerRef.current!.scrollTo(0, 0);
-  }, [scrollKey]);
+  #scrollDebounceId = 0;
 
-  const onHomeClick = (event: Event) => {
+  #onScroll = () => {
+    clearTimeout(this.#scrollDebounceId);
+    this.#scrollDebounceId = setTimeout(
+      () => this.#sizeHeaderContainer(),
+      250,
+    ) as unknown as number;
+  };
+
+  #onResize = () => {
+    this.#sizeHeaderContainer();
+  };
+
+  #sizeHeaderContainer = () => {
+    const bounds = this.#headerRef.current!.getBoundingClientRect();
+    const scrollOffset = document.documentElement.scrollTop;
+    const headerContainer = this.#headerContainerRef.current!;
+
+    // The header is out of view.
+    // Change it's container so it's just out of view.
+    if (bounds.top + bounds.height <= 0) {
+      headerContainer.style.height = `${scrollOffset}px`;
+      headerContainer.style.marginBottom = `${
+        bounds.height + scrollOffset * -1
+      }px`;
+      return;
+    }
+
+    // The header is fully in view.
+    // Change it's container so this is the maximum y it can be.
+    if (bounds.top === 0) {
+      headerContainer.style.height = `${scrollOffset + bounds.height}px`;
+      headerContainer.style.marginBottom = `${scrollOffset * -1}px`;
+      return;
+    }
+
+    // Otherwise, the header is partially visible, so do nothing.
+  };
+
+  componentDidMount() {
+    addEventListener('scroll', this.#onScroll);
+    addEventListener('resize', this.#onResize);
+    this.#sizeHeaderContainer();
+  }
+
+  componentWillUnmount() {
+    removeEventListener('scroll', this.#onScroll);
+    removeEventListener('resize', this.#onResize);
+  }
+
+  #onHomeClick = (event: Event) => {
     const backEntriesReversed = navigation
       .entries()
       .slice(0, navigation.currentEntry!.index)
@@ -31,7 +73,6 @@ const Header: FunctionalComponent<Props> = ({
       const entryURL = new URL(entry.url);
       return (
         entryURL.origin === location.origin &&
-        entry.sameDocument &&
         (entryURL.pathname === '/' || entryURL.pathname.startsWith('/with-'))
       );
     });
@@ -42,25 +83,26 @@ const Header: FunctionalComponent<Props> = ({
     navigation.traverseTo(entry.key);
   };
 
-  return (
-    <div class={styles.mainLayout}>
-      <header
-        class={[styles.header, showBackIcon && styles.showBackIcon]
-          .filter(Boolean)
-          .join(' ')}
-      >
-        <a href="/" class={styles.homeLink} onClick={onHomeClick}>
-          <svg class={styles.backIcon} viewBox="0 0 24 24">
-            <path d="M20 11H7.8l5.6-5.6L12 4l-8 8 8 8 1.4-1.4L7.8 13H20v-2z" />
-          </svg>
-          <span class={styles.headerText}>HTTP 203</span>
-        </a>
-      </header>
-      <div ref={scrollerRef} class={styles.main}>
-        {children}
+  render({ children, showBackIcon }: RenderableProps<Props>) {
+    return (
+      <div class={styles.mainLayout}>
+        <div ref={this.#headerContainerRef} class={styles.headerContainer}>
+          <header
+            ref={this.#headerRef}
+            class={[styles.header, showBackIcon && styles.showBackIcon]
+              .filter(Boolean)
+              .join(' ')}
+          >
+            <a href="/" class={styles.homeLink} onClick={this.#onHomeClick}>
+              <svg class={styles.backIcon} viewBox="0 0 24 24">
+                <path d="M20 11H7.8l5.6-5.6L12 4l-8 8 8 8 1.4-1.4L7.8 13H20v-2z" />
+              </svg>
+              <span class={styles.headerText}>HTTP 203</span>
+            </a>
+          </header>
+        </div>
+        <div class={styles.main}>{children}</div>
       </div>
-    </div>
-  );
-};
-
-export default Header;
+    );
+  }
+}
