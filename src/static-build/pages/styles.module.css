@@ -73,6 +73,12 @@ a {
   }
 }
 
+@keyframes fade-out-a-bit {
+  to {
+    opacity: 0.8;
+  }
+}
+
 @keyframes slide-and-fade-from-right {
   from {
     opacity: 0;
@@ -104,28 +110,30 @@ a {
 html:global(.transition-home-to-video)::page-transition-container(embed-container),
 html:global(.transition-video-to-home)::page-transition-container(embed-container) {
   animation-duration: 300ms;
-  animation-timing-function: ease-out;
+  animation-timing-function: cubic-bezier(0.8, 0, 0.6, 1);
   z-index: 1;
 }
 
-html:global(.transition-home-to-video)::page-transition-container(video-details),
-html:global(.transition-video-to-home)::page-transition-container(video-details) {
-  animation-duration: 300ms;
-  animation-timing-function: ease-out;
-  background: #fff;
-  overflow: clip;
+html:global(.transition-home-to-video)::page-transition-container(root) {
+  background: black;
+  animation: none;
 }
 
-html:global(.transition-home-to-video)::page-transition-incoming-image(root),
-html:global(.transition-video-to-home)::page-transition-outgoing-image(root) {
-  display: none;
+html:global(.transition-home-to-video)::page-transition-image-wrapper(root) {
+  isolation: auto;
 }
 
 html:global(.transition-home-to-video)::page-transition-outgoing-image(root),
-html:global(.transition-video-to-home)::page-transition-incoming-image(root) {
-  animation: none;
-  opacity: 1;
+html:global(.transition-home-to-video)::page-transition-incoming-image(root) {
   mix-blend-mode: normal;
+}
+
+html:global(.transition-home-to-video)::page-transition-outgoing-image(root) {
+  animation: 90ms linear both fade-out-a-bit;
+}
+
+html:global(.transition-home-to-video)::page-transition-incoming-image(root) {
+  animation: 150ms linear both 60ms fade-in;
 }
 
 html:global(.transition-video-to-video)::page-transition-incoming-image(root) {
@@ -161,15 +169,5 @@ html:global(.transition-video-to-video.back-transition)::page-transition-outgoin
 
   html:global(.transition-video-to-video.back-transition)::page-transition-outgoing-image(root) {
     animation-name: slide-and-fade-to-right;
-  }
-}
-
-@media (min-width: 900px) {
-  html:global(.transition-home-to-video)::page-transition-incoming-image(related-videos) {
-    animation: 300ms ease-out both slide-from-right;
-  }
-
-  html:global(.transition-video-to-home)::page-transition-outgoing-image(related-videos) {
-    animation: 300ms ease-out both slide-to-right;
   }
 }

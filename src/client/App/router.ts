@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { useCallback, useEffect, useLayoutEffect, useRef } from 'preact/hooks';
 
 import { usePageTransition } from 'client/utils';
 import * as videoListStyles from 'shared/general/VideoList/styles.module.css';
+import * as embedStyles from 'shared/Video/Embed/styles.module.css';
 
 const enum TransitionType {
   Other,
@@ -75,6 +77,8 @@ export function useRouter(callback: (newURL: string) => void) {
     scrollTo(0, 0);
   });
 
+  let thumbnailRect: DOMRect | undefined;
+
   const startTransition = usePageTransition({
     outgoing() {
       const { navigationType, to, transitionType } = transitionData.current!;
@@ -84,17 +88,11 @@ export function useRouter(callback: (newURL: string) => void) {
         const thumb = document.querySelector(
           `a[href="${to}"] .${videoListStyles.videoThumb}`,
         );
-        const details = document.querySelector(
-          `a[href="${to}"] .${videoListStyles.videoMeta}`,
-        );
 
-        if (thumb && details) {
-          elementsToUntag.current.push(
-            thumb as HTMLElement,
-            details as HTMLElement,
-          );
+        if (thumb) {
+          thumbnailRect = thumb.getBoundingClientRect();
+          elementsToUntag.current.push(thumb as HTMLElement);
           (thumb as HTMLElement).style.pageTransitionTag = 'embed-container';
-          (details as HTMLElement).style.pageTransitionTag = 'video-details';
         }
       } else if (transitionType === TransitionType.VideoToThumbs) {
         document.documentElement.classList.add('transition-video-to-home');
@@ -116,19 +114,43 @@ export function useRouter(callback: (newURL: string) => void) {
             `a[href="${from}"] .${videoListStyles.videoThumb}`,
           ) || document.querySelector(`.${videoListStyles.videoThumb}`);
 
-        const details =
-          document.querySelector(
-            `a[href="${from}"] .${videoListStyles.videoMeta}`,
-          ) || document.querySelector(`.${videoListStyles.videoMeta}`);
-
-        if (thumb && details) {
-          elementsToUntag.current.push(
-            thumb as HTMLElement,
-            details as HTMLElement,
-          );
+        if (thumb) {
+          elementsToUntag.current.push(thumb as HTMLElement);
           (thumb as HTMLElement).style.pageTransitionTag = 'embed-container';
-          (details as HTMLElement).style.pageTransitionTag = 'video-details';
         }
+      }
+
+      if (transitionType === TransitionType.ThumbsToVideo) {
+        const fullEmbedRect = document
+          .querySelector(`.${embedStyles.embedContainer}`)!
+          .getBoundingClientRect();
+
+        const scale = thumbnailRect!.width / fullEmbedRect.width;
+
+        requestAnimationFrame(() => {
+          document.documentElement.animate(
+            [
+              {
+                width: `${innerWidth * scale}px`,
+                height: `${innerHeight * scale}px`,
+                transform: `translate(${
+                  thumbnailRect!.left - fullEmbedRect.left * scale
+                }px, ${thumbnailRect!.top - fullEmbedRect.top * scale}px)`,
+              },
+              {
+                width: `${innerWidth}px`,
+                height: `${innerHeight}px`,
+                transform: `translate(0px, 0px)`,
+              },
+            ],
+            {
+              easing: 'cubic-bezier(0.8, 0, 0.6, 1)',
+              duration: 300,
+              fill: 'both',
+              pseudoElement: '::page-transition-incoming-image(root)',
+            },
+          );
+        });
       }
     },
     done() {
