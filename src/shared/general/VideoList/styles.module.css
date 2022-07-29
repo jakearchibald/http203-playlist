@@ -37,6 +37,8 @@
 
 .video-link {
   color: inherit;
+  display: block;
+  contain: paint;
 
   &:hover {
     text-decoration: none;

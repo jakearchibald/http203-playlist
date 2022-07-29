@@ -78,6 +78,7 @@ export function useRouter(callback: (newURL: string) => void) {
   });
 
   let thumbnailRect: DOMRect | undefined;
+  let fullEmbedRect: DOMRect | undefined;
 
   const startTransition = usePageTransition({
     outgoing() {
@@ -85,17 +86,22 @@ export function useRouter(callback: (newURL: string) => void) {
 
       if (transitionType === TransitionType.ThumbsToVideo) {
         document.documentElement.classList.add('transition-home-to-video');
-        const thumb = document.querySelector(
-          `a[href="${to}"] .${videoListStyles.videoThumb}`,
-        );
+        const thumbLink = document.querySelector(`a[href="${to}"]`);
 
-        if (thumb) {
-          thumbnailRect = thumb.getBoundingClientRect();
-          elementsToUntag.current.push(thumb as HTMLElement);
-          (thumb as HTMLElement).style.pageTransitionTag = 'embed-container';
+        if (thumbLink) {
+          const thumb = thumbLink.querySelector(
+            `.${videoListStyles.videoThumb}`,
+          );
+          thumbnailRect = thumb!.getBoundingClientRect();
+          elementsToUntag.current.push(thumbLink as HTMLElement);
+          (thumbLink as HTMLElement).style.pageTransitionTag =
+            'embed-container';
         }
       } else if (transitionType === TransitionType.VideoToThumbs) {
         document.documentElement.classList.add('transition-video-to-home');
+        fullEmbedRect = document
+          .querySelector(`.${embedStyles.embedContainer}`)!
+          .getBoundingClientRect();
       } else if (transitionType === TransitionType.VideoToVideo) {
         document.documentElement.classList.add('transition-video-to-video');
       }
@@ -109,19 +115,48 @@ export function useRouter(callback: (newURL: string) => void) {
 
       if (transitionType === TransitionType.VideoToThumbs) {
         // Allow these to fall back to the first thumbnail
-        const thumb =
-          document.querySelector(
-            `a[href="${from}"] .${videoListStyles.videoThumb}`,
-          ) || document.querySelector(`.${videoListStyles.videoThumb}`);
+        const thumbLink =
+          document.querySelector(`a[href="${from}"]`) ||
+          document.querySelector(`.${videoListStyles.videoThumb}`);
+        const thumb = thumbLink!.querySelector(
+          `.${videoListStyles.videoThumb}`,
+        );
 
-        if (thumb) {
-          elementsToUntag.current.push(thumb as HTMLElement);
-          (thumb as HTMLElement).style.pageTransitionTag = 'embed-container';
-        }
+        thumbnailRect = thumb!.getBoundingClientRect();
+
+        elementsToUntag.current.push(thumbLink as HTMLElement);
+        (thumbLink as HTMLElement).style.pageTransitionTag = 'embed-container';
+
+        const scale = thumbnailRect.width / fullEmbedRect!.width;
+
+        requestAnimationFrame(() => {
+          document.documentElement.animate(
+            [
+              {
+                width: `${innerWidth}px`,
+                height: `${innerHeight}px`,
+                transform: `translate(0px, 0px)`,
+              },
+              {
+                width: `${innerWidth * scale}px`,
+                height: `${innerHeight * scale}px`,
+                transform: `translate(${
+                  thumbnailRect!.left - fullEmbedRect!.left * scale
+                }px, ${thumbnailRect!.top - fullEmbedRect!.top * scale}px)`,
+              },
+            ],
+            {
+              easing: 'cubic-bezier(0.8, 0, 0.6, 1)',
+              duration: 250,
+              fill: 'both',
+              pseudoElement: '::page-transition-outgoing-image(root)',
+            },
+          );
+        });
       }
 
       if (transitionType === TransitionType.ThumbsToVideo) {
-        const fullEmbedRect = document
+        fullEmbedRect = document
           .querySelector(`.${embedStyles.embedContainer}`)!
           .getBoundingClientRect();
 
@@ -134,8 +169,8 @@ export function useRouter(callback: (newURL: string) => void) {
                 width: `${innerWidth * scale}px`,
                 height: `${innerHeight * scale}px`,
                 transform: `translate(${
-                  thumbnailRect!.left - fullEmbedRect.left * scale
-                }px, ${thumbnailRect!.top - fullEmbedRect.top * scale}px)`,
+                  thumbnailRect!.left - fullEmbedRect!.left * scale
+                }px, ${thumbnailRect!.top - fullEmbedRect!.top * scale}px)`,
               },
               {
                 width: `${innerWidth}px`,
