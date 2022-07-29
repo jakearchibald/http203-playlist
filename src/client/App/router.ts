@@ -1,33 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { useCallback, useEffect, useRef } from 'preact/hooks';
 
 import { usePageTransition } from 'client/utils';
 
-function createStar({
-  points,
-  x,
-  y,
-  scale,
-}: {
-  points: number;
-  x: number;
-  y: number;
-  scale: number;
-}): DOMPoint[] {
-  return Array.from({ length: points }, (_, i) =>
-    new DOMMatrix()
-      .translate(x, y)
-      .scale(scale)
-      .rotate((i / points) * 360)
-      .translate(0, i % 2 ? -1 : -2)
-      //.translate(0, -1)
-      .transformPoint(new DOMPoint()),
-  );
-}
-
-function pointsToCSSPolygon(points: DOMPoint[]): string {
-  const pointsStr = points.map((point) => `${point.x}px ${point.y}px`).join();
-  return `polygon(${pointsStr})`;
-}
+let lastClick: MouseEvent | undefined;
+addEventListener('click', (event) => (lastClick = event));
 
 const enum TransitionType {
   Other,
@@ -76,23 +53,21 @@ export function useRouter(callback: (newURL: string) => void) {
 
   const startTransition = usePageTransition({
     incoming() {
-      const points = 10;
-      const x = innerWidth / 2;
-      const y = innerHeight / 2;
-      const endScale = Math.sqrt(x ** 2 + y ** 2);
+      const x = lastClick?.clientX ?? innerWidth / 2;
+      const y = lastClick?.clientY ?? innerHeight / 2;
+      const endRadius = Math.sqrt(
+        Math.max(x ** 2, (innerWidth - x) ** 2) +
+          Math.max(y ** 2, (innerHeight - y) ** 2),
+      );
 
       requestAnimationFrame(() => {
         document.documentElement.animate(
           [
             {
-              clipPath: pointsToCSSPolygon(
-                createStar({ points, x, y, scale: 0 }),
-              ),
+              clipPath: `circle(0 at ${x}px ${y}px)`,
             },
             {
-              clipPath: pointsToCSSPolygon(
-                createStar({ points, x, y, scale: endScale }),
-              ),
+              clipPath: `circle(${endRadius}px at ${x}px ${y}px)`,
             },
           ],
           {
