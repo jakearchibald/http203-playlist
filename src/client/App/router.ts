@@ -1,7 +1,33 @@
 import { useCallback, useEffect, useRef } from 'preact/hooks';
 
 import { usePageTransition } from 'client/utils';
-import * as videoListStyles from 'shared/general/VideoList/styles.module.css';
+
+function createStar({
+  points,
+  x,
+  y,
+  scale,
+}: {
+  points: number;
+  x: number;
+  y: number;
+  scale: number;
+}): DOMPoint[] {
+  return Array.from({ length: points }, (_, i) =>
+    new DOMMatrix()
+      .translate(x, y)
+      .scale(scale)
+      .rotate((i / points) * 360)
+      .translate(0, i % 2 ? -1 : -2)
+      //.translate(0, -1)
+      .transformPoint(new DOMPoint()),
+  );
+}
+
+function pointsToCSSPolygon(points: DOMPoint[]): string {
+  const pointsStr = points.map((point) => `${point.x}px ${point.y}px`).join();
+  return `polygon(${pointsStr})`;
+}
 
 const enum TransitionType {
   Other,
@@ -43,78 +69,39 @@ function getTransitionType(from: string, to: string): TransitionType {
 export function useRouter(callback: (newURL: string) => void) {
   const savedCallback = useRef(callback);
   const transitionData = useRef<TransitionData>();
-  const elementsToUntag = useRef<HTMLElement[]>([]);
 
   useEffect(() => {
     savedCallback.current = callback;
   }, [callback]);
 
   const startTransition = usePageTransition({
-    outgoing() {
-      const { back, to, type } = transitionData.current!;
-
-      if (type === TransitionType.ThumbsToVideo) {
-        document.documentElement.classList.add('transition-home-to-video');
-        const thumb = document.querySelector(
-          `a[href="${to}"] .${videoListStyles.videoThumb}`,
-        );
-        const details = document.querySelector(
-          `a[href="${to}"] .${videoListStyles.videoMeta}`,
-        );
-
-        if (thumb && details) {
-          elementsToUntag.current.push(
-            thumb as HTMLElement,
-            details as HTMLElement,
-          );
-          (thumb as HTMLElement).style.pageTransitionTag = 'embed-container';
-          (details as HTMLElement).style.pageTransitionTag = 'video-details';
-        }
-      } else if (type === TransitionType.VideoToThumbs) {
-        document.documentElement.classList.add('transition-video-to-home');
-      } else if (type === TransitionType.VideoToVideo) {
-        document.documentElement.classList.add('transition-video-to-video');
-      }
-
-      if (back) document.documentElement.classList.add('back-transition');
-    },
     incoming() {
-      const { from, type } = transitionData.current!;
+      const points = 10;
+      const x = innerWidth / 2;
+      const y = innerHeight / 2;
+      const endScale = Math.sqrt(x ** 2 + y ** 2);
 
-      if (type === TransitionType.VideoToThumbs) {
-        // Allow these to fall back to the first thumbnail
-        const thumb =
-          document.querySelector(
-            `a[href="${from}"] .${videoListStyles.videoThumb}`,
-          ) || document.querySelector(`.${videoListStyles.videoThumb}`);
-
-        const details =
-          document.querySelector(
-            `a[href="${from}"] .${videoListStyles.videoMeta}`,
-          ) || document.querySelector(`.${videoListStyles.videoMeta}`);
-
-        if (thumb && details) {
-          elementsToUntag.current.push(
-            thumb as HTMLElement,
-            details as HTMLElement,
-          );
-          (thumb as HTMLElement).style.pageTransitionTag = 'embed-container';
-          (details as HTMLElement).style.pageTransitionTag = 'video-details';
-        }
-      }
-    },
-    done() {
-      document.documentElement.classList.remove(
-        'back-transition',
-        'transition-home-to-video',
-        'transition-video-to-home',
-        'transition-video-to-video',
-      );
-
-      while (elementsToUntag.current.length) {
-        const element = elementsToUntag.current.pop()!;
-        element.style.pageTransitionTag = '';
-      }
+      requestAnimationFrame(() => {
+        document.documentElement.animate(
+          [
+            {
+              clipPath: pointsToCSSPolygon(
+                createStar({ points, x, y, scale: 0 }),
+              ),
+            },
+            {
+              clipPath: pointsToCSSPolygon(
+                createStar({ points, x, y, scale: endScale }),
+              ),
+            },
+          ],
+          {
+            duration: 500,
+            easing: 'ease-in',
+            pseudoElement: '::page-transition-incoming-image(root)',
+          },
+        );
+      });
     },
   });
 
