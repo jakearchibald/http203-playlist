@@ -65,6 +65,7 @@ export function usePageTransition({
     if (startResolverRef.current === undefined) return;
     incomingRef.current?.(transitionRef.current!);
     startResolverRef.current();
+    startResolverRef.current = undefined;
   });
 
   return async (): Promise<void> => {
