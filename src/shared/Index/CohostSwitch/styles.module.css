@@ -59,7 +59,12 @@
   }
 
   & a {
-    background: var(--primary-color);
-    color: #fff;
+    display: block;
+    padding: 0.6rem 1rem;
+    border-bottom: 1px solid var(--divider);
+  }
+
+  & > li:last-child a {
+    border-bottom: none;
   }
 }

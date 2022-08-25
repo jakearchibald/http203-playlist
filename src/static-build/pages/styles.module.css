@@ -194,3 +194,12 @@ html:global(.transition-video-to-video.back-transition)::page-transition-outgoin
     animation-name: slide-and-fade-to-right;
   }
 }
+
+:global(.no-root-transition)::page-transition-outgoing-image(root),
+:global(.no-root-transition)::page-transition-incoming-image(root) {
+  animation: none;
+}
+
+:global(.no-root-transition)::page-transition-outgoing-image(root) {
+  display: none;
+}
