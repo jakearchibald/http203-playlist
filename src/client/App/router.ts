@@ -64,18 +64,11 @@ function getTransitionType(from: string, to: string): TransitionType {
 export function useRouter(callback: (newURL: string) => void) {
   const savedCallback = useRef(callback);
   const transitionData = useRef<TransitionData>();
-  const resetScrollOnNextRender = useRef(false);
   const elementsToUntag = useRef<HTMLElement[]>([]);
 
   useEffect(() => {
     savedCallback.current = callback;
   }, [callback]);
-
-  useLayoutEffect(() => {
-    if (!resetScrollOnNextRender.current) return;
-    resetScrollOnNextRender.current = false;
-    scrollTo(0, 0);
-  });
 
   let thumbnailRect: DOMRect | undefined;
   let fullEmbedRect: DOMRect | undefined;
@@ -211,9 +204,6 @@ export function useRouter(callback: (newURL: string) => void) {
     ) => {
       if (from === to) return;
 
-      // Hack so scroll restoration does the right thing
-      await new Promise((r) => setTimeout(r, 0));
-
       if ('createDocumentTransition' in document) {
         transitionData.current = {
           from,
@@ -225,8 +215,6 @@ export function useRouter(callback: (newURL: string) => void) {
       }
 
       savedCallback.current(to);
-
-      if (type === NavigationType.New) resetScrollOnNextRender.current = true;
     },
     [startTransition],
   );
@@ -239,8 +227,9 @@ export function useRouter(callback: (newURL: string) => void) {
     navigation.addEventListener(
       'navigate',
       (event) => {
-        if (!event.canTransition) return;
+        if (!event.canIntercept) return;
 
+        const currentPath = new URL(navigation.currentEntry!.url!).pathname;
         const destinationURL = new URL(event.destination.url);
 
         if (
@@ -248,13 +237,13 @@ export function useRouter(callback: (newURL: string) => void) {
           destinationURL.pathname.startsWith('/with-') ||
           destinationURL.pathname.startsWith('/videos/')
         ) {
-          event.transitionWhile(
-            performTransition(
-              new URL(navigation.currentEntry!.url!).pathname,
-              destinationURL.pathname,
-              { type: getNavigationType(event) },
-            ),
-          );
+          event.intercept({
+            async handler() {
+              await performTransition(currentPath, destinationURL.pathname, {
+                type: getNavigationType(event),
+              });
+            },
+          });
         }
       },
       { signal: controller.signal },

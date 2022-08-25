@@ -15,7 +15,8 @@
 
 interface DocumentTransition {
   start(setupPromise: () => Promise<void> | void): Promise<void>;
-  setElement(element: Element, tag: string): void;
+  prepare(preparePromise: () => Promise<void> | void): Promise<void>;
+  finished: Promise<void>;
 }
 
 interface Document {

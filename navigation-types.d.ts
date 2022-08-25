@@ -34,9 +34,10 @@ interface NavigationDestination {
   sameDocument: boolean;
 }
 
-interface NavigationTransitionWhileOptions {
-  focusReset: 'after-transition' | 'manual';
-  scrollRestoration: 'after-transition' | 'manual';
+interface NavigationInterceptOptions {
+  handler?: () => unknown;
+  focusReset?: 'after-transition' | 'manual';
+  scroll?: 'after-transition' | 'manual';
 }
 
 interface NavigationHistoryEntry extends EventTarget {
@@ -52,17 +53,14 @@ interface NavigationHistoryEntry extends EventTarget {
 interface NavigateEvent extends Event {
   navigationType: NavigationAPIType;
   destination: NavigationDestination;
-  canTransition: boolean;
+  canIntercept: boolean;
   userInitiated: boolean;
   hashCahnge: boolean;
   signal: AbortSignal;
   formData?: FormData;
   downloadRequest?: string;
   info: unknown;
-  transitionWhile: (
-    newNavigationAction: Promise<void> | void,
-    options?: NavigationTransitionWhileOptions,
-  ) => void;
+  intercept: (options?: NavigationInterceptOptions) => void;
 }
 
 declare var navigation: Navigation;
