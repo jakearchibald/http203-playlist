@@ -1,11 +1,5 @@
-import {
-  h,
-  FunctionalComponent,
-  RenderableProps,
-  Fragment,
-  createRef,
-} from 'preact';
-import { useEffect, useState } from 'preact/hooks';
+import { h, FunctionalComponent, RenderableProps, Fragment } from 'preact';
+import { useEffect, useRef, useState } from 'preact/hooks';
 import { cohosts } from 'shared/data';
 
 import * as styles from './styles.module.css';
@@ -20,21 +14,25 @@ const CohostSwitch: FunctionalComponent<Props> = ({
   selectedCohost,
 }: RenderableProps<Props>) => {
   const [modalOpen, setModalOpen] = useState(false);
-  const dialogRef = createRef<HTMLDialogElement>();
+  const dialogRef = useRef<HTMLDialogElement>(null);
 
-  const startTransition = usePageTransition({
+  const startDialogOpenTransition = usePageTransition({
     incoming() {
-      console.log('incoming');
       document.documentElement.classList.add('no-root-transition');
     },
     done() {
-      console.log('done');
       document.documentElement.classList.remove('no-root-transition');
     },
   });
 
-  // TODO: something screwy is happening with 'incoming' happening twice
-  // Happens when dialog is closed with esc
+  const startDialogCloseTransition = usePageTransition({
+    incoming() {
+      document.documentElement.classList.add('no-root-transition');
+    },
+    done() {
+      document.documentElement.classList.remove('no-root-transition');
+    },
+  });
 
   useEffect(() => {
     const listener = () => setModalOpen(false);
@@ -44,11 +42,29 @@ const CohostSwitch: FunctionalComponent<Props> = ({
   }, [dialogRef]);
 
   useEffect(() => {
-    dialogRef.current!.close();
-  }, [selectedCohost]);
+    const listener = (event: Event) => {
+      event.preventDefault();
+      console.log('close from cancel');
+      void startDialogCloseTransition().then(() => {
+        dialogRef.current!.close();
+      });
+    };
+    const dialog = dialogRef.current!;
+    dialog.addEventListener('cancel', listener);
+    return () => dialog.removeEventListener('cancel', listener);
+  }, [dialogRef]);
+
+  useEffect(() => {
+    if (!dialogRef.current?.open) return;
+    console.log('close from cohost change');
+
+    void startDialogCloseTransition().then(() => {
+      dialogRef.current!.close();
+    });
+  }, [selectedCohost, startDialogCloseTransition]);
 
   const onButtonClick = () => {
-    void startTransition().then(() => {
+    void startDialogOpenTransition().then(() => {
       dialogRef.current!.showModal();
       setModalOpen(true);
     });
