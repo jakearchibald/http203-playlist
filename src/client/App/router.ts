@@ -133,7 +133,7 @@ export function useRouter(callback: (newURL: string) => void) {
         type: getTransitionType(from, to),
       };
 
-      await new Promise((r) => setTimeout(r, 2500));
+      await new Promise((r) => setTimeout(r, 4000));
       await startTransition();
       savedCallback.current(to);
     },
