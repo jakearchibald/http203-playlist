@@ -204,7 +204,7 @@ export function useRouter(callback: (newURL: string) => void) {
     ) => {
       if (from === to) return;
 
-      if ('createDocumentTransition' in document) {
+      if ('startViewTransition' in document) {
         transitionData.current = {
           from,
           to,

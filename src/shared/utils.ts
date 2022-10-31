@@ -45,8 +45,8 @@ const reducedMotionMedia = __PRERENDER__
   : matchMedia('(prefers-reduced-motion: reduce)');
 
 interface UsePageTransitionArg {
-  outgoing?(transition: DocumentTransition): void;
-  incoming?(transition: DocumentTransition): void;
+  outgoing?(transition: ViewTransition): void;
+  incoming?(transition: ViewTransition): void;
   done?(): void;
 }
 
@@ -59,7 +59,7 @@ export function usePageTransition({
   const outgoingRef = useRef(outgoing);
   const incomingRef = useRef(incoming);
   const doneRef = useRef(done);
-  const transitionRef = useRef<DocumentTransition>();
+  const transitionRef = useRef<ViewTransition>();
 
   useEffect(() => {
     if (startResolverRef.current === undefined) return;
@@ -69,23 +69,20 @@ export function usePageTransition({
   });
 
   return async (): Promise<void> => {
-    if (
-      !('createDocumentTransition' in document) ||
-      reducedMotionMedia!.matches
-    ) {
+    if (!('startViewTransition' in document) || reducedMotionMedia!.matches) {
       return;
     }
 
     return new Promise<void>((resolve) => {
-      const transition = document.createDocumentTransition();
+      const transition = document.startViewTransition(async () => {
+        resolve();
+        await new Promise((resolve) => (startResolverRef.current = resolve));
+      });
+
       transitionRef.current = transition;
       outgoingRef.current?.(transition);
 
-      globalThis.ongoingTransition = transition.start(async () => {
-        resolve();
-
-        await new Promise((resolve) => (startResolverRef.current = resolve));
-      });
+      globalThis.ongoingTransition = transition.finished;
 
       globalThis.ongoingTransition
         .then(() => {

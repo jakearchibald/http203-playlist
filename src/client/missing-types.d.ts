@@ -13,14 +13,14 @@
 /// <reference path="../../missing-types.d.ts" />
 /// <reference path="../../navigation-types.d.ts" />
 
-interface DocumentTransition {
-  start(setupPromise: () => Promise<void> | void): Promise<void>;
-  prepare(preparePromise: () => Promise<void> | void): Promise<void>;
+interface ViewTransition {
   finished: Promise<void>;
+  ready: Promise<void>;
+  domUpdated: Promise<void>;
 }
 
 interface Document {
-  createDocumentTransition(): DocumentTransition;
+  startViewTransition(setupPromise: () => Promise<void> | void): ViewTransition;
 }
 
 declare var ongoingTransition: Promise<void> | undefined;

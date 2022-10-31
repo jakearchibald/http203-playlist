@@ -15,13 +15,14 @@
 
 declare const __PRERENDER__: boolean;
 
-interface DocumentTransition {
-  start(setupPromise: () => Promise<void> | void): Promise<void>;
-  setElement(element: Element, tag: string): void;
+interface ViewTransition {
+  finished: Promise<void>;
+  ready: Promise<void>;
+  domUpdated: Promise<void>;
 }
 
 interface Document {
-  createDocumentTransition(): DocumentTransition;
+  startViewTransition(setupPromise: () => Promise<void> | void): ViewTransition;
 }
 
 declare var ongoingTransition: Promise<void> | undefined;
