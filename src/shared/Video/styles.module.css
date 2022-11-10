@@ -49,7 +49,7 @@
   align-items: start;
 
   :global(.transition-video-to-video) & {
-    page-transition-tag: related-videos;
+    view-transition-name: related-videos;
   }
 
   @media (min-width: 900px) {

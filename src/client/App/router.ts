@@ -87,7 +87,7 @@ export function useRouter(callback: (newURL: string) => void) {
           );
           thumbnailRect = thumb!.getBoundingClientRect();
           elementsToUntag.current.push(thumbLink as HTMLElement);
-          (thumbLink as HTMLElement).style.pageTransitionTag =
+          (thumbLink as HTMLElement).style.viewTransitionName =
             'embed-container';
         }
       } else if (transitionType === TransitionType.VideoToThumbs) {
@@ -118,7 +118,7 @@ export function useRouter(callback: (newURL: string) => void) {
         thumbnailRect = thumb!.getBoundingClientRect();
 
         elementsToUntag.current.push(thumbLink as HTMLElement);
-        (thumbLink as HTMLElement).style.pageTransitionTag = 'embed-container';
+        (thumbLink as HTMLElement).style.viewTransitionName = 'embed-container';
 
         const scale = thumbnailRect.width / fullEmbedRect!.width;
 
@@ -142,7 +142,7 @@ export function useRouter(callback: (newURL: string) => void) {
               easing: 'cubic-bezier(0.8, 0, 0.6, 1)',
               duration: 250,
               fill: 'both',
-              pseudoElement: '::page-transition-outgoing-image(root)',
+              pseudoElement: '::view-transition-old(root)',
             },
           );
         });
@@ -175,7 +175,7 @@ export function useRouter(callback: (newURL: string) => void) {
               easing: 'cubic-bezier(0.8, 0, 0.6, 1)',
               duration: 300,
               fill: 'both',
-              pseudoElement: '::page-transition-incoming-image(root)',
+              pseudoElement: '::view-transition-new(root)',
             },
           );
         });
@@ -191,7 +191,7 @@ export function useRouter(callback: (newURL: string) => void) {
 
       while (elementsToUntag.current.length) {
         const element = elementsToUntag.current.pop()!;
-        element.style.pageTransitionTag = '';
+        element.style.viewTransitionName = '';
       }
     },
   });

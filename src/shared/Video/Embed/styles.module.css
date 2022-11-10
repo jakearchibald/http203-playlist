@@ -17,10 +17,10 @@
 .embed-container {
   display: grid;
   contain: paint;
-  page-transition-tag: embed-container;
+  view-transition-name: embed-container;
 
   :global(.transition-video-to-video) & {
-    page-transition-tag: none;
+    view-transition-name: none;
   }
 
   & > * {
