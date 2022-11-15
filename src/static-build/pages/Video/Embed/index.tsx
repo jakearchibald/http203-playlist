@@ -22,7 +22,6 @@ const Embed: FunctionalComponent<Props> = ({
         fetchpriority="high"
       />
       <iframe
-        style="display: none"
         class={styles.embed}
         width="560"
         height="315"
