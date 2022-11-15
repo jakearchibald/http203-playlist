@@ -146,7 +146,7 @@ export default async function ({ watch }) {
           preventAssignment: true,
         }),
         json(),
-        runScript(dir + '/static-build/index.js'),
+        runScript(dir + '/index.js'),
       ],
     },
   ];

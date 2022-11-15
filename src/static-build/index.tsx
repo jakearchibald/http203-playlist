@@ -13,7 +13,7 @@
 import { h } from 'preact';
 import { renderPage, writeFiles } from './utils';
 import IndexPage from './pages/Index';
-import { cohosts } from 'shared/data';
+import { cohosts } from 'static-build/data';
 import pageData from 'video-data:';
 import VideoPage from './pages/Video';
 

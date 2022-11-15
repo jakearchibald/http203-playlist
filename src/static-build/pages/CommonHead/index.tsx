@@ -14,7 +14,7 @@ import { h, FunctionalComponent, Fragment } from 'preact';
 
 import 'add-css:../styles.module.css';
 import initialCss from 'prerender-css:';
-import clientUrl, { imports } from 'client-bundle:client';
+//import clientUrl, { imports } from 'client-bundle:client';
 import faviconURL from 'url:static-build/assets/favicon.png';
 import { escapeStyleScriptContent } from 'static-build/utils';
 
@@ -32,10 +32,10 @@ const CommonHead: FunctionalComponent<Props> = () => (
         __html: escapeStyleScriptContent(initialCss),
       }}
     />
-    {imports.map((preload) => (
+    {/*imports.map((preload) => (
       <link rel="preload" href={preload} as="script" />
-    ))}
-    <script src={clientUrl} type="module" />
+    ))*/}
+    {/*<script src={clientUrl} type="module" />*/}
   </>
 );
 

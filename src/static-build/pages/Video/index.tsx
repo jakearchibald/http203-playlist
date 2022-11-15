@@ -12,8 +12,13 @@
  */
 import { h, FunctionalComponent } from 'preact';
 import CommonHead from '../CommonHead';
-import VideoRoot from 'shared/Video';
 import pageData from 'video-data:';
+import * as styles from './styles.module.css';
+import 'add-css:./styles.module.css';
+import HeaderLayout from '../general/HeaderLayout';
+import Embed from './Embed';
+import { formatDate } from 'static-build/utils';
+import VideoList from '../general/VideoList';
 
 interface Props {
   video: typeof import('video-data:').default[string];
@@ -27,7 +32,26 @@ const Video: FunctionalComponent<Props> = ({ video }) => (
     </head>
     <body>
       <div id="app">
-        <VideoRoot video={video} videos={pageData} />
+        <HeaderLayout showBackIcon>
+          <div class={styles.videoLayout}>
+            <div class={styles.videoAndDetails}>
+              <Embed video={video} key={video.id} />
+
+              <div class={styles.videoDetails}>
+                <h1 class={styles.videoTitle}>{video.title}</h1>
+                <time>{formatDate(new Date(video.published))}</time>
+                <div
+                  class={styles.description}
+                  // eslint-disable-next-line react/no-danger
+                  dangerouslySetInnerHTML={{ __html: video.description }}
+                />
+              </div>
+            </div>
+            <div class={styles.scroller}>
+              <VideoList videos={pageData} />
+            </div>
+          </div>
+        </HeaderLayout>
       </div>
     </body>
   </html>

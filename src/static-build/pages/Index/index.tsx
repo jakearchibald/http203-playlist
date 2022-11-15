@@ -11,27 +11,45 @@
  * limitations under the License.
  */
 import { h, FunctionalComponent } from 'preact';
+import HeaderLayout from 'static-build/pages/general/HeaderLayout';
+import VideoList from 'static-build/pages/general/VideoList';
 
-import IndexRoot from 'shared/Index';
 import pageData from 'video-data:';
 import CommonHead from '../CommonHead';
+import CohostSwitch from './CohostSwitch';
 
 interface Props {
   cohost?: typeof import('video-data:').default[string]['cohost'];
 }
 
-const Index: FunctionalComponent<Props> = ({ cohost }) => (
-  <html lang="en">
-    <head>
-      <CommonHead />
-      <title>HTTP 203{cohost && ` - with ${cohost}`}</title>
-    </head>
-    <body>
-      <div id="app">
-        <IndexRoot videos={pageData} cohost={cohost} />
-      </div>
-    </body>
-  </html>
-);
+const Index: FunctionalComponent<Props> = ({ cohost }) => {
+  let filteredVideos = pageData;
+
+  if (cohost) {
+    filteredVideos = Object.fromEntries(
+      Object.entries(pageData).filter(([_, data]) => data.cohost === cohost),
+    );
+  }
+
+  return (
+    <html lang="en">
+      <head>
+        <CommonHead />
+        <title>HTTP 203{cohost && ` - with ${cohost}`}</title>
+      </head>
+      <body>
+        <div id="app">
+          {/*<IndexRoot videos={pageData} cohost={cohost} />*/}
+          <HeaderLayout>
+            <div>
+              <CohostSwitch selectedCohost={cohost} />
+              <VideoList videos={filteredVideos} />
+            </div>
+          </HeaderLayout>
+        </div>
+      </body>
+    </html>
+  );
+};
 
 export default Index;
