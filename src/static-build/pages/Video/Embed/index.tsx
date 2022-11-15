@@ -12,7 +12,15 @@ const Embed: FunctionalComponent<Props> = ({
   video,
 }: RenderableProps<Props>) => {
   return (
-    <div class={styles.embedContainer}>
+    <div class={[styles.embedContainer, 'embed-container'].join(' ')}>
+      <img
+        class={styles.videoImg}
+        srcset={ytSrcset(video.id)}
+        alt={video.title}
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        fetchpriority="high"
+      />
       <iframe
         class={styles.embed}
         width="560"
@@ -22,14 +30,6 @@ const Embed: FunctionalComponent<Props> = ({
         frameBorder="0"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowFullScreen
-      />
-      <img
-        class={styles.videoImg}
-        srcset={ytSrcset(video.id)}
-        alt={video.title}
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        fetchpriority="high"
       />
     </div>
   );
