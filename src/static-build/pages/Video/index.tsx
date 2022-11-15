@@ -19,6 +19,7 @@ import HeaderLayout from '../general/HeaderLayout';
 import Embed from './Embed';
 import { formatDate } from 'static-build/utils';
 import VideoList from '../general/VideoList';
+import CommonFoot from '../CommonFoot';
 
 interface Props {
   video: typeof import('video-data:').default[string];
@@ -47,12 +48,13 @@ const Video: FunctionalComponent<Props> = ({ video }) => (
                 />
               </div>
             </div>
-            <div class={styles.scroller}>
+            <div class={['side-bar', styles.scroller].join(' ')}>
               <VideoList videos={pageData} />
             </div>
           </div>
         </HeaderLayout>
       </div>
+      <CommonFoot />
     </body>
   </html>
 );

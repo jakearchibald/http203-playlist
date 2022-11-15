@@ -107,12 +107,4 @@ a {
     animation-name: slide-and-fade-to-left;
     animation-duration: 300ms;
   }
-
-  ::view-transition-old(related-videos):only-child {
-    animation: 300ms ease-out both slide-and-fade-to-left;
-  }
-
-  ::view-transition-new(related-videos):only-child {
-    animation: 300ms ease-out both slide-and-fade-from-right;
-  }
 }

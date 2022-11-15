@@ -15,6 +15,7 @@ import HeaderLayout from 'static-build/pages/general/HeaderLayout';
 import VideoList from 'static-build/pages/general/VideoList';
 
 import pageData from 'video-data:';
+import CommonFoot from '../CommonFoot';
 import CommonHead from '../CommonHead';
 import CohostSwitch from './CohostSwitch';
 
@@ -47,6 +48,7 @@ const Index: FunctionalComponent<Props> = ({ cohost }) => {
             </div>
           </HeaderLayout>
         </div>
+        <CommonFoot />
       </body>
     </html>
   );

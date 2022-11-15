@@ -15,7 +15,6 @@
   z-index: 1;
   top: 0;
   contain: paint;
-  view-transition-name: site-header;
   pointer-events: auto;
 }
 
@@ -61,5 +60,4 @@
 .header-text {
   display: block;
   contain: paint;
-  view-transition-name: header-text;
 }

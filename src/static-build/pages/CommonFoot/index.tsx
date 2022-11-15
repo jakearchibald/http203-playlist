@@ -10,16 +10,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/// <reference path="../../missing-types.d.ts" />
+import { h, FunctionalComponent, Fragment } from 'preact';
 
-declare module 'prerender-css:' {
-  const css: string;
-  export default css;
-}
+import { allSrc } from 'client-bundle:client/view-transition';
+import { escapeStyleScriptContent } from 'static-build/utils';
 
-declare module 'client-bundle:*' {
-  const url: string;
-  export default url;
-  export const imports: string[];
-  export const allSrc: string;
-}
+interface Props {}
+
+const CommonFoot: FunctionalComponent<Props> = () => (
+  <>
+    <script
+      // eslint-disable-next-line react/no-danger
+      dangerouslySetInnerHTML={{
+        __html: escapeStyleScriptContent(allSrc),
+      }}
+    />
+  </>
+);
+
+export default CommonFoot;

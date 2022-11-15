@@ -47,7 +47,6 @@
   background: var(--divider);
   display: grid;
   align-items: start;
-  view-transition-name: related-videos;
 
   @media (min-width: 900px) {
     height: 100vh;
