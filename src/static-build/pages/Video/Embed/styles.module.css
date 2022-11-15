@@ -17,11 +17,6 @@
 .embed-container {
   display: grid;
   contain: paint;
-  view-transition-name: embed-container;
-
-  :global(.from-video.to-video) & {
-    view-transition-name: none;
-  }
 
   & > * {
     grid-area: 1 / 1;
