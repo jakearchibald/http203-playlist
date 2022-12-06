@@ -25,4 +25,4 @@ interface Document {
   startViewTransition(setupPromise: () => Promise<void> | void): ViewTransition;
 }
 
-declare var ongoingTransition: Promise<void> | undefined;
+declare var ongoingTransition: ViewTransition | undefined;

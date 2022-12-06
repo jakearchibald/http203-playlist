@@ -242,6 +242,13 @@ export function useRouter(callback: (newURL: string) => void) {
               await performTransition(currentPath, destinationURL.pathname, {
                 type: getNavigationType(event),
               });
+              await globalThis.ongoingTransition!.domUpdated;
+              if (
+                event.navigationType === 'push' ||
+                event.navigationType === 'replace'
+              ) {
+                window.scrollTo(0, 0);
+              }
             },
           });
         }

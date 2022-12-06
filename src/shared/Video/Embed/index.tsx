@@ -20,7 +20,7 @@ const Embed: FunctionalComponent<Props> = ({
   useEffect(() => {
     if (!globalThis.ongoingTransition) return;
 
-    globalThis.ongoingTransition
+    globalThis.ongoingTransition.finished
       .then(() => {
         setRenderIframe(true);
       })

@@ -82,9 +82,9 @@ export function usePageTransition({
       transitionRef.current = transition;
       outgoingRef.current?.(transition);
 
-      globalThis.ongoingTransition = transition.finished;
+      globalThis.ongoingTransition = transition;
 
-      globalThis.ongoingTransition
+      globalThis.ongoingTransition.finished
         .then(() => {
           globalThis.ongoingTransition = undefined;
           doneRef.current?.();
