@@ -242,7 +242,8 @@ export function useRouter(callback: (newURL: string) => void) {
               await performTransition(currentPath, destinationURL.pathname, {
                 type: getNavigationType(event),
               });
-              await globalThis.ongoingTransition!.domUpdated;
+              await (globalThis.ongoingTransition!.domUpdated ||
+                globalThis.ongoingTransition!.updateCallbackDone);
               if (
                 event.navigationType === 'push' ||
                 event.navigationType === 'replace'

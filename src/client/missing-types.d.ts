@@ -16,7 +16,9 @@
 interface ViewTransition {
   finished: Promise<void>;
   ready: Promise<void>;
-  domUpdated: Promise<void>;
+  // Deprecated
+  domUpdated?: Promise<void>;
+  updateCallbackDone: Promise<void>;
 }
 
 interface Document {
