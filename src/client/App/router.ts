@@ -11,6 +11,12 @@ const enum PageType {
   Unknown,
 }
 
+const pageTypeClassNames = {
+  [PageType.Thumbs]: 'thumbs',
+  [PageType.Video]: 'video',
+  [PageType.Unknown]: 'unknown',
+} as const;
+
 const enum NavigationType {
   New,
   Back,
@@ -31,7 +37,6 @@ function getNavigationType(event: NavigateEvent): NavigationType {
 }
 
 interface TransitionData {
-  navigationType: NavigationType;
   from: string;
   fromType: PageType;
   to: string;
@@ -56,9 +61,8 @@ export function useRouter(callback: (newURL: string) => void) {
   let fullEmbedRect: DOMRect | undefined;
 
   const startTransition = usePageTransition<TransitionData>({
-    beforeChange({ navigationType, to, fromType, toType }) {
+    beforeChange({ to, fromType, toType }) {
       if (fromType === PageType.Thumbs && toType === PageType.Video) {
-        document.documentElement.classList.add('transition-home-to-video');
         const thumbLink = document.querySelector(`a[href="${to}"]`);
 
         if (thumbLink) {
@@ -71,16 +75,9 @@ export function useRouter(callback: (newURL: string) => void) {
             'embed-container';
         }
       } else if (fromType === PageType.Video && toType === PageType.Thumbs) {
-        document.documentElement.classList.add('transition-video-to-home');
         fullEmbedRect = document
           .querySelector(`.${embedStyles.embedContainer}`)!
           .getBoundingClientRect();
-      } else if (fromType === PageType.Video && toType === PageType.Video) {
-        document.documentElement.classList.add('transition-video-to-video');
-      }
-
-      if (navigationType === NavigationType.Back) {
-        document.documentElement.classList.add('back-transition');
       }
     },
     afterChange({ from, fromType, toType }) {
@@ -158,13 +155,6 @@ export function useRouter(callback: (newURL: string) => void) {
       }
     },
     done() {
-      document.documentElement.classList.remove(
-        'back-transition',
-        'transition-home-to-video',
-        'transition-video-to-home',
-        'transition-video-to-video',
-      );
-
       while (elementsToUntag.current.length) {
         const element = elementsToUntag.current.pop()!;
         element.style.viewTransitionName = '';
@@ -180,13 +170,20 @@ export function useRouter(callback: (newURL: string) => void) {
     ) => {
       if (from === to) return;
 
+      const fromType = getPageType(from);
+      const toType = getPageType(to);
+
       await startTransition({
+        classNames: [
+          `from-${pageTypeClassNames[fromType]}`,
+          `to-${pageTypeClassNames[toType]}`,
+          type === NavigationType.Back && 'back-transition',
+        ].filter(Boolean) as string[],
         data: {
           from,
-          fromType: getPageType(from),
+          fromType,
           to,
-          toType: getPageType(to),
-          navigationType: type,
+          toType,
         },
       });
 

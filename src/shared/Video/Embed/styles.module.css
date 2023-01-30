@@ -19,7 +19,7 @@
   contain: paint;
   view-transition-name: embed-container;
 
-  :global(.transition-video-to-video) & {
+  :global(.from-video.to-video) & {
     view-transition-name: none;
   }
 

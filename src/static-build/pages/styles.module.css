@@ -113,85 +113,85 @@ a {
   }
 }
 
-html:global(.transition-home-to-video)::view-transition-group(embed-container),
-html:global(.transition-video-to-home)::view-transition-group(embed-container) {
+html:global(.from-thumbs.to-video)::view-transition-group(embed-container),
+html:global(.from-video.to-thumbs)::view-transition-group(embed-container) {
   animation-duration: 300ms;
   animation-timing-function: cubic-bezier(0.8, 0, 0.6, 1);
   z-index: 1;
 }
 
-html:global(.transition-video-to-home)::view-transition-group(embed-container) {
+html:global(.from-video.to-thumbs)::view-transition-group(embed-container) {
   animation-duration: 250ms;
 }
 
-html:global(.transition-home-to-video)::view-transition-group(root),
-html:global(.transition-video-to-home)::view-transition-group(root) {
+html:global(.from-thumbs.to-video)::view-transition-group(root),
+html:global(.from-video.to-thumbs)::view-transition-group(root) {
   background: black;
   animation: none;
   z-index: 0;
 }
 
-html:global(.transition-home-to-video)::view-transition-image-pair(root),
-html:global(.transition-video-to-home)::view-transition-image-pair(root) {
+html:global(.from-thumbs.to-video)::view-transition-image-pair(root),
+html:global(.from-video.to-thumbs)::view-transition-image-pair(root) {
   isolation: auto;
 }
 
-html:global(.transition-home-to-video)::view-transition-old(root),
-html:global(.transition-home-to-video)::view-transition-new(root),
-html:global(.transition-video-to-home)::view-transition-old(root),
-html:global(.transition-video-to-home)::view-transition-new(root) {
+html:global(.from-thumbs.to-video)::view-transition-old(root),
+html:global(.from-thumbs.to-video)::view-transition-new(root),
+html:global(.from-video.to-thumbs)::view-transition-old(root),
+html:global(.from-video.to-thumbs)::view-transition-new(root) {
   mix-blend-mode: normal;
 }
 
-html:global(.transition-home-to-video)::view-transition-old(root) {
+html:global(.from-thumbs.to-video)::view-transition-old(root) {
   animation: 90ms linear both fade-out-a-bit;
 }
 
-html:global(.transition-video-to-home)::view-transition-new(root) {
+html:global(.from-video.to-thumbs)::view-transition-new(root) {
   animation: 250ms cubic-bezier(0.8, 0, 0.6, 1) both fade-in-a-bit;
 }
 
-html:global(.transition-home-to-video)::view-transition-new(root) {
+html:global(.from-thumbs.to-video)::view-transition-new(root) {
   animation: 150ms linear both 60ms fade-in;
 }
 
-html:global(.transition-video-to-home)::view-transition-old(root) {
+html:global(.from-video.to-thumbs)::view-transition-old(root) {
   animation: 150ms linear both 60ms fade-out;
   z-index: 2;
 }
 
-html:global(.transition-video-to-video)::view-transition-new(root) {
+html:global(.from-video.to-video)::view-transition-new(root) {
   animation: 500ms ease-out both slide-from-right;
 }
 
-html:global(.transition-video-to-video)::view-transition-old(root) {
+html:global(.from-video.to-video)::view-transition-old(root) {
   animation: 500ms ease-out both slide-to-left;
 }
 
-html:global(.transition-video-to-video.back-transition)::view-transition-new(root) {
+html:global(.from-video.to-video.back-transition)::view-transition-new(root) {
   animation-name: slide-from-left;
 }
 
-html:global(.transition-video-to-video.back-transition)::view-transition-old(root) {
+html:global(.from-video.to-video.back-transition)::view-transition-old(root) {
   animation-name: slide-to-right;
 }
 
 @media (min-width: 660px) {
-  html:global(.transition-video-to-video)::view-transition-new(root) {
+  html:global(.from-video.to-video)::view-transition-new(root) {
     animation-name: slide-and-fade-from-right;
     animation-duration: 300ms;
   }
 
-  html:global(.transition-video-to-video)::view-transition-old(root) {
+  html:global(.from-video.to-video)::view-transition-old(root) {
     animation-name: slide-and-fade-to-left;
     animation-duration: 300ms;
   }
 
-  html:global(.transition-video-to-video.back-transition)::view-transition-new(root) {
+  html:global(.from-video.to-video.back-transition)::view-transition-new(root) {
     animation-name: slide-and-fade-from-left;
   }
 
-  html:global(.transition-video-to-video.back-transition)::view-transition-old(root) {
+  html:global(.from-video.to-video.back-transition)::view-transition-old(root) {
     animation-name: slide-and-fade-to-right;
   }
 }
