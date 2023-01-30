@@ -49,6 +49,18 @@ function getPageType(url: string): PageType {
   return PageType.Unknown;
 }
 
+function createTransform(from: DOMRect, to: DOMRect): string {
+  const scaleX = to.width / from.width;
+  const scaleY = to.height / from.height;
+  const translateX = to.left - from.left;
+  const translateY = to.top - from.top;
+
+  return new DOMMatrix()
+    .scale(scaleX, scaleY)
+    .translate(translateX / scaleX, translateY / scaleY)
+    .toString();
+}
+
 /*function getSnapshotRootHeightDiff(): number {
   // This is a hack, and assumes that the difference between the
   // IDB and the snapshot root is just the URL bar.
@@ -97,7 +109,7 @@ export function useRouter(callback: (newURL: string) => void) {
         // Allow these to fall back to the first thumbnail
         const thumbLink =
           document.querySelector<HTMLElement>(`a[href="${from}"]`) ||
-          document.querySelector<HTMLElement>(`.${videoListStyles.videoThumb}`);
+          document.querySelector<HTMLElement>(`.${videoListStyles.videoLink}`);
 
         const thumb = thumbLink!.querySelector(
           `.${videoListStyles.videoThumb}`,
@@ -112,19 +124,14 @@ export function useRouter(callback: (newURL: string) => void) {
             // until after a microtask.
             await Promise.resolve();
             thumbnailRect = thumb!.getBoundingClientRect();
-            const scale = thumbnailRect.width / fullEmbedRect!.width;
 
             document.documentElement.animate(
               [
                 {
-                  width: `${innerWidth}px`,
                   transform: `translate(0px, 0px)`,
                 },
                 {
-                  width: `${innerWidth * scale}px`,
-                  transform: `translate(${
-                    thumbnailRect.left - fullEmbedRect!.left * scale
-                  }px, ${thumbnailRect.top - fullEmbedRect!.top * scale}px)`,
+                  transform: createTransform(fullEmbedRect!, thumbnailRect),
                 },
               ],
               {
@@ -147,21 +154,15 @@ export function useRouter(callback: (newURL: string) => void) {
               .querySelector(`.${embedStyles.embedContainer}`)!
               .getBoundingClientRect();
 
-            const scale = thumbnailRect!.width / fullEmbedRect.width;
-
             /*const heightDiff = getSnapshotRootHeightDiff();
             console.log(heightDiff);*/
 
             document.documentElement.animate(
               [
                 {
-                  width: `${innerWidth * scale}px`,
-                  transform: `translate(${
-                    thumbnailRect!.left - fullEmbedRect.left * scale
-                  }px, ${thumbnailRect!.top - fullEmbedRect.top * scale}px)`,
+                  transform: createTransform(fullEmbedRect, thumbnailRect!),
                 },
                 {
-                  width: `${innerWidth}px`,
                   transform: `translate(0px, 0px)`,
                 },
               ],

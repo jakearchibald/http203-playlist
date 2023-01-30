@@ -141,6 +141,7 @@ html:global(.from-thumbs.to-video)::view-transition-new(root),
 html:global(.from-video.to-thumbs)::view-transition-old(root),
 html:global(.from-video.to-thumbs)::view-transition-new(root) {
   mix-blend-mode: normal;
+  transform-origin: 0 0;
 }
 
 html:global(.from-thumbs.to-video)::view-transition-old(root) {
