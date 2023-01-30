@@ -49,6 +49,17 @@ function getPageType(url: string): PageType {
   return PageType.Unknown;
 }
 
+/*function getSnapshotRootHeightDiff(): number {
+  // This is a hack, and assumes that the difference between the
+  // IDB and the snapshot root is just the URL bar.
+  // This won't work if the URL bar state is different between the before/after views
+  // or if a virtual keyboard was used.
+  const rootHeight = parseFloat(
+    getComputedStyle(document.documentElement, '::view-transition').height,
+  );
+  return rootHeight - innerHeight;
+}*/
+
 export function useRouter(callback: (newURL: string) => void) {
   const savedCallback = useRef(callback);
   const elementsToUntag = useRef<HTMLElement[]>([]);
@@ -63,16 +74,17 @@ export function useRouter(callback: (newURL: string) => void) {
   const startTransition = usePageTransition<TransitionData>({
     beforeChange({ to, fromType, toType }) {
       if (fromType === PageType.Thumbs && toType === PageType.Video) {
-        const thumbLink = document.querySelector(`a[href="${to}"]`);
+        const thumbLink = document.querySelector<HTMLElement>(
+          `a[href="${to}"]`,
+        );
 
         if (thumbLink) {
           const thumb = thumbLink.querySelector(
             `.${videoListStyles.videoThumb}`,
           );
           thumbnailRect = thumb!.getBoundingClientRect();
-          elementsToUntag.current.push(thumbLink as HTMLElement);
-          (thumbLink as HTMLElement).style.viewTransitionName =
-            'embed-container';
+          elementsToUntag.current.push(thumbLink);
+          thumbLink.style.viewTransitionName = 'embed-container';
         }
       } else if (fromType === PageType.Video && toType === PageType.Thumbs) {
         fullEmbedRect = document
@@ -80,78 +92,88 @@ export function useRouter(callback: (newURL: string) => void) {
           .getBoundingClientRect();
       }
     },
-    afterChange({ from, fromType, toType }) {
+    afterChange({ from, fromType, toType }, viewTransition) {
       if (fromType === PageType.Video && toType === PageType.Thumbs) {
         // Allow these to fall back to the first thumbnail
         const thumbLink =
-          document.querySelector(`a[href="${from}"]`) ||
-          document.querySelector(`.${videoListStyles.videoThumb}`);
+          document.querySelector<HTMLElement>(`a[href="${from}"]`) ||
+          document.querySelector<HTMLElement>(`.${videoListStyles.videoThumb}`);
+
         const thumb = thumbLink!.querySelector(
           `.${videoListStyles.videoThumb}`,
         );
 
-        thumbnailRect = thumb!.getBoundingClientRect();
+        elementsToUntag.current.push(thumbLink!);
+        thumbLink!.style.viewTransitionName = 'embed-container';
 
-        elementsToUntag.current.push(thumbLink as HTMLElement);
-        (thumbLink as HTMLElement).style.viewTransitionName = 'embed-container';
+        viewTransition.ready
+          .then(async () => {
+            // For some horrible reason, scroll positions aren't updated
+            // until after a microtask.
+            await Promise.resolve();
+            thumbnailRect = thumb!.getBoundingClientRect();
+            const scale = thumbnailRect.width / fullEmbedRect!.width;
 
-        const scale = thumbnailRect.width / fullEmbedRect!.width;
-
-        requestAnimationFrame(() => {
-          document.documentElement.animate(
-            [
+            document.documentElement.animate(
+              [
+                {
+                  width: `${innerWidth}px`,
+                  transform: `translate(0px, 0px)`,
+                },
+                {
+                  width: `${innerWidth * scale}px`,
+                  transform: `translate(${
+                    thumbnailRect.left - fullEmbedRect!.left * scale
+                  }px, ${thumbnailRect.top - fullEmbedRect!.top * scale}px)`,
+                },
+              ],
               {
-                width: `${innerWidth}px`,
-                height: `${innerHeight}px`,
-                transform: `translate(0px, 0px)`,
+                easing: 'cubic-bezier(0.8, 0, 0.6, 1)',
+                duration: 250,
+                fill: 'both',
+                pseudoElement: '::view-transition-old(root)',
               },
-              {
-                width: `${innerWidth * scale}px`,
-                height: `${innerHeight * scale}px`,
-                transform: `translate(${
-                  thumbnailRect!.left - fullEmbedRect!.left * scale
-                }px, ${thumbnailRect!.top - fullEmbedRect!.top * scale}px)`,
-              },
-            ],
-            {
-              easing: 'cubic-bezier(0.8, 0, 0.6, 1)',
-              duration: 250,
-              fill: 'both',
-              pseudoElement: '::view-transition-old(root)',
-            },
-          );
-        });
+            );
+          })
+          .catch(() => undefined);
       } else if (fromType === PageType.Thumbs && toType === PageType.Video) {
-        fullEmbedRect = document
-          .querySelector(`.${embedStyles.embedContainer}`)!
-          .getBoundingClientRect();
+        viewTransition.ready
+          .then(async () => {
+            // For some horrible reason, scroll positions aren't updated
+            // until after a microtask.
+            await Promise.resolve();
 
-        const scale = thumbnailRect!.width / fullEmbedRect.width;
+            fullEmbedRect = document
+              .querySelector(`.${embedStyles.embedContainer}`)!
+              .getBoundingClientRect();
 
-        requestAnimationFrame(() => {
-          document.documentElement.animate(
-            [
+            const scale = thumbnailRect!.width / fullEmbedRect.width;
+
+            /*const heightDiff = getSnapshotRootHeightDiff();
+            console.log(heightDiff);*/
+
+            document.documentElement.animate(
+              [
+                {
+                  width: `${innerWidth * scale}px`,
+                  transform: `translate(${
+                    thumbnailRect!.left - fullEmbedRect.left * scale
+                  }px, ${thumbnailRect!.top - fullEmbedRect.top * scale}px)`,
+                },
+                {
+                  width: `${innerWidth}px`,
+                  transform: `translate(0px, 0px)`,
+                },
+              ],
               {
-                width: `${innerWidth * scale}px`,
-                height: `${innerHeight * scale}px`,
-                transform: `translate(${
-                  thumbnailRect!.left - fullEmbedRect!.left * scale
-                }px, ${thumbnailRect!.top - fullEmbedRect!.top * scale}px)`,
+                easing: 'cubic-bezier(0.8, 0, 0.6, 1)',
+                duration: 300,
+                fill: 'both',
+                pseudoElement: '::view-transition-new(root)',
               },
-              {
-                width: `${innerWidth}px`,
-                height: `${innerHeight}px`,
-                transform: `translate(0px, 0px)`,
-              },
-            ],
-            {
-              easing: 'cubic-bezier(0.8, 0, 0.6, 1)',
-              duration: 300,
-              fill: 'both',
-              pseudoElement: '::view-transition-new(root)',
-            },
-          );
-        });
+            );
+          })
+          .catch(() => undefined);
       }
     },
     done() {
@@ -211,12 +233,16 @@ export function useRouter(callback: (newURL: string) => void) {
           destinationURL.pathname.startsWith('/videos/')
         ) {
           event.intercept({
+            scroll: 'manual',
             async handler() {
               await performTransition(currentPath, destinationURL.pathname, {
                 type: getNavigationType(event),
               });
               await (globalThis.ongoingTransition!.domUpdated ||
                 globalThis.ongoingTransition!.updateCallbackDone);
+
+              event.scroll();
+
               if (
                 event.navigationType === 'push' ||
                 event.navigationType === 'replace'

@@ -61,6 +61,7 @@ interface NavigateEvent extends Event {
   downloadRequest?: string;
   info: unknown;
   intercept: (options?: NavigationInterceptOptions) => void;
+  scroll: () => void;
 }
 
 declare var navigation: Navigation;
