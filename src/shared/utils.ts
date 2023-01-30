@@ -56,13 +56,13 @@ interface StartTransitionOptions<DataType> {
 }
 
 export function usePageTransition<DataType = undefined>({
-  beforeChange: outgoing,
-  afterChange: incoming,
+  beforeChange,
+  afterChange,
   done,
 }: UsePageTransitionArg<DataType> = {}) {
   const startResolverRef = useRef<(value?: unknown) => void>();
-  const beforeChangeRef = useRef(outgoing);
-  const afterChangeRef = useRef(incoming);
+  const beforeChangeRef = useRef(beforeChange);
+  const afterChangeRef = useRef(afterChange);
   const doneRef = useRef(done);
   const dataRef = useRef<DataType>();
   const transitionRef = useRef<ViewTransition>();
