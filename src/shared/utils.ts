@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'preact/hooks';
+import { useRef, useEffect, useLayoutEffect } from 'preact/hooks';
 
 const ytImageSizes: [width: number, urlPart: string][] = [
   [320, 'mq'],
@@ -44,50 +44,64 @@ const reducedMotionMedia = __PRERENDER__
   ? null
   : matchMedia('(prefers-reduced-motion: reduce)');
 
-interface UsePageTransitionArg {
-  outgoing?(transition: ViewTransition): void;
-  incoming?(transition: ViewTransition): void;
-  done?(): void;
+interface UsePageTransitionArg<DataType> {
+  beforeChange?(data: DataType, transition: ViewTransition): void;
+  afterChange?(data: DataType, transition: ViewTransition): void;
+  done?(data: DataType): void;
 }
 
-export function usePageTransition({
-  outgoing,
-  incoming,
+interface StartTransitionOptions<DataType> {
+  classNames?: string[];
+  data?: DataType;
+}
+
+export function usePageTransition<DataType = undefined>({
+  beforeChange: outgoing,
+  afterChange: incoming,
   done,
-}: UsePageTransitionArg = {}) {
+}: UsePageTransitionArg<DataType> = {}) {
   const startResolverRef = useRef<(value?: unknown) => void>();
-  const outgoingRef = useRef(outgoing);
-  const incomingRef = useRef(incoming);
+  const beforeChangeRef = useRef(outgoing);
+  const afterChangeRef = useRef(incoming);
   const doneRef = useRef(done);
+  const dataRef = useRef<DataType>();
   const transitionRef = useRef<ViewTransition>();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (startResolverRef.current === undefined) return;
-    incomingRef.current?.(transitionRef.current!);
+    afterChangeRef.current?.(dataRef.current!, transitionRef.current!);
     startResolverRef.current();
     startResolverRef.current = undefined;
   });
 
-  return async (): Promise<void> => {
+  return async ({
+    classNames = [],
+    data,
+  }: StartTransitionOptions<DataType>): Promise<void> => {
     if (!('startViewTransition' in document) || reducedMotionMedia!.matches) {
       return;
     }
 
     return new Promise<void>((resolve) => {
+      dataRef.current = data;
+      document.documentElement.classList.add(...classNames);
+
       const transition = document.startViewTransition(async () => {
         resolve();
+        // Wait for next update
         await new Promise((resolve) => (startResolverRef.current = resolve));
       });
 
       transitionRef.current = transition;
-      outgoingRef.current?.(transition);
+      beforeChangeRef.current?.(data!, transition);
 
       globalThis.ongoingTransition = transition;
 
-      globalThis.ongoingTransition.finished
-        .then(() => {
+      transition.finished
+        .finally(() => {
           globalThis.ongoingTransition = undefined;
-          doneRef.current?.();
+          document.documentElement.classList.remove(...classNames);
+          doneRef.current?.(data!);
         })
         // eslint-disable-next-line @typescript-eslint/no-empty-function
         .catch(() => {});

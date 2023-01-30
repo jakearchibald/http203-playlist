@@ -5,12 +5,10 @@ import { usePageTransition } from 'shared/utils';
 import * as videoListStyles from 'shared/general/VideoList/styles.module.css';
 import * as embedStyles from 'shared/Video/Embed/styles.module.css';
 
-const enum TransitionType {
-  Other,
-  ThumbsToVideo,
-  VideoToThumbs,
-  VideoToVideo,
-  ThumbsToThumbs,
+const enum PageType {
+  Thumbs,
+  Video,
+  Unknown,
 }
 
 const enum NavigationType {
@@ -33,37 +31,21 @@ function getNavigationType(event: NavigateEvent): NavigationType {
 }
 
 interface TransitionData {
-  transitionType: TransitionType;
   navigationType: NavigationType;
   from: string;
+  fromType: PageType;
   to: string;
+  toType: PageType;
 }
 
-function getTransitionType(from: string, to: string): TransitionType {
-  if (
-    to.startsWith('/videos/') &&
-    (from === '/' || from.startsWith('/with-'))
-  ) {
-    return TransitionType.ThumbsToVideo;
-  }
-  if (from.startsWith('/videos/') && (to === '/' || to.startsWith('/with-'))) {
-    return TransitionType.VideoToThumbs;
-  }
-  if (
-    (from === '/' || from.startsWith('/with-')) &&
-    (to === '/' || to.startsWith('/with-'))
-  ) {
-    return TransitionType.ThumbsToThumbs;
-  }
-  if (from.startsWith('/videos/') && to.startsWith('/videos/')) {
-    return TransitionType.VideoToVideo;
-  }
-  return TransitionType.Other;
+function getPageType(url: string): PageType {
+  if (url === '/' || url.startsWith('/with-')) return PageType.Thumbs;
+  if (url.startsWith('/videos/')) return PageType.Video;
+  return PageType.Unknown;
 }
 
 export function useRouter(callback: (newURL: string) => void) {
   const savedCallback = useRef(callback);
-  const transitionData = useRef<TransitionData>();
   const elementsToUntag = useRef<HTMLElement[]>([]);
 
   useEffect(() => {
@@ -73,11 +55,9 @@ export function useRouter(callback: (newURL: string) => void) {
   let thumbnailRect: DOMRect | undefined;
   let fullEmbedRect: DOMRect | undefined;
 
-  const startTransition = usePageTransition({
-    outgoing() {
-      const { navigationType, to, transitionType } = transitionData.current!;
-
-      if (transitionType === TransitionType.ThumbsToVideo) {
+  const startTransition = usePageTransition<TransitionData>({
+    beforeChange({ navigationType, to, fromType, toType }) {
+      if (fromType === PageType.Thumbs && toType === PageType.Video) {
         document.documentElement.classList.add('transition-home-to-video');
         const thumbLink = document.querySelector(`a[href="${to}"]`);
 
@@ -90,12 +70,12 @@ export function useRouter(callback: (newURL: string) => void) {
           (thumbLink as HTMLElement).style.viewTransitionName =
             'embed-container';
         }
-      } else if (transitionType === TransitionType.VideoToThumbs) {
+      } else if (fromType === PageType.Video && toType === PageType.Thumbs) {
         document.documentElement.classList.add('transition-video-to-home');
         fullEmbedRect = document
           .querySelector(`.${embedStyles.embedContainer}`)!
           .getBoundingClientRect();
-      } else if (transitionType === TransitionType.VideoToVideo) {
+      } else if (fromType === PageType.Video && toType === PageType.Video) {
         document.documentElement.classList.add('transition-video-to-video');
       }
 
@@ -103,10 +83,8 @@ export function useRouter(callback: (newURL: string) => void) {
         document.documentElement.classList.add('back-transition');
       }
     },
-    incoming() {
-      const { from, transitionType } = transitionData.current!;
-
-      if (transitionType === TransitionType.VideoToThumbs) {
+    afterChange({ from, fromType, toType }) {
+      if (fromType === PageType.Video && toType === PageType.Thumbs) {
         // Allow these to fall back to the first thumbnail
         const thumbLink =
           document.querySelector(`a[href="${from}"]`) ||
@@ -146,9 +124,7 @@ export function useRouter(callback: (newURL: string) => void) {
             },
           );
         });
-      }
-
-      if (transitionType === TransitionType.ThumbsToVideo) {
+      } else if (fromType === PageType.Thumbs && toType === PageType.Video) {
         fullEmbedRect = document
           .querySelector(`.${embedStyles.embedContainer}`)!
           .getBoundingClientRect();
@@ -204,15 +180,15 @@ export function useRouter(callback: (newURL: string) => void) {
     ) => {
       if (from === to) return;
 
-      if ('startViewTransition' in document) {
-        transitionData.current = {
+      await startTransition({
+        data: {
           from,
+          fromType: getPageType(from),
           to,
+          toType: getPageType(to),
           navigationType: type,
-          transitionType: getTransitionType(from, to),
-        };
-        await startTransition();
-      }
+        },
+      });
 
       savedCallback.current(to);
     },
