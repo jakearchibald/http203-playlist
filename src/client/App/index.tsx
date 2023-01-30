@@ -9,6 +9,13 @@ interface Props {
   videos: typeof import('video-data:').default;
 }
 
+function getCohostFromURL(path = location.pathname) {
+  if (!path.startsWith('/with-')) return undefined;
+  const cohost = /\/with-([^/]+)/.exec(path);
+  if (!cohost) return undefined;
+  return cohosts.find((name) => name.toLowerCase() === cohost[1]);
+}
+
 const App: FunctionalComponent<Props> = ({
   videos,
 }: RenderableProps<Props>) => {
@@ -26,13 +33,6 @@ const App: FunctionalComponent<Props> = ({
     },
     [videos],
   );
-
-  function getCohostFromURL(path = location.pathname) {
-    if (!path.startsWith('/with-')) return undefined;
-    const cohost = /\/with-([^/]+)/.exec(path);
-    if (!cohost) return undefined;
-    return cohosts.find((name) => name.toLowerCase() === cohost[1]);
-  }
 
   const setStateFromURL = useCallback(
     (path = '/') => {

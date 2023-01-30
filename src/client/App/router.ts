@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { useCallback, useEffect, useLayoutEffect, useRef } from 'preact/hooks';
+import { useCallback, useEffect, useRef } from 'preact/hooks';
 
 import { usePageTransition } from 'shared/utils';
 import * as videoListStyles from 'shared/general/VideoList/styles.module.css';

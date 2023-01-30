@@ -1,6 +1,288 @@
 [
   {
     "kind": "youtube#playlistItem",
+    "etag": "okllj4EcFMLCHY5ZuBgkh7RUf4E",
+    "id": "UExOWWt4T0Y2cmNJQUtJUUZzTmJWMEpEd3NfR19ibk5vOS41QTQ4QTIyM0Y1RTBGMUNE",
+    "snippet": {
+      "publishedAt": "2022-10-25T15:52:53Z",
+      "channelId": "UCnUYZLuoy1rq1aVMwx4aTzw",
+      "title": "Scroll-Linked Animations with ScrollTimeline and ViewTimeline | HTTP 203",
+      "description": "Bramus shares his excitement for Scroll-Linked Animations that are powered by nothing but HTML and CSS. JavaScript option that integrates with WAAPI also included!\n\nChapters:\n00:00 - Prologue\n00:15 - Intro + Teaser Example\n03:41 - Scroll-Linked vs. Scroll-Triggered Animations\n05:18 - Basic Example using CSS (Document Timeline, Scroll Progress Timeline, scroll(), animation-timeline)\n12:31 - Basic Example using JavaScript (ScrollTimeline)\n14:06 - Named Scroll Progress Timelines (scroll-timeline-name, scroll-timeline-axis)\n20:31 - Scroll Progress Timelines Offsets\n25:05 - Tracking Elements as they enter/exit using JavaScript (ViewTimeline)\n31:09 - Tracking Elements as they enter/exit using CSS (view-timeline-name, view-timeline-axis)\n32:02 - View Progress Timeline Insets\n33:07 - View Progress Timeline Examples (Cover Flow, Contact List Fly-in/Fly-Out, Stacking Cards)\n35:40 - Play with it today!\n38:04 - Epilogue\n\nResources:\nCover Flow Demo (CSS) → https://goo.gle/3SvEQbd\nCover Flow Demo (JS+WAAPI) → https://goo.gle/3F9S62h\nScroll Progress Demo (CSS) → https://goo.gle/3F9S6zj\nScroll Progress Demo (JS+WAAPI) → https://goo.gle/3Sq5nXn\nImage Reveal on Enter Demo (CSS) → https://goo.gle/3F9S8XX\nImage Reveal on Enter Demo (JS+WAAPI) → https://goo.gle/3Sto8JK\nList fly-in + fly-out Effect Demo (CSS) →https://goo.gle/3Svg3UE\nList fly-in + fly-out Effect Demo (JS+WAAPI) → https://goo.gle/3F9Saix\nHorizontal Scroll Section Demo (CSS) → https://goo.gle/3SpaDe5\nHorizontal Scroll Section Demo (JS+WAAPI) → https://goo.gle/3SAbcBz\nParallax Cover to Sticky Header, faked (JS+WAAPI) → https://goo.gle/3SKoMCR\nStacking Cards Demo (JS+WAAPI) → https://goo.gle/3VW0wjD\n\nCollection with all CSS Demos → https://goo.gle/3F9ScqF\nCollection with all JS+WAAPI Demos → https://goo.gle/3F9ScXH\n\nScroll-Linked Animations Specification → https://goo.gle/3F9SduJ\nScroll-Linked Animations Polyfill → https://goo.gle/3SyziN8\nCSS WG Issue “Bring back Scroll-Offsets”→ https://goo.gle/3SxfE4d\ndocument.timeline → https://goo.gle/3SwNF4u\n\nMore videos in the HTTP 203 series → http://goo.gle/HTTP203\nSubscribe to Google Chrome Developers here → https://goo.gle/ChromeDevs \n\nAlso, if you enjoyed this, you might like the HTTP203 podcast → https://goo.gle/HTTP203Podcast\n\n#HTTP203 #ChromeDeveloper #WebDev",
+      "thumbnails": {
+        "default": {
+          "url": "https://i.ytimg.com/vi/Qf5wdXOxW3E/default.jpg",
+          "width": 120,
+          "height": 90
+        },
+        "medium": {
+          "url": "https://i.ytimg.com/vi/Qf5wdXOxW3E/mqdefault.jpg",
+          "width": 320,
+          "height": 180
+        },
+        "high": {
+          "url": "https://i.ytimg.com/vi/Qf5wdXOxW3E/hqdefault.jpg",
+          "width": 480,
+          "height": 360
+        },
+        "standard": {
+          "url": "https://i.ytimg.com/vi/Qf5wdXOxW3E/sddefault.jpg",
+          "width": 640,
+          "height": 480
+        },
+        "maxres": {
+          "url": "https://i.ytimg.com/vi/Qf5wdXOxW3E/maxresdefault.jpg",
+          "width": 1280,
+          "height": 720
+        }
+      },
+      "channelTitle": "Google Chrome Developers",
+      "playlistId": "PLNYkxOF6rcIAKIQFsNbV0JDws_G_bnNo9",
+      "position": 0,
+      "resourceId": {
+        "kind": "youtube#video",
+        "videoId": "Qf5wdXOxW3E"
+      },
+      "videoOwnerChannelTitle": "Google Chrome Developers",
+      "videoOwnerChannelId": "UCnUYZLuoy1rq1aVMwx4aTzw"
+    }
+  },
+  {
+    "kind": "youtube#playlistItem",
+    "etag": "wokqZICADyJ74y-x8pLiJ63n0WY",
+    "id": "UExOWWt4T0Y2cmNJQUtJUUZzTmJWMEpEd3NfR19ibk5vOS5CRjBFOTUzQTE4Mjg3RUJF",
+    "snippet": {
+      "publishedAt": "2022-10-11T14:05:17Z",
+      "channelId": "UCnUYZLuoy1rq1aVMwx4aTzw",
+      "title": "How rotate(0) fixed my transform animation | HTTP 203",
+      "description": "Jake and Bramus chat about transform animations, in particular how `rotate(0)` can behave differently to `none`. \n\nSpec → https://goo.gle/3Mpi3wj \nDemo → https://goo.gle/3RQGTXb \n\nMore videos in the HTTP 203 series → http://goo.gle/HTTP203\nSubscribe to Google Chrome Developers here → https://goo.gle/ChromeDevs \n\nAlso, if you enjoyed this, you might like the HTTP203 podcast → https://goo.gle/HTTP203Podcast\n\n#HTTP203 #ChromeDeveloper #WebDev",
+      "thumbnails": {
+        "default": {
+          "url": "https://i.ytimg.com/vi/azoIMhKOucQ/default.jpg",
+          "width": 120,
+          "height": 90
+        },
+        "medium": {
+          "url": "https://i.ytimg.com/vi/azoIMhKOucQ/mqdefault.jpg",
+          "width": 320,
+          "height": 180
+        },
+        "high": {
+          "url": "https://i.ytimg.com/vi/azoIMhKOucQ/hqdefault.jpg",
+          "width": 480,
+          "height": 360
+        },
+        "standard": {
+          "url": "https://i.ytimg.com/vi/azoIMhKOucQ/sddefault.jpg",
+          "width": 640,
+          "height": 480
+        },
+        "maxres": {
+          "url": "https://i.ytimg.com/vi/azoIMhKOucQ/maxresdefault.jpg",
+          "width": 1280,
+          "height": 720
+        }
+      },
+      "channelTitle": "Google Chrome Developers",
+      "playlistId": "PLNYkxOF6rcIAKIQFsNbV0JDws_G_bnNo9",
+      "position": 1,
+      "resourceId": {
+        "kind": "youtube#video",
+        "videoId": "azoIMhKOucQ"
+      },
+      "videoOwnerChannelTitle": "Google Chrome Developers",
+      "videoOwnerChannelId": "UCnUYZLuoy1rq1aVMwx4aTzw"
+    }
+  },
+  {
+    "kind": "youtube#playlistItem",
+    "etag": "sjJH3I-m_4VtX-WvYQODY3Tktw0",
+    "id": "UExOWWt4T0Y2cmNJQUtJUUZzTmJWMEpEd3NfR19ibk5vOS5ENUI5OTFCQkYxNDUxQjQ3",
+    "snippet": {
+      "publishedAt": "2022-09-27T06:19:50Z",
+      "channelId": "UCnUYZLuoy1rq1aVMwx4aTzw",
+      "title": "A love letter to DOMPoint and DOMMatrix | HTTP 203",
+      "description": "Jake shares his love for DOMPoint and DOMMatrix, two little-known APIs that are useful for visual effects!\n\nFull demo → https://goo.gle/3SuTzDI \nDOMPoint → https://goo.gle/3CdWxaE \nDOMMatrix → https://goo.gle/3xU3efa \nSpec → https://goo.gle/3UGAYq5 \n\nMore videos in the HTTP 203 series → http://goo.gle/HTTP203\nSubscribe to Google Chrome Developers here → https://goo.gle/ChromeDevs \n\nAlso, if you enjoyed this, you might like the HTTP203 podcast → https://goo.gle/HTTP203Podcast\n\n#HTTP203 #ChromeDeveloper #WebDev",
+      "thumbnails": {
+        "default": {
+          "url": "https://i.ytimg.com/vi/VdNzD4lhidw/default.jpg",
+          "width": 120,
+          "height": 90
+        },
+        "medium": {
+          "url": "https://i.ytimg.com/vi/VdNzD4lhidw/mqdefault.jpg",
+          "width": 320,
+          "height": 180
+        },
+        "high": {
+          "url": "https://i.ytimg.com/vi/VdNzD4lhidw/hqdefault.jpg",
+          "width": 480,
+          "height": 360
+        },
+        "standard": {
+          "url": "https://i.ytimg.com/vi/VdNzD4lhidw/sddefault.jpg",
+          "width": 640,
+          "height": 480
+        },
+        "maxres": {
+          "url": "https://i.ytimg.com/vi/VdNzD4lhidw/maxresdefault.jpg",
+          "width": 1280,
+          "height": 720
+        }
+      },
+      "channelTitle": "Google Chrome Developers",
+      "playlistId": "PLNYkxOF6rcIAKIQFsNbV0JDws_G_bnNo9",
+      "position": 2,
+      "resourceId": {
+        "kind": "youtube#video",
+        "videoId": "VdNzD4lhidw"
+      },
+      "videoOwnerChannelTitle": "Google Chrome Developers",
+      "videoOwnerChannelId": "UCnUYZLuoy1rq1aVMwx4aTzw"
+    }
+  },
+  {
+    "kind": "youtube#playlistItem",
+    "etag": "pHIrjHZ4WyMDFukvP1TJHikJF6I",
+    "id": "UExOWWt4T0Y2cmNJQUtJUUZzTmJWMEpEd3NfR19ibk5vOS5GN0EwRkMxQTJGMTFCNDc1",
+    "snippet": {
+      "publishedAt": "2022-09-13T16:00:58Z",
+      "channelId": "UCnUYZLuoy1rq1aVMwx4aTzw",
+      "title": "It's viewports all the way down | HTTP 203",
+      "description": "Bramus schools Jake about all the viewports that exist in the browser. If you've had layout issues with position fixed, vw units, or height:100%, this episode will probably explain why.\n\nChapters:\n00:00 - Prologue\n00:17 - Intro\n01:03 - Desktop Browsers / The Layout Viewport\n05:33 - The ICB\n12:51 - Viewport Units\n16:07 - Pinch Zoom / The Visual Viewport\n19:29 - The Layout Viewport, ICB, and Visual Viewport on Mobile Browsers\n23:30 - The Large, Small, and Dynamic Viewport\n28:35 - Viewports Units and their relation to the ICB\n30:25 - Resize Behavior (on mobile) when editable areas gain focus\n36:01 - The Virtual Keyboard API\n38:44 - A look into my Crystal Ball\n42:04 - Interop 2022 Viewport Investigation Effort\n43:20 - Epilogue\n\nResources:\nThe Large, Small, and Dynamic Viewports → https://goo.gle/3qxhne7\nPrevent content from being hidden underneath the Virtual Keyboard by means of the VirtualKeyboard API → https://goo.gle/3U9rl2X\nInterop 2022 Viewport Investigation Effort Discussion → https://goo.gle/3DhBHYN\nInterop 2022 Viewport Investigation Effort Test Pages → https://goo.gle/3BDcuqy\nCSSWG Issue on Viewport Resize Behavior and Positioning → https://goo.gle/3QJe12q\n\nSpecifications:\n(Layout) Viewport Definition (CSS2 Specification) → https://goo.gle/3DlfjxG\nContaining Block Definition (CSS2 Specification) → https://goo.gle/3Dl9hwN\nViewport Relative Lengths (CSS Values 4 Specification) → https://goo.gle/3ddLwvZ\nThe Visual Viewport (MDN) → https://goo.gle/3L9PsKU\nThe Visual Viewport API (CSSOM Specification) → https://goo.gle/3qvAJk2\nViewport Variants (CSS Values 4 Specification) → https://goo.gle/3U7Wd3M\nVirtual Keyboard Specification → https://goo.gle/3qzq7R2\n\nMore videos in the HTTP 203 series → http://goo.gle/HTTP203\nSubscribe to Google Chrome Developers here → https://goo.gle/ChromeDevs \n\nAlso, if you enjoyed this, you might like the HTTP203 podcast → https://goo.gle/HTTP203Podcast\n\n#HTTP203 #ChromeDeveloper #WebDev",
+      "thumbnails": {
+        "default": {
+          "url": "https://i.ytimg.com/vi/xl9R8aTOW_I/default.jpg",
+          "width": 120,
+          "height": 90
+        },
+        "medium": {
+          "url": "https://i.ytimg.com/vi/xl9R8aTOW_I/mqdefault.jpg",
+          "width": 320,
+          "height": 180
+        },
+        "high": {
+          "url": "https://i.ytimg.com/vi/xl9R8aTOW_I/hqdefault.jpg",
+          "width": 480,
+          "height": 360
+        },
+        "standard": {
+          "url": "https://i.ytimg.com/vi/xl9R8aTOW_I/sddefault.jpg",
+          "width": 640,
+          "height": 480
+        },
+        "maxres": {
+          "url": "https://i.ytimg.com/vi/xl9R8aTOW_I/maxresdefault.jpg",
+          "width": 1280,
+          "height": 720
+        }
+      },
+      "channelTitle": "Google Chrome Developers",
+      "playlistId": "PLNYkxOF6rcIAKIQFsNbV0JDws_G_bnNo9",
+      "position": 3,
+      "resourceId": {
+        "kind": "youtube#video",
+        "videoId": "xl9R8aTOW_I"
+      },
+      "videoOwnerChannelTitle": "Google Chrome Developers",
+      "videoOwnerChannelId": "UCnUYZLuoy1rq1aVMwx4aTzw"
+    }
+  },
+  {
+    "kind": "youtube#playlistItem",
+    "etag": "sV7dYgn_mw3k_wBPdlDlT-O5yE0",
+    "id": "UExOWWt4T0Y2cmNJQUtJUUZzTmJWMEpEd3NfR19ibk5vOS43RjdBQTMwNUUwRTA1QkE3",
+    "snippet": {
+      "publishedAt": "2022-08-30T15:06:02Z",
+      "channelId": "UCnUYZLuoy1rq1aVMwx4aTzw",
+      "title": "Magic tricks with the HTML parser | HTTP 203",
+      "description": "Jake and NEW GUEST (for the next few episodes) Bramus chat about strange behaviors in the HTML parser. Should it be more strict? And, how you can get access to the streaming parser with JavaScript, to speed up your pages.\n\nSimon Pieters book, \"Idiosyncrasies of the HTML parser\" → https://goo.gle/3PUPKGg \nThe HTML parsing spec → https://goo.gle/3AY8Cjr \n[p] is one of the many tags whose end tag can be omitted in certain situations → https://goo.gle/3KLlBbH \nFormatting elements that carry over if not closed → https://goo.gle/3CHrjZS \nThe adoption agency algorithm → https://goo.gle/3qevd5j \nA valid XHTML document → https://goo.gle/3pWgFqG \nAn invalid XHTML document → https://goo.gle/3cuAJxl \nThe CSS parsing spec → https://goo.gle/3RDdKPF \nShould severe HTML parsing issues be highlighted in DevTools? The DevTools teams says \"no\" → https://goo.gle/3Ri02kX \nPrettier discussion on self-closing tags → https://goo.gle/3CK9nhu \nCreating a detached HTML document → https://goo.gle/3Rq7Np3 \nStreaming a response with fetch() → https://goo.gle/3cuOKLr \nCreating a streaming HTML parser in JavaScript → https://goo.gle/3RgokLW \n\nMore videos in the HTTP 203 series → http://goo.gle/HTTP203\nSubscribe to Google Chrome Developers here → https://goo.gle/ChromeDevs \n\nAlso, if you enjoyed this, you might like the HTTP203 podcast → https://goo.gle/HTTP203Podcast\n\n#HTTP203 #ChromeDeveloper #WebDev",
+      "thumbnails": {
+        "default": {
+          "url": "https://i.ytimg.com/vi/LLRig4s1_yA/default.jpg",
+          "width": 120,
+          "height": 90
+        },
+        "medium": {
+          "url": "https://i.ytimg.com/vi/LLRig4s1_yA/mqdefault.jpg",
+          "width": 320,
+          "height": 180
+        },
+        "high": {
+          "url": "https://i.ytimg.com/vi/LLRig4s1_yA/hqdefault.jpg",
+          "width": 480,
+          "height": 360
+        },
+        "standard": {
+          "url": "https://i.ytimg.com/vi/LLRig4s1_yA/sddefault.jpg",
+          "width": 640,
+          "height": 480
+        },
+        "maxres": {
+          "url": "https://i.ytimg.com/vi/LLRig4s1_yA/maxresdefault.jpg",
+          "width": 1280,
+          "height": 720
+        }
+      },
+      "channelTitle": "Google Chrome Developers",
+      "playlistId": "PLNYkxOF6rcIAKIQFsNbV0JDws_G_bnNo9",
+      "position": 4,
+      "resourceId": {
+        "kind": "youtube#video",
+        "videoId": "LLRig4s1_yA"
+      },
+      "videoOwnerChannelTitle": "Google Chrome Developers",
+      "videoOwnerChannelId": "UCnUYZLuoy1rq1aVMwx4aTzw"
+    }
+  },
+  {
+    "kind": "youtube#playlistItem",
+    "etag": "M9ZkZusuauzvuBAhI2sopSq2HT0",
+    "id": "UExOWWt4T0Y2cmNJQUtJUUZzTmJWMEpEd3NfR19ibk5vOS5CMDk1Q0MxREYyOTVEOTZF",
+    "snippet": {
+      "publishedAt": "2022-07-26T14:10:10Z",
+      "channelId": "UCnUYZLuoy1rq1aVMwx4aTzw",
+      "title": "DOM ready events considered harmful | HTTP 203",
+      "description": "Jake and Cassie (still from off of Greensock) talk about DOM ready events, which can slow down your app in unexpected ways. But what are the alternatives?\n\nDOMContentLoaded → https://goo.gle/3J3QLKt \nreadyState → https://goo.gle/3d3KS13 \nScript defer → https://goo.gle/3Bf8zQV \nCustom elements → https://goo.gle/3S0EtXa \nMUtation observers → https://goo.gle/3Ov3jvv \n\nMore videos in the HTTP 203 series → http://goo.gle/HTTP203\nSubscribe to Google Chrome Developers here → https://goo.gle/ChromeDevs \n\nAlso, if you enjoyed this, you might like the HTTP203 podcast → https://goo.gle/HTTP203Podcast\n\n#HTTP203 #ChromeDeveloper #WebDev",
+      "thumbnails": {
+        "default": {
+          "url": "https://i.ytimg.com/vi/_iq1fPjeqMQ/default.jpg",
+          "width": 120,
+          "height": 90
+        },
+        "medium": {
+          "url": "https://i.ytimg.com/vi/_iq1fPjeqMQ/mqdefault.jpg",
+          "width": 320,
+          "height": 180
+        },
+        "high": {
+          "url": "https://i.ytimg.com/vi/_iq1fPjeqMQ/hqdefault.jpg",
+          "width": 480,
+          "height": 360
+        },
+        "standard": {
+          "url": "https://i.ytimg.com/vi/_iq1fPjeqMQ/sddefault.jpg",
+          "width": 640,
+          "height": 480
+        },
+        "maxres": {
+          "url": "https://i.ytimg.com/vi/_iq1fPjeqMQ/maxresdefault.jpg",
+          "width": 1280,
+          "height": 720
+        }
+      },
+      "channelTitle": "Google Chrome Developers",
+      "playlistId": "PLNYkxOF6rcIAKIQFsNbV0JDws_G_bnNo9",
+      "position": 5,
+      "resourceId": {
+        "kind": "youtube#video",
+        "videoId": "_iq1fPjeqMQ"
+      },
+      "videoOwnerChannelTitle": "Google Chrome Developers",
+      "videoOwnerChannelId": "UCnUYZLuoy1rq1aVMwx4aTzw"
+    }
+  },
+  {
+    "kind": "youtube#playlistItem",
     "etag": "XyeeeZus2Tlo3VaO4MNtLaLPcCI",
     "id": "UExOWWt4T0Y2cmNJQUtJUUZzTmJWMEpEd3NfR19ibk5vOS44NzQ1OTI1OUFFM0NFRTc5",
     "snippet": {

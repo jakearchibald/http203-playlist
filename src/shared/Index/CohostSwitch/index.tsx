@@ -13,16 +13,18 @@ const CohostSwitch: FunctionalComponent<Props> = ({
   selectedCohost,
 }: RenderableProps<Props>) => {
   return (
-    <ol class={[styles.cohostSwitch, 'cohost-switch'].join(' ')}>
-      <li class={selectedCohost ? '' : styles.currentCohost}>
-        <a href="/">All</a>
-      </li>
-      {cohosts.map((cohost) => (
-        <li class={selectedCohost === cohost ? styles.currentCohost : ''}>
-          <a href={`/with-${cohost.toLowerCase()}/`}>{cohost}</a>
+    <div class={styles.cohostSwitchWrapper}>
+      <ol class={[styles.cohostSwitch, 'cohost-switch'].join(' ')}>
+        <li class={selectedCohost ? '' : styles.currentCohost}>
+          <a href="/">All</a>
         </li>
-      ))}
-    </ol>
+        {cohosts.map((cohost) => (
+          <li class={selectedCohost === cohost ? styles.currentCohost : ''}>
+            <a href={`/with-${cohost.toLowerCase()}/`}>{cohost}</a>
+          </li>
+        ))}
+      </ol>
+    </div>
   );
 };
 
