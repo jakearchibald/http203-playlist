@@ -52,12 +52,10 @@ function getPageType(url: string): PageType {
 function createTransform(from: DOMRect, to: DOMRect): string {
   const scaleX = to.width / from.width;
   const scaleY = to.height / from.height;
-  const translateX = to.left - from.left;
-  const translateY = to.top - from.top;
 
   return new DOMMatrix()
+    .translate(to.left - scaleX * from.left, to.top - scaleY * from.top)
     .scale(scaleX, scaleY)
-    .translate(translateX / scaleX, translateY / scaleY)
     .toString();
 }
 
