@@ -21,4 +21,5 @@ declare module 'client-bundle:*' {
   const url: string;
   export default url;
   export const imports: string[];
+  export const allSrc: string;
 }

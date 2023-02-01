@@ -10,21 +10,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/// <reference path="../../missing-types.d.ts" />
-/// <reference path="../../navigation-types.d.ts" />
+import { h, FunctionalComponent, Fragment } from 'preact';
 
-declare const __PRERENDER__: boolean;
+import { allSrc } from 'client-bundle:client/view-transition';
+import { escapeStyleScriptContent } from 'static-build/utils';
 
-interface ViewTransition {
-  finished: Promise<void>;
-  ready: Promise<void>;
-  // Deprecated
-  domUpdated?: Promise<void>;
-  updateCallbackDone: Promise<void>;
-}
+interface Props {}
 
-interface Document {
-  startViewTransition(setupPromise: () => Promise<void> | void): ViewTransition;
-}
+const CommonFoot: FunctionalComponent<Props> = () => (
+  <>
+    <script
+      // eslint-disable-next-line react/no-danger
+      dangerouslySetInnerHTML={{
+        __html: escapeStyleScriptContent(allSrc),
+      }}
+    />
+  </>
+);
 
-declare var ongoingTransition: ViewTransition | undefined;
+export default CommonFoot;

@@ -119,7 +119,7 @@ export default async function ({ watch }) {
                 preventAssignment: true,
               }),
               entryDataPlugin(),
-              isProduction ? terser({ module: true }) : {},
+              terser({ module: true }),
             ],
             preserveEntrySignatures: false,
           },
@@ -146,7 +146,7 @@ export default async function ({ watch }) {
           preventAssignment: true,
         }),
         json(),
-        runScript(dir + '/static-build/index.js'),
+        runScript(dir + '/index.js'),
       ],
     },
   ];

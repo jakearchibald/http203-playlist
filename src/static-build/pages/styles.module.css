@@ -192,12 +192,3 @@ html:global(.from-video.to-video.back-transition)::view-transition-old(root) {
     animation-name: slide-and-fade-to-right;
   }
 }
-
-:global(.no-root-transition)::view-transition-old(root),
-:global(.no-root-transition)::view-transition-new(root) {
-  animation: none;
-}
-
-:global(.no-root-transition)::view-transition-old(root) {
-  display: none;
-}
