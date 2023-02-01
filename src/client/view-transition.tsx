@@ -1,9 +1,62 @@
+const enum PageType {
+  Thumbs,
+  Video,
+  Unknown,
+}
+
+const pageTypeClassNames = {
+  [PageType.Thumbs]: 'thumbs',
+  [PageType.Video]: 'video',
+  [PageType.Unknown]: 'unknown',
+} as const;
+
+const enum NavigationType {
+  New,
+  Back,
+  Other,
+}
+
+function getNavigationType(event: NavigateEvent): NavigationType {
+  if (event.navigationType === 'push' || event.navigationType === 'replace') {
+    return NavigationType.New;
+  }
+  if (
+    event.destination.index !== -1 &&
+    event.destination.index < navigation.currentEntry!.index
+  ) {
+    return NavigationType.Back;
+  }
+  return NavigationType.Other;
+}
+
 interface ViewTransitionState {
   isBack: boolean;
-  headerCaptured: boolean;
   fromURL: string;
+  fromType: PageType;
+  toType: PageType;
   thumbnailCapture: DOMRect | null;
   embedContainerCapture: DOMRect | null;
+  navType: NavigationType;
+}
+
+function getPageType(url: string): PageType {
+  if (url === '/' || url.startsWith('/with-')) return PageType.Thumbs;
+  if (url.startsWith('/videos/')) return PageType.Video;
+  return PageType.Unknown;
+}
+
+function setHTMLClasses(
+  fromType: PageType,
+  toType: PageType,
+  navType: NavigationType,
+) {
+  document.documentElement.className = [
+    `from-${pageTypeClassNames[fromType]}`,
+    `to-${pageTypeClassNames[toType]}`,
+    navType === NavigationType.Back && 'back-transition',
+  ]
+    .filter(Boolean)
+    .join(' ');
 }
 
 navigation.addEventListener('navigate', (event) => {
@@ -14,79 +67,68 @@ navigation.addEventListener('navigate', (event) => {
 
   if (toURL.origin !== location.origin) return;
 
-  // Undo previous transition name setting
-  const fullEmbed = document.querySelector<HTMLElement>('.embed-container');
-  if (fullEmbed) fullEmbed.style.viewTransitionName = '';
-
   // Undo previous thumb name setting
   for (const el of document.querySelectorAll<HTMLElement>('.video-thumb')) {
-    el.style.viewTransitionName = '';
+    el.closest('a')!.style.viewTransitionName = '';
   }
+
+  const fromType = getPageType(fromURL.pathname);
+  const toType = getPageType(toURL.pathname);
+  const navType = getNavigationType(event);
+
+  setHTMLClasses(fromType, toType, navType);
+  captureHeader();
 
   const state: ViewTransitionState = {
     isBack:
       event.destination.index !== -1 &&
       event.destination.index < navigation.currentEntry!.index,
     fromURL: fromURL.href,
-    headerCaptured: captureHeader(),
-    thumbnailCapture: captureThumbnail(fromURL, toURL),
-    embedContainerCapture: captureEmbedContainer(toURL),
+    fromType,
+    toType,
+    navType,
+    thumbnailCapture: captureThumbnail(fromType, toType, toURL),
+    embedContainerCapture: captureEmbedContainer(fromType),
   };
-
-  captureSideBar(fromURL, toURL);
 
   sessionStorage.viewTransition = JSON.stringify(state, null, ' ');
 });
 
-function captureThumbnail(fromURL: URL, toURL: URL): null | DOMRect {
-  if (fromURL.pathname.startsWith('/videos/')) return null;
+function captureThumbnail(
+  fromType: PageType,
+  toType: PageType,
+  toURL: URL,
+): null | DOMRect {
+  if (fromType !== PageType.Thumbs || toType !== PageType.Video) return null;
 
   const thumbLink = document.querySelector(`a[href="${toURL.pathname}"]`);
 
   if (!thumbLink) return null;
 
   const thumb = thumbLink.querySelector(`.video-thumb`) as HTMLElement;
-  thumb.style.viewTransitionName = 'embed-container';
+  thumb.closest('a')!.style.viewTransitionName = 'embed-container';
   return thumb.getBoundingClientRect();
 }
 
-function captureEmbedContainer(toURL: URL): null | DOMRect {
-  if (toURL.pathname.startsWith('/videos/')) return null;
-
-  const fullEmbed = document.querySelector<HTMLElement>('.embed-container');
-  if (!fullEmbed) return null;
-
-  fullEmbed.style.viewTransitionName = 'embed-container';
-  return fullEmbed.getBoundingClientRect();
+function captureEmbedContainer(fromType: PageType): null | DOMRect {
+  if (fromType !== PageType.Video) return null;
+  return document
+    .querySelector<HTMLElement>('.embed-container')!
+    .getBoundingClientRect();
 }
 
-function captureHeader(): boolean {
-  const el = document.querySelector('.header');
-  if (!el) return false;
+function captureHeader() {
+  const el = document.querySelector<HTMLElement>('.header');
+  if (!el) return;
 
   const viewportBounds = new DOMRect(0, 0, innerWidth, innerHeight);
 
-  if (!intersects(el.getBoundingClientRect(), viewportBounds)) return false;
+  if (!intersects(el.getBoundingClientRect(), viewportBounds)) return;
 
-  (el as HTMLElement).style.viewTransitionName = 'header';
+  el.style.viewTransitionName = 'header';
 
-  const headerText = document.querySelector('.header-text') as HTMLElement;
+  const headerText = document.querySelector<HTMLElement>('.header-text')!;
   headerText.style.viewTransitionName = 'header-text';
-
-  return true;
-}
-
-function captureSideBar(fromURL: URL, toURL: URL): boolean {
-  const bothVideos =
-    fromURL.pathname.startsWith('/videos/') &&
-    toURL.pathname.startsWith('/videos/');
-
-  if (!bothVideos) return false;
-
-  const el = document.querySelector('.side-bar') as HTMLElement;
-  el.style.viewTransitionName = 'side-bar';
-
-  return true;
 }
 
 function intersects(item: DOMRect, bounds: DOMRect): boolean {
@@ -98,6 +140,16 @@ function intersects(item: DOMRect, bounds: DOMRect): boolean {
   );
 }
 
+function createTransform(from: DOMRect, to: DOMRect): string {
+  const scaleX = to.width / from.width;
+  const scaleY = to.height / from.height;
+
+  return new DOMMatrix()
+    .translate(to.left - scaleX * from.left, to.top - scaleY * from.top)
+    .scale(scaleX, scaleY)
+    .toString();
+}
+
 function setupDocumentTransition() {
   if (!sessionStorage.viewTransition) return;
 
@@ -107,152 +159,63 @@ function setupDocumentTransition() {
   delete sessionStorage.viewTransition;
 
   const fromURL = new URL(oldState.fromURL);
-
-  const headerCaptured = captureHeader();
-  captureSideBar(fromURL, new URL(location.href));
+  captureHeader();
+  setHTMLClasses(oldState.fromType, oldState.toType, oldState.navType);
 
   const style = document.createElement('style');
-  let styleText = `
-    @keyframes header-exit {
-      to {
-        transform: translateY(-60px);
-      }
-    }
-
-    @keyframes header-enter {
-      from {
-        transform: translateY(-60px);
-      }
-    }
-
-    @keyframes fade-in {
-      from {
-        opacity: 0;
-      }
-    }
-
-    @keyframes fade-out {
-      to {
-        opacity: 0;
-      }
-    }
-  `;
-
-  // Header transition
-  if (oldState.headerCaptured && !headerCaptured) {
-    styleText += `
-      ::view-transition-old(header),
-      ::view-transition-old(header-text) {
-        animation: 300ms ease-out both header-exit;
-      }
-    `;
-  } else if (!oldState.headerCaptured && headerCaptured) {
-    styleText += `
-      ::view-transition-new(header),
-      ::view-transition-new(header-text) {
-        animation: 300ms ease-out both header-enter;
-      }
-    `;
-  }
 
   // Thumb-to-video transition
   if (oldState.thumbnailCapture) {
     const fullEmbed = document.querySelector('.embed-container') as HTMLElement;
     const fullEmbedRect = fullEmbed.getBoundingClientRect();
 
-    fullEmbed.style.viewTransitionName = 'embed-container';
-
-    const scale = oldState.thumbnailCapture.width / fullEmbedRect.width;
-
-    styleText += `
-      @keyframes thumbnail-anim {
-        from {
-          width: ${innerWidth * scale}px;
-          height: ${innerHeight * scale}px;
-          transform: translate(${
-            oldState.thumbnailCapture.left - fullEmbedRect.left * scale
-          }px, ${oldState.thumbnailCapture.top - fullEmbedRect.top * scale}px);
-        }
-        to {
-          width: ${innerWidth}px;
-          height: ${innerHeight}px;
-          transform: translate(0px, 0px);
-        }
-      }
-
-      ::view-transition-old(root) {
-        animation: none;
-        mix-blend-mode: normal;
-      }
-
-      ::view-transition-new(root) {
-        animation: 300ms ease-out both fade-in, 300ms ease-out both thumbnail-anim;
-        mix-blend-mode: normal;
-      }
-
-      ::view-transition-image-pair(root) {
-        isolation: auto;
-      }
-
-      ::view-transition-group(embed-container) {
-        animation-duration: 300ms;
-        animation-timing-function: ease-out;
-      }
-    `;
+    style.textContent = [
+      `@keyframes thumbnail-anim {`,
+      `  from {`,
+      `    transform: ${createTransform(
+        fullEmbedRect,
+        oldState.thumbnailCapture,
+      )};`,
+      `  }`,
+      `  to {`,
+      `    transform: none;`,
+      `  }`,
+      `}`,
+      `::view-transition-new(root) {`,
+      `  animation: 150ms ease both 60ms -ua-view-transition-fade-in, 300ms ease both thumbnail-anim;`,
+      `}`,
+    ].join('\n');
   }
 
   // Video-to-thumb transition
-  const thumbLink = document.querySelector(`a[href="${fromURL.pathname}"]`);
+  const thumbLink = document.querySelector<HTMLElement>(
+    `a[href="${fromURL.pathname}"]`,
+  );
 
   if (oldState.embedContainerCapture && thumbLink) {
     const thumb = thumbLink.querySelector(`.video-thumb`) as HTMLElement;
-    thumb.style.viewTransitionName = 'embed-container';
+    thumbLink.style.viewTransitionName = 'embed-container';
 
     const thumbnailRect = thumb.getBoundingClientRect();
-    const scale = thumbnailRect.width / oldState.embedContainerCapture.width;
 
-    styleText += `
-      @keyframes thumbnail-anim {
-        from {
-          width: ${innerWidth}px;
-          height: ${innerHeight}px;
-          transform: translate(0px, 0px);
-        }
-        to {
-          width: ${innerWidth * scale}px;
-          height: ${innerHeight * scale}px;
-          transform: translate(
-            ${
-              thumbnailRect.left - oldState.embedContainerCapture.left * scale
-            }px,
-            ${thumbnailRect.top - oldState.embedContainerCapture.top * scale}px
-          );
-        }
-      }
-
-      ::view-transition-new(root) {
-        animation: none;
-        mix-blend-mode: normal;
-      }
-
-      ::view-transition-old(root) {
-        animation: 300ms ease-out both fade-out, 300ms ease-out both thumbnail-anim;
-        mix-blend-mode: normal;
-        z-index: 1;
-      }
-
-      ::view-transition-image-pair(root) {
-        isolation: auto;
-      }
-
-      ::view-transition-group(embed-container) {
-        animation-duration: 300ms;
-        animation-timing-function: ease-out;
-      }
-    `;
+    style.textContent = [
+      `@keyframes thumbnail-anim {`,
+      `  from {`,
+      `    transform: none;`,
+      `  }`,
+      `  to {`,
+      `    transform: ${createTransform(
+        oldState.embedContainerCapture,
+        thumbnailRect,
+      )};`,
+      `  }`,
+      `}`,
+      `::view-transition-old(root) {`,
+      `  animation: 150ms ease both 60ms -ua-view-transition-fade-out, 300ms ease both thumbnail-anim;`,
+      `}`,
+    ].join('\n');
   }
 
-  style.textContent = styleText;
   document.head.append(style);
 }
 

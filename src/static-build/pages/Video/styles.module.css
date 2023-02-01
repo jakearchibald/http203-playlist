@@ -48,6 +48,10 @@
   display: grid;
   align-items: start;
 
+  :global(.from-video.to-video) & {
+    view-transition-name: related-videos;
+  }
+
   @media (min-width: 900px) {
     height: 100vh;
     --video-list-auto-flow: row;
