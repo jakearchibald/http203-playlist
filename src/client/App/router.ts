@@ -133,8 +133,8 @@ export function useRouter(callback: (newURL: string) => void) {
                 },
               ],
               {
-                easing: 'cubic-bezier(0.8, 0, 0.6, 1)',
-                duration: 250,
+                easing: 'ease',
+                duration: 300,
                 fill: 'both',
                 pseudoElement: '::view-transition-old(root)',
               },
@@ -165,7 +165,7 @@ export function useRouter(callback: (newURL: string) => void) {
                 },
               ],
               {
-                easing: 'cubic-bezier(0.8, 0, 0.6, 1)',
+                easing: 'ease',
                 duration: 300,
                 fill: 'both',
                 pseudoElement: '::view-transition-new(root)',
@@ -226,6 +226,9 @@ export function useRouter(callback: (newURL: string) => void) {
         const currentPath = new URL(navigation.currentEntry!.url!).pathname;
         const destinationURL = new URL(event.destination.url);
 
+        // Need to call this before intercept, else the current entry is wrong.
+        const navigationType = getNavigationType(event);
+
         if (
           destinationURL.pathname === '/' ||
           destinationURL.pathname.startsWith('/with-') ||
@@ -235,7 +238,7 @@ export function useRouter(callback: (newURL: string) => void) {
             scroll: 'manual',
             async handler() {
               await performTransition(currentPath, destinationURL.pathname, {
-                type: getNavigationType(event),
+                type: navigationType,
               });
               await (globalThis.ongoingTransition!.domUpdated ||
                 globalThis.ongoingTransition!.updateCallbackDone);
