@@ -22,8 +22,8 @@ const Embed: FunctionalComponent<Props> = ({
         fetchpriority="high"
       />
       <iframe
-        style="display: none"
-        class={styles.embed}
+        style="opacity: 0"
+        class={[styles.embed, 'embed'].join(' ')}
         width="560"
         height="315"
         src={`https://www.youtube-nocookie.com/embed/${video.id}`}

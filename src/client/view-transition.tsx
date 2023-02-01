@@ -161,62 +161,76 @@ function setupDocumentTransition() {
   const fromURL = new URL(oldState.fromURL);
   captureHeader();
   setHTMLClasses(oldState.fromType, oldState.toType, oldState.navType);
-
-  const style = document.createElement('style');
-
   // Thumb-to-video transition
-  if (oldState.thumbnailCapture) {
+  if (
+    oldState.fromType === PageType.Thumbs &&
+    oldState.toType === PageType.Video
+  ) {
     const fullEmbed = document.querySelector('.embed-container') as HTMLElement;
     const fullEmbedRect = fullEmbed.getBoundingClientRect();
 
-    style.textContent = [
-      `@keyframes thumbnail-anim {`,
-      `  from {`,
-      `    transform: ${createTransform(
-        fullEmbedRect,
-        oldState.thumbnailCapture,
-      )};`,
-      `  }`,
-      `  to {`,
-      `    transform: none;`,
-      `  }`,
-      `}`,
-      `::view-transition-new(root) {`,
-      `  animation: 150ms ease both 60ms -ua-view-transition-fade-in, 300ms ease both thumbnail-anim;`,
-      `}`,
-    ].join('\n');
+    requestAnimationFrame(() => {
+      document.documentElement.animate(
+        {
+          transform: [
+            createTransform(fullEmbedRect, oldState.thumbnailCapture!),
+            'none',
+          ],
+        },
+        {
+          pseudoElement: '::view-transition-new(root)',
+          duration: 300,
+          easing: 'ease',
+        },
+      );
+
+      const embed = document.querySelector<HTMLIFrameElement>('.embed')!;
+      const loaded = new Promise((resolve) => (embed.onload = resolve));
+      Promise.all([
+        ...document.documentElement.getAnimations().map((a) => a.finished),
+        loaded,
+      ])
+        .then(async () => {
+          await new Promise((r) => setTimeout(r, 100));
+          embed.style.opacity = '1';
+          embed.animate(
+            { offset: 0, opacity: 0 },
+            { duration: 300, easing: 'ease' },
+          );
+        })
+        .catch(() => undefined);
+    });
   }
 
   // Video-to-thumb transition
-  const thumbLink = document.querySelector<HTMLElement>(
-    `a[href="${fromURL.pathname}"]`,
-  );
-
-  if (oldState.embedContainerCapture && thumbLink) {
+  if (
+    oldState.fromType === PageType.Video &&
+    oldState.toType === PageType.Thumbs
+  ) {
+    const thumbLink = document.querySelector<HTMLElement>(
+      `a[href="${fromURL.pathname}"]`,
+    )!;
     const thumb = thumbLink.querySelector(`.video-thumb`) as HTMLElement;
     thumbLink.style.viewTransitionName = 'embed-container';
 
     const thumbnailRect = thumb.getBoundingClientRect();
 
-    style.textContent = [
-      `@keyframes thumbnail-anim {`,
-      `  from {`,
-      `    transform: none;`,
-      `  }`,
-      `  to {`,
-      `    transform: ${createTransform(
-        oldState.embedContainerCapture,
-        thumbnailRect,
-      )};`,
-      `  }`,
-      `}`,
-      `::view-transition-old(root) {`,
-      `  animation: 150ms ease both 60ms -ua-view-transition-fade-out, 300ms ease both thumbnail-anim;`,
-      `}`,
-    ].join('\n');
+    requestAnimationFrame(() => {
+      document.documentElement.animate(
+        {
+          transform: [
+            'none',
+            createTransform(oldState.embedContainerCapture!, thumbnailRect),
+          ],
+        },
+        {
+          pseudoElement: '::view-transition-old(root)',
+          duration: 300,
+          easing: 'ease',
+        },
+      );
+    });
   }
-
-  document.head.append(style);
 }
 
 setupDocumentTransition();

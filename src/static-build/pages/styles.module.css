@@ -148,6 +148,15 @@ html:global(.from-video.to-thumbs)::view-transition-new(root) {
   animation: 300ms ease both fade-in-a-bit;
 }
 
+html:global(.from-thumbs.to-video)::view-transition-new(root) {
+  animation: 150ms ease both 60ms fade-in;
+}
+
+html:global(.from-video.to-thumbs)::view-transition-old(root) {
+  animation: 150ms ease both 60ms fade-out;
+  z-index: 2;
+}
+
 html:global(.from-video.to-video)::view-transition-new(root) {
   animation: 500ms ease-out both slide-from-right;
 }
