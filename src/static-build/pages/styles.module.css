@@ -61,28 +61,12 @@ a {
   }
 }
 
-@keyframes fade-in {
-  from {
-    opacity: 0;
-  }
+::view-transition-new(root) {
+  animation: 500ms ease-out both slide-from-right;
 }
 
-@keyframes fade-out {
-  to {
-    opacity: 0;
-  }
-}
-
-@keyframes fade-out-a-bit {
-  to {
-    opacity: 0.5;
-  }
-}
-
-@keyframes fade-in-a-bit {
-  from {
-    opacity: 0.5;
-  }
+::view-transition-old(root) {
+  animation: 500ms ease-out both slide-to-left;
 }
 
 @keyframes slide-and-fade-from-right {
@@ -113,91 +97,22 @@ a {
   }
 }
 
-html:global(.from-thumbs.to-video)::view-transition-group(embed-container),
-html:global(.from-video.to-thumbs)::view-transition-group(embed-container) {
-  animation-duration: 300ms;
-  animation-timing-function: ease;
-  z-index: 1;
-}
-
-html:global(.from-thumbs.to-video)::view-transition-group(root),
-html:global(.from-video.to-thumbs)::view-transition-group(root) {
-  background: black;
-  animation: none;
-  z-index: 0;
-}
-
-html:global(.from-thumbs.to-video)::view-transition-image-pair(root),
-html:global(.from-video.to-thumbs)::view-transition-image-pair(root) {
-  isolation: auto;
-}
-
-html:global(.from-thumbs.to-video)::view-transition-old(root),
-html:global(.from-thumbs.to-video)::view-transition-new(root),
-html:global(.from-video.to-thumbs)::view-transition-old(root),
-html:global(.from-video.to-thumbs)::view-transition-new(root) {
-  mix-blend-mode: normal;
-  transform-origin: 0 0;
-}
-
-html:global(.from-thumbs.to-video)::view-transition-old(root) {
-  animation: 300ms ease both fade-out-a-bit;
-}
-
-html:global(.from-video.to-thumbs)::view-transition-new(root) {
-  animation: 300ms ease both fade-in-a-bit;
-}
-
-html:global(.from-thumbs.to-video)::view-transition-new(root) {
-  animation: 150ms ease both 60ms fade-in;
-}
-
-html:global(.from-video.to-thumbs)::view-transition-old(root) {
-  animation: 150ms ease both 60ms fade-out;
-  z-index: 2;
-}
-
-html:global(.from-video.to-video)::view-transition-new(root) {
-  animation: 500ms ease-out both slide-from-right;
-}
-
-html:global(.from-video.to-video)::view-transition-old(root) {
-  animation: 500ms ease-out both slide-to-left;
-}
-
-html:global(.from-video.to-video.back-transition)::view-transition-new(root) {
-  animation-name: slide-from-left;
-}
-
-html:global(.from-video.to-video.back-transition)::view-transition-old(root) {
-  animation-name: slide-to-right;
-}
-
 @media (min-width: 660px) {
-  html:global(.from-video.to-video)::view-transition-new(root) {
+  ::view-transition-new(root) {
     animation-name: slide-and-fade-from-right;
     animation-duration: 300ms;
   }
 
-  html:global(.from-video.to-video)::view-transition-old(root) {
+  ::view-transition-old(root) {
     animation-name: slide-and-fade-to-left;
     animation-duration: 300ms;
   }
 
-  html:global(.from-video.to-video.back-transition)::view-transition-new(root) {
-    animation-name: slide-and-fade-from-left;
+  ::view-transition-old(related-videos):only-child {
+    animation: 300ms ease-out both slide-and-fade-to-left;
   }
 
-  html:global(.from-video.to-video.back-transition)::view-transition-old(root) {
-    animation-name: slide-and-fade-to-right;
+  ::view-transition-new(related-videos):only-child {
+    animation: 300ms ease-out both slide-and-fade-from-right;
   }
-}
-
-:global(.no-root-transition)::view-transition-old(root),
-:global(.no-root-transition)::view-transition-new(root) {
-  animation: none;
-}
-
-:global(.no-root-transition)::view-transition-old(root) {
-  display: none;
 }
