@@ -27,6 +27,21 @@ const CommonHead: FunctionalComponent<Props> = () => (
     <meta name="viewport" content="width=device-width, minimum-scale=1.0" />
     <meta name="view-transition" content="same-origin" />
     <link rel="icon" type="image/png" href={faviconURL} />
+    <meta http-equiv="origin-trial" content="AteY8ah5aqorHJWyw8H0saZ0Va196D5FMvISj5sy+j9xkgIYUYdD2J+I2lf5X70onDi6iCywXOZV73b0OSuhkwcAAABheyJvcmlnaW4iOiJodHRwOi8vbG9jYWxob3N0OjMwMDAiLCJmZWF0dXJlIjoiU3BlY3VsYXRpb25SdWxlc1ByZWZldGNoRnV0dXJlIiwiZXhwaXJ5IjoxNzA5NjgzMTk5fQ==" />
+    <meta http-equiv="origin-trial" content="Ak6HTzvOAbZ7TGX4+hUP5ne5R6G7V93joZA7kHl52zXeRzSo/IQMJa+5PTSPain2VpK1xbWc8n3WhuGDibA/uAoAAABqeyJvcmlnaW4iOiJodHRwczovL3d3dy50dW5ldGhld2ViLmNvbTo0NDMiLCJmZWF0dXJlIjoiU3BlY3VsYXRpb25SdWxlc1ByZWZldGNoRnV0dXJlIiwiZXhwaXJ5IjoxNzA5NjgzMTk5fQ==" />
+    <script type="speculationrules" dangerouslySetInnerHTML={ { __html: `
+      {
+          "prerender": [
+            {
+              "source": "document",
+              "where": {
+                "href_matches": "/*\\\\?*#*", "relative_to": "document"
+              },
+              "eagerness": "moderate"
+            }
+          ]
+        }`
+      }} />
     <style
       // eslint-disable-next-line react/no-danger
       dangerouslySetInnerHTML={{
